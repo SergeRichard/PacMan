@@ -3,11 +3,11 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
-	private int[,] gridMap;
+	public int[,] GridMap;
 
 	// Use this for initialization
 	void Start () {
-		gridMap = new int[,]{
+		GridMap = new int[,]{
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
 			{1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1},
