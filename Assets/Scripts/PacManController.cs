@@ -1,0 +1,149 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class PacManController : MonoBehaviour {
+
+	Animator animator;
+
+	public enum PacManStates {Idle, Up, Down, Left, Right};
+
+	public static PacManStates pacManStates;
+
+	public float DistanceToTravel = .32f;
+	public float TimeStep = .01f;
+
+	public Transform LeftBank;
+	public Transform RightBank;
+
+	public GameManager GameManager;
+
+//	private int rowOnGrid = 23;
+//	private int colOnGrid = 13;
+	private int rowOnGrid = 1;
+	private int colOnGrid = 2;
+
+	private bool movingDone;
+
+	// Use this for initialization
+	void Start () {
+		animator = GetComponent<Animator> ();
+		pacManStates = PacManStates.Idle;
+		movingDone = true;
+
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (movingDone) {
+			if ((Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) && (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 2)) {			
+				SetRight ();
+			} else if ((Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) && (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 2)) {
+				SetLeft ();
+			} else if ((Input.GetKey (KeyCode.UpArrow) || Input.GetKey (KeyCode.W)) && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 0) {
+				SetUp ();
+			} else if ((Input.GetKey (KeyCode.DownArrow) || Input.GetKey (KeyCode.S)) && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 0) {
+				SetDown ();
+			} else if (pacManStates == PacManStates.Right && (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 2)) {
+				SetRight ();
+			} else if (pacManStates == PacManStates.Left && (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 2)) {
+				SetLeft ();
+			} else if (pacManStates == PacManStates.Up && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 0) {
+				SetUp ();
+			} else if (pacManStates == PacManStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 0) {
+				SetDown ();
+			} 
+
+
+		}
+
+
+	}
+	void SetRight() {
+		pacManStates = PacManStates.Right;
+		animator.Play ("PacManMovesRight");
+		movingDone = false;
+		StartCoroutine (MoveRight ());
+		colOnGrid++;
+	}
+	void SetLeft() {
+		animator.Play ("PacManMovesLeft");
+		pacManStates = PacManStates.Left;
+		movingDone = false;
+		StartCoroutine (MoveLeft ());
+		colOnGrid--;
+	}
+	void SetUp() {
+		animator.Play ("PacManMovesUp");
+		pacManStates = PacManStates.Up;
+		movingDone = false;
+		StartCoroutine (MoveUp ());
+		rowOnGrid--;
+	}
+	void SetDown() {
+		animator.Play ("PacManMovesDown");
+		pacManStates = PacManStates.Down;
+		movingDone = false;
+		StartCoroutine (MoveDown ());
+		rowOnGrid++;
+	}
+
+
+	IEnumerator MoveRight () {
+		float distanceTraveled = transform.position.x;
+		float endPosition = transform.position.x + DistanceToTravel; 
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(distanceTraveled,transform.position.y);
+
+			yield return new WaitForSeconds (TimeStep);
+		}
+		movingDone = true;
+		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 2) {
+			transform.position = LeftBank.position;
+			rowOnGrid = 14;
+			colOnGrid = 1;
+		}
+
+	}
+	IEnumerator MoveLeft () {
+		float distanceTraveled = transform.position.x;
+		float endPosition = transform.position.x - DistanceToTravel; 
+
+		while (distanceTraveled > endPosition) {
+			distanceTraveled -= .08f;
+			transform.position = new Vector2(distanceTraveled,transform.position.y);
+
+			yield return new WaitForSeconds (TimeStep);
+		}
+		movingDone = true;
+		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 2) {
+			transform.position = RightBank.position;
+			rowOnGrid = 14;
+			colOnGrid = 28;
+		}
+	}
+	IEnumerator MoveUp () {
+		float distanceTraveled = transform.position.y;
+		float endPosition = transform.position.y + DistanceToTravel; 
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep);
+		}
+		movingDone = true;
+	}
+	IEnumerator MoveDown () {
+		float distanceTraveled = transform.position.y;
+		float endPosition = transform.position.y - DistanceToTravel; 
+
+		while (distanceTraveled > endPosition) {
+			distanceTraveled -= .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep);
+		}
+		movingDone = true;
+	}
+}
