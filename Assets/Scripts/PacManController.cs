@@ -16,6 +16,10 @@ public class PacManController : MonoBehaviour {
 	public Transform RightBank;
 
 	public GameManager GameManager;
+	public Sprite RightSprite;
+	public Sprite LeftSprite;
+	public Sprite UpSprite;
+	public Sprite DownSprite;
 
 //	private int rowOnGrid = 23;
 //	private int colOnGrid = 13;
@@ -51,7 +55,9 @@ public class PacManController : MonoBehaviour {
 				SetUp ();
 			} else if (pacManStates == PacManStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 0) {
 				SetDown ();
-			} 
+			} else {
+				animator.enabled = false;
+			}
 
 
 		}
@@ -59,32 +65,40 @@ public class PacManController : MonoBehaviour {
 
 	}
 	void SetRight() {
+		animator.enabled = true;
 		pacManStates = PacManStates.Right;
 		animator.Play ("PacManMovesRight");
 		movingDone = false;
 		StartCoroutine (MoveRight ());
 		colOnGrid++;
+		GetComponent<SpriteRenderer> ().sprite = RightSprite;
 	}
 	void SetLeft() {
+		animator.enabled = true;
 		animator.Play ("PacManMovesLeft");
 		pacManStates = PacManStates.Left;
 		movingDone = false;
 		StartCoroutine (MoveLeft ());
 		colOnGrid--;
+		GetComponent<SpriteRenderer> ().sprite = LeftSprite;
 	}
 	void SetUp() {
+		animator.enabled = true;
 		animator.Play ("PacManMovesUp");
 		pacManStates = PacManStates.Up;
 		movingDone = false;
 		StartCoroutine (MoveUp ());
 		rowOnGrid--;
+		GetComponent<SpriteRenderer> ().sprite = UpSprite;
 	}
 	void SetDown() {
+		animator.enabled = true;
 		animator.Play ("PacManMovesDown");
 		pacManStates = PacManStates.Down;
 		movingDone = false;
 		StartCoroutine (MoveDown ());
 		rowOnGrid++;
+		GetComponent<SpriteRenderer> ().sprite = DownSprite;
 	}
 
 
