@@ -5,8 +5,19 @@ public class GameManager : MonoBehaviour {
 
 	public int[,] GridMap;
 
+	public enum States {Intro, Play};
+
+	public static States state;
+	public MusicController MusicController;
+	public GameObject PacMan;
+	public GameObject PacManIntro;
+	public MessageController MessageController;
+
+
 	// Use this for initialization
 	void Start () {
+		state = States.Intro;
+
 		GridMap = new int[,]{
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
@@ -40,19 +51,24 @@ public class GameManager : MonoBehaviour {
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 		};
-//		GridMap = new int[,] {
-//			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1, 1, 1, 1 },
-//			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 ,1 },
-//			{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
-//			{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0 ,1 ,1 ,1 ,1 ,1 ,0 ,1 ,1 ,1},
-//			{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0 , },
-//			{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0 },
-//			{ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-//			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-//			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-//		};
+		PlayIntroMusic ();
 	}
-	
+	void PlayIntroMusic() {
+		PacManIntro.GetComponent<SpriteRenderer> ().enabled = true;
+		PacMan.GetComponent<SpriteRenderer> ().enabled = false;
+		MusicController.PlayIntro ();
+		Invoke ("IntroDone", MusicController.IntroMusic.length);
+		Invoke ("HidePlayerText", 1.75f);
+	}
+	void HidePlayerText() {
+		MessageController.PlayerText.SetActive (false);
+	}
+	void IntroDone() {
+		PacMan.GetComponent<SpriteRenderer> ().enabled = true;
+		PacManIntro.GetComponent<SpriteRenderer> ().enabled = false;
+		state = States.Play;
+		MessageController.GetReadyText.SetActive (false);
+	}
 	// Update is called once per frame
 	void Update () {
 	

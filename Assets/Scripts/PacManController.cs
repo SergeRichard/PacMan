@@ -9,6 +9,9 @@ public class PacManController : MonoBehaviour {
 
 	public static PacManStates pacManStates;
 
+	public Transform LeftLocation;
+	public Transform RightLocation;
+
 	public float DistanceToTravel = .32f;
 	public float TimeStep = .01f;
 
@@ -23,22 +26,34 @@ public class PacManController : MonoBehaviour {
 
 //	private int rowOnGrid = 23;
 //	private int colOnGrid = 13;
-	private int rowOnGrid = 1;
-	private int colOnGrid = 2;
+	private int rowOnGrid = 23;
+	private int colOnGrid = 14;
 
 	private bool movingDone;
 
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
-		pacManStates = PacManStates.Idle;
+		pacManStates = PacManStates.Left;
 		movingDone = true;
-
+		transform.position = LeftLocation.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (movingDone) {
+		if (GameManager.state == GameManager.States.Intro) {
+			if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) {
+				transform.position = RightLocation.transform.position;
+				colOnGrid = 15;
+				pacManStates = PacManStates.Right;
+			}
+			if (Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) {
+				transform.position = LeftLocation.transform.position;
+				colOnGrid = 14;
+				pacManStates = PacManStates.Left;
+			}
+		}
+		if (movingDone && GameManager.state == GameManager.States.Play) {
 			if ((Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) && (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 2)) {			
 				SetRight ();
 			} else if ((Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) && (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 2)) {
@@ -58,8 +73,6 @@ public class PacManController : MonoBehaviour {
 			} else {
 				animator.enabled = false;
 			}
-
-
 		}
 
 
