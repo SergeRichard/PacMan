@@ -4,6 +4,7 @@ using System.Collections;
 public class MusicController : MonoBehaviour {
 
 	public AudioClip IntroMusic;
+	public AudioClip SirenSound;
 
 	protected AudioSource audioSource;
 
@@ -19,7 +20,13 @@ public class MusicController : MonoBehaviour {
 
 	public void PlayIntro() {
 		audioSource.clip = IntroMusic;
+		audioSource.loop = false;
 		audioSource.Play ();
 
+	}
+	public void PlaySirenSound() {		
+		audioSource.clip = SirenSound;
+		audioSource.loop = true;
+		audioSource.Play ();
 	}
 }

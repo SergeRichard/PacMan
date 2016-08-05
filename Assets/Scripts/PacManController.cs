@@ -173,4 +173,9 @@ public class PacManController : MonoBehaviour {
 		}
 		movingDone = true;
 	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		other.gameObject.SetActive (false);
+
+	}
 }

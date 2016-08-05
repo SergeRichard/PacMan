@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour {
 		PacManIntro.GetComponent<SpriteRenderer> ().enabled = false;
 		state = States.Play;
 		MessageController.GetReadyText.SetActive (false);
+		MusicController.PlaySirenSound ();
 	}
 	// Update is called once per frame
 	void Update () {
