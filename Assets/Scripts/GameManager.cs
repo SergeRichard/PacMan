@@ -12,11 +12,25 @@ public class GameManager : MonoBehaviour {
 	public GameObject PacMan;
 	public GameObject PacManIntro;
 	public MessageController MessageController;
+	public int Lives;
 
+	[HideInInspector]
+	public int Score;
+
+	[HideInInspector]
+	public int HighScore;
 
 	// Use this for initialization
 	void Start () {
 		state = States.Intro;
+
+		Score = 0;
+		HighScore = 0;
+		Lives = 5;
+
+		MessageController.HighScoreValue.text = HighScore.ToString ();
+		MessageController.ScoreValue.text = Score.ToString ();
+		MessageController.LivesController.ShowLives (Lives);
 
 		GridMap = new int[,]{
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},

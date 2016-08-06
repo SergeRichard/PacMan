@@ -72,6 +72,7 @@ public class PacManController : MonoBehaviour {
 				SetDown ();
 			} else {
 				animator.enabled = false;
+				GameManager.MusicController.StopWakaSound ();
 			}
 		}
 
@@ -80,6 +81,20 @@ public class PacManController : MonoBehaviour {
 	void PlayWakaIfPelletThere() {
 		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3 || GameManager.GridMap [rowOnGrid, colOnGrid] == 4) {
 			GameManager.MusicController.PlayWakaSound ();
+
+
+			if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3)
+				GameManager.Score += 10;
+			
+			if (GameManager.GridMap [rowOnGrid, colOnGrid] == 4)
+				GameManager.Score += 50;
+
+			if (GameManager.HighScore < GameManager.Score) {
+				GameManager.HighScore = GameManager.Score;
+				GameManager.MessageController.HighScoreValue.text = GameManager.HighScore.ToString ();
+			}
+			GameManager.MessageController.ScoreValue.text = GameManager.Score.ToString ();
+
 			GameManager.GridMap [rowOnGrid, colOnGrid] = 0;
 		} else {
 			GameManager.MusicController.StopWakaSound ();
