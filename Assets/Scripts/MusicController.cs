@@ -5,6 +5,7 @@ public class MusicController : MonoBehaviour {
 
 	public AudioClip IntroMusic;
 	public AudioClip SirenSound;
+	public AudioSource WakaSoundAudioSource;
 
 	protected AudioSource audioSource;
 
@@ -28,5 +29,16 @@ public class MusicController : MonoBehaviour {
 		audioSource.clip = SirenSound;
 		audioSource.loop = true;
 		audioSource.Play ();
+	}
+	public void PlayWakaSound() {
+		if (!WakaSoundAudioSource.isPlaying) {
+			WakaSoundAudioSource.loop = true;
+			WakaSoundAudioSource.Play ();
+		}
+
+	}
+	public void StopWakaSound() {
+		if (WakaSoundAudioSource.isPlaying)
+			WakaSoundAudioSource.Stop ();
 	}
 }

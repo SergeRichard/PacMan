@@ -54,21 +54,21 @@ public class PacManController : MonoBehaviour {
 			}
 		}
 		if (movingDone && GameManager.state == GameManager.States.Play) {
-			if ((Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) && (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 2)) {			
+			if ((Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {			
 				SetRight ();
-			} else if ((Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) && (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 2)) {
+			} else if ((Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) && GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
 				SetLeft ();
-			} else if ((Input.GetKey (KeyCode.UpArrow) || Input.GetKey (KeyCode.W)) && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 0) {
+			} else if ((Input.GetKey (KeyCode.UpArrow) || Input.GetKey (KeyCode.W)) && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
 				SetUp ();
-			} else if ((Input.GetKey (KeyCode.DownArrow) || Input.GetKey (KeyCode.S)) && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 0) {
+			} else if ((Input.GetKey (KeyCode.DownArrow) || Input.GetKey (KeyCode.S)) && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
 				SetDown ();
-			} else if (pacManStates == PacManStates.Right && (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 2)) {
+			} else if (pacManStates == PacManStates.Right && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
 				SetRight ();
-			} else if (pacManStates == PacManStates.Left && (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 0 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 2)) {
+			} else if (pacManStates == PacManStates.Left && GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
 				SetLeft ();
-			} else if (pacManStates == PacManStates.Up && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 0) {
+			} else if (pacManStates == PacManStates.Up && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
 				SetUp ();
-			} else if (pacManStates == PacManStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 0) {
+			} else if (pacManStates == PacManStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
 				SetDown ();
 			} else {
 				animator.enabled = false;
@@ -77,6 +77,14 @@ public class PacManController : MonoBehaviour {
 
 
 	}
+	void PlayWakaIfPelletThere() {
+		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3 || GameManager.GridMap [rowOnGrid, colOnGrid] == 4) {
+			GameManager.MusicController.PlayWakaSound ();
+			GameManager.GridMap [rowOnGrid, colOnGrid] = 0;
+		} else {
+			GameManager.MusicController.StopWakaSound ();
+		}
+	}
 	void SetRight() {
 		animator.enabled = true;
 		pacManStates = PacManStates.Right;
@@ -84,6 +92,8 @@ public class PacManController : MonoBehaviour {
 		movingDone = false;
 		StartCoroutine (MoveRight ());
 		colOnGrid++;
+		PlayWakaIfPelletThere ();
+
 		GetComponent<SpriteRenderer> ().sprite = RightSprite;
 	}
 	void SetLeft() {
@@ -93,6 +103,7 @@ public class PacManController : MonoBehaviour {
 		movingDone = false;
 		StartCoroutine (MoveLeft ());
 		colOnGrid--;
+		PlayWakaIfPelletThere ();
 		GetComponent<SpriteRenderer> ().sprite = LeftSprite;
 	}
 	void SetUp() {
@@ -102,6 +113,7 @@ public class PacManController : MonoBehaviour {
 		movingDone = false;
 		StartCoroutine (MoveUp ());
 		rowOnGrid--;
+		PlayWakaIfPelletThere ();
 		GetComponent<SpriteRenderer> ().sprite = UpSprite;
 	}
 	void SetDown() {
@@ -111,6 +123,7 @@ public class PacManController : MonoBehaviour {
 		movingDone = false;
 		StartCoroutine (MoveDown ());
 		rowOnGrid++;
+		PlayWakaIfPelletThere ();
 		GetComponent<SpriteRenderer> ().sprite = DownSprite;
 	}
 
