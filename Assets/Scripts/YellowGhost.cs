@@ -5,7 +5,7 @@ public class YellowGhost : MonoBehaviour {
 
 	Animator animator;
 
-	public enum YellowGhostStates {Idle, Up, Down, Left, Right};
+	public enum YellowGhostStates {Idle,IdleUpAndDown, Up, Down, Left, Right};
 
 	public static YellowGhostStates YellowGhostState;
 
@@ -34,7 +34,7 @@ public class YellowGhost : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
-		YellowGhostState = YellowGhostStates.Left;
+		YellowGhostState = YellowGhostStates.IdleUpAndDown;
 		movingDone = true;
 		//transform.position = LeftLocation.transform.position;
 	}
@@ -53,24 +53,68 @@ public class YellowGhost : MonoBehaviour {
 //				pacManStates = PacManStates.Left;
 //			}
 //		}
-		if (movingDone && GameManager.state == GameManager.States.Play) {
-			if (YellowGhostState == YellowGhostStates.Right && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
-				SetRight ();
-			} else if (YellowGhostState == YellowGhostStates.Left && GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
-				SetLeft ();
-			} else if (YellowGhostState == YellowGhostStates.Up && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
-				SetUp ();
-			} else if (YellowGhostState == YellowGhostStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
-				SetDown ();
-			} else {
-				animator.enabled = false;
-				//GameManager.MusicController.StopWakaSound ();
-			}
+		if (movingDone && GameManager.state == GameManager.States.Play && YellowGhostState == YellowGhostStates.IdleUpAndDown) {
+			movingDone = false;
+			StartCoroutine(MoveUpAndDownInBox ());
 		}
+//		if (movingDone && GameManager.state == GameManager.States.Play) {
+//			if (YellowGhostState == YellowGhostStates.Right && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+//				SetRight ();
+//			} else if (YellowGhostState == YellowGhostStates.Left && GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+//				SetLeft ();
+//			} else if (YellowGhostState == YellowGhostStates.Up && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+//				SetUp ();
+//			} else if (YellowGhostState == YellowGhostStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+//				SetDown ();
+//			} else {
+//				animator.enabled = false;
+//				//GameManager.MusicController.StopWakaSound ();
+//			}
+//		}
 
 
 	}
+	IEnumerator MoveUpAndDownInBox() {
+		float distanceTraveled = transform.position.y;
+		float endPosition = transform.position.y + (DistanceToTravel / 2f);
 
+		float timeMulti = 3f;
+
+		animator.enabled = true;
+		animator.Play ("MoveUp");
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+		endPosition = transform.position.y - DistanceToTravel;
+
+		animator.enabled = true;
+		animator.Play ("MoveDown");
+
+		while (distanceTraveled > endPosition) {
+			distanceTraveled -= .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+		endPosition = transform.position.y + (DistanceToTravel / 2f);
+
+		animator.enabled = true;
+		animator.Play ("MoveUp");
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+
+		movingDone = true;
+
+	}
 	void SetRight() {
 		animator.enabled = true;
 		YellowGhostState = YellowGhostStates.Right;

@@ -5,7 +5,7 @@ public class BlueGhost : MonoBehaviour {
 
 	Animator animator;
 
-	public enum BlueGhostStates {Idle, Up, Down, Left, Right};
+	public enum BlueGhostStates {Idle, IdleUpAndDown, IdleDown, Up, Down, Left, Right};
 
 	public static BlueGhostStates BlueGhostState;
 
@@ -34,7 +34,7 @@ public class BlueGhost : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
-		BlueGhostState = BlueGhostStates.Left;
+		BlueGhostState = BlueGhostStates.IdleUpAndDown;
 		movingDone = true;
 		//transform.position = LeftLocation.transform.position;
 	}
@@ -53,22 +53,66 @@ public class BlueGhost : MonoBehaviour {
 		//				pacManStates = PacManStates.Left;
 		//			}
 		//		}
-		if (movingDone && GameManager.state == GameManager.States.Play) {
-			if (BlueGhostState == BlueGhostStates.Right && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
-				SetRight ();
-			} else if (BlueGhostState == BlueGhostStates.Left && GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
-				SetLeft ();
-			} else if (BlueGhostState == BlueGhostStates.Up && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
-				SetUp ();
-			} else if (BlueGhostState == BlueGhostStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
-				SetDown ();
-			} else {
-				animator.enabled = false;
-				//GameManager.MusicController.StopWakaSound ();
-			}
+		if (movingDone && GameManager.state == GameManager.States.Play && BlueGhostState == BlueGhostStates.IdleUpAndDown) {
+			movingDone = false;
+			StartCoroutine(MoveUpAndDownInBox ());
 		}
+//		if (movingDone && GameManager.state == GameManager.States.Play) {
+//			if (BlueGhostState == BlueGhostStates.Right && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+//				SetRight ();
+//			} else if (BlueGhostState == BlueGhostStates.Left && GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+//				SetLeft ();
+//			} else if (BlueGhostState == BlueGhostStates.Up && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+//				SetUp ();
+//			} else if (BlueGhostState == BlueGhostStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+//				SetDown ();
+//			} else {
+//				animator.enabled = false;
+//				//GameManager.MusicController.StopWakaSound ();
+//			}
+//		}
 	}
+	IEnumerator MoveUpAndDownInBox() {
+		float distanceTraveled = transform.position.y;
+		float endPosition = transform.position.y + (DistanceToTravel / 2f);
 
+		float timeMulti = 3f;
+
+		animator.enabled = true;
+		animator.Play ("MoveUp");
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+		endPosition = transform.position.y - DistanceToTravel;
+
+		animator.enabled = true;
+		animator.Play ("MoveDown");
+
+		while (distanceTraveled > endPosition) {
+			distanceTraveled -= .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+		endPosition = transform.position.y + (DistanceToTravel / 2f);
+
+		animator.enabled = true;
+		animator.Play ("MoveUp");
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+
+		movingDone = true;
+
+	}
 	void SetRight() {
 		animator.enabled = true;
 		BlueGhostState = BlueGhostStates.Right;
