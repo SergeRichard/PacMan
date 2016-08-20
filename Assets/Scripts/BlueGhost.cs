@@ -64,6 +64,9 @@ public class BlueGhost : MonoBehaviour {
 			movingDone = false;
 			StartCoroutine(MoveOutOfBox ());
 		}
+		if (GameManager.state == GameManager.States.PacManDead) {
+			animator.enabled = false;
+		}
 		if (movingDone && GameManager.state == GameManager.States.Play && BlueGhostState != BlueGhostStates.MoveOutOfBox) {
 			ChangeDirection();
 			switch (BlueGhostState) {

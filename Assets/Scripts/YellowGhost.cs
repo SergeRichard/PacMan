@@ -64,6 +64,9 @@ public class YellowGhost : MonoBehaviour {
 			movingDone = false;
 			StartCoroutine(MoveOutOfBox ());
 		}
+		if (GameManager.state == GameManager.States.PacManDead) {
+			animator.enabled = false;
+		}
 		if (movingDone && GameManager.state == GameManager.States.Play && YellowGhostState != YellowGhostStates.MoveOutOfBox) {
 			ChangeDirection();
 			switch (YellowGhostState) {

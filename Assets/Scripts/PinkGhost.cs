@@ -58,6 +58,9 @@ public class PinkGhost : MonoBehaviour {
 			movingDone = false;
 			StartCoroutine (MoveOutOfBox ());
 		}
+		if (GameManager.state == GameManager.States.PacManDead) {
+			animator.enabled = false;
+		}
 		if (movingDone && GameManager.state == GameManager.States.Play && PinkGhostState != PinkGhostStates.MoveOutOfBox) {
 			ChangeDirection();
 			switch (PinkGhostState) {
