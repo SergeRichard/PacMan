@@ -26,7 +26,7 @@ public class RedGhost : MonoBehaviour {
 
 	//	private int rowOnGrid = 23;
 	//	private int colOnGrid = 13;
-	private int rowOnGrid = 23;
+	private int rowOnGrid = 11;
 	private int colOnGrid = 14;
 
 	private bool movingDone;
@@ -75,6 +75,12 @@ public class RedGhost : MonoBehaviour {
 	void ChangeDirection() {
 		switch (RedGhostState) {
 		case RedGhostStates.Left:
+			if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					RedGhostState = RedGhostStates.Left;
+					break;
+				}
+			}
 			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
 				if (Random.Range (0, 2) == 0) {
 					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
@@ -88,11 +94,16 @@ public class RedGhost : MonoBehaviour {
 					} else {
 						RedGhostState = RedGhostStates.Up;
 					}
-
 				}
 			}
 			break;
 		case RedGhostStates.Right:
+			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					RedGhostState = RedGhostStates.Right;
+					break;
+				} 
+			}
 			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
 				if (Random.Range (0, 2) == 0) {
 					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
@@ -111,6 +122,12 @@ public class RedGhost : MonoBehaviour {
 			}
 			break;
 		case RedGhostStates.Up:
+			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					RedGhostState = RedGhostStates.Up;
+					break;
+				}
+			}
 			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
 				if (Random.Range (0, 2) == 0) {
 					if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
@@ -124,11 +141,16 @@ public class RedGhost : MonoBehaviour {
 					} else {
 						RedGhostState = RedGhostStates.Right;
 					}
-
 				}
 			}
 			break;
 		case RedGhostStates.Down:
+			if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					RedGhostState = RedGhostStates.Down;
+					break;
+				}
+			}
 			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
 				if (Random.Range (0, 2) == 0) {
 					if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
@@ -142,7 +164,6 @@ public class RedGhost : MonoBehaviour {
 					} else {
 						RedGhostState = RedGhostStates.Right;
 					}
-
 				}
 			}
 			break;
