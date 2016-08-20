@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour {
 	public GameObject PacMan;
 	public GameObject PacManIntro;
 	public MessageController MessageController;
+	public GhostController GhostController;
+
 	public int Lives;
 
 	[HideInInspector]
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour {
 		MessageController.HighScoreValue.text = HighScore.ToString ();
 		MessageController.ScoreValue.text = Score.ToString ();
 		MessageController.LivesController.ShowLives (Lives);
+
+		GhostController.DisableGhostRenderer ();
 
 		GridMap = new int[,]{
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -76,6 +80,7 @@ public class GameManager : MonoBehaviour {
 	}
 	void HidePlayerText() {
 		MessageController.PlayerText.SetActive (false);
+		GhostController.EnableGhostRenderer ();
 	}
 	void IntroDone() {
 		PacMan.GetComponent<SpriteRenderer> ().enabled = true;
