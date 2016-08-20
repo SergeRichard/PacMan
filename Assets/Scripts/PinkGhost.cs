@@ -5,9 +5,10 @@ public class PinkGhost : MonoBehaviour {
 
 	Animator animator;
 
-	public enum PinkGhostStates {Idle, Up, Down, Left, Right};
+	public enum PinkGhostStates {Idle, IdleUpAndDown, MoveOutOfBox, Up, Down, Left, Right};
 
 	public static PinkGhostStates PinkGhostState;
+	public GhostController GhostController;
 
 	//	public Transform LeftLocation;
 	//	public Transform RightLocation;
@@ -34,7 +35,7 @@ public class PinkGhost : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
-		PinkGhostState = PinkGhostStates.Left;
+		PinkGhostState = PinkGhostStates.MoveOutOfBox;
 		movingDone = true;
 		//transform.position = LeftLocation.transform.position;
 	}
@@ -53,26 +54,52 @@ public class PinkGhost : MonoBehaviour {
 		//				pacManStates = PacManStates.Left;
 		//			}
 		//		}
-		if (movingDone && GameManager.state == GameManager.States.Play) {
-			if (PinkGhostState == PinkGhostStates.Right && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
-				SetRight ();
-			} else if (PinkGhostState == PinkGhostStates.Left && GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
-				SetLeft ();
-			} else if (PinkGhostState == PinkGhostStates.Up && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+		if (movingDone && GameManager.state == GameManager.States.Play && PinkGhostState == PinkGhostStates.MoveOutOfBox) {
+			movingDone = false;
+			StartCoroutine (MoveOutOfBox ());
+		}
+		if (movingDone && GameManager.state == GameManager.States.Play && PinkGhostState != PinkGhostStates.MoveOutOfBox) {
+			ChangeDirection();
+			switch (PinkGhostState) {
+			case PinkGhostStates.Up:
 				SetUp ();
-			} else if (PinkGhostState == PinkGhostStates.Down && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+				break;
+			case PinkGhostStates.Down:
 				SetDown ();
-			} else {
-				animator.enabled = false;
-				//GameManager.MusicController.StopWakaSound ();
+				break;
+			case PinkGhostStates.Right:
+				SetRight ();
+				break;
+			case PinkGhostStates.Left:
+				SetLeft ();
+				break;
+
 			}
 		}
 	}
+	IEnumerator MoveOutOfBox() {
+		float distanceTraveled = transform.position.y;
+		float endPosition = transform.position.y + (DistanceToTravel * 3f);
 
+		float timeMulti = 3f;
+
+		animator.enabled = true;
+		animator.Play ("MoveUp");
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+		PinkGhostState = PinkGhostStates.Left;
+		GetComponent<Transform> ().position = GhostController.GhostStartLocation.position;
+		movingDone = true;
+	}
 	void SetRight() {
 		animator.enabled = true;
 		PinkGhostState = PinkGhostStates.Right;
-		animator.Play ("PacManMovesRight");
+		animator.Play ("MovesRight");
 		movingDone = false;
 		StartCoroutine (MoveRight ());
 		colOnGrid++;
@@ -81,7 +108,7 @@ public class PinkGhost : MonoBehaviour {
 	}
 	void SetLeft() {
 		animator.enabled = true;
-		animator.Play ("PacManMovesLeft");
+		animator.Play ("MovesLeft");
 		PinkGhostState = PinkGhostStates.Left;
 		movingDone = false;
 		StartCoroutine (MoveLeft ());
@@ -90,7 +117,7 @@ public class PinkGhost : MonoBehaviour {
 	}
 	void SetUp() {
 		animator.enabled = true;
-		animator.Play ("PacManMovesUp");
+		animator.Play ("MovesUp");
 		PinkGhostState = PinkGhostStates.Up;
 		movingDone = false;
 		StartCoroutine (MoveUp ());
@@ -99,14 +126,111 @@ public class PinkGhost : MonoBehaviour {
 	}
 	void SetDown() {
 		animator.enabled = true;
-		animator.Play ("PacManMovesDown");
+		animator.Play ("MovesDown");
 		PinkGhostState = PinkGhostStates.Down;
 		movingDone = false;
 		StartCoroutine (MoveDown ());
 		rowOnGrid++;
 		GetComponent<SpriteRenderer> ().sprite = DownSprite;
 	}
+	void ChangeDirection() {
+		switch (PinkGhostState) {
+		case PinkGhostStates.Left:
+			if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					PinkGhostState = PinkGhostStates.Left;
+					break;
+				}
+			}
+			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+						PinkGhostState = PinkGhostStates.Up;
+					} else {
+						PinkGhostState = PinkGhostStates.Down;
+					}
+				} else {
+					if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+						PinkGhostState = PinkGhostStates.Down;
+					} else {
+						PinkGhostState = PinkGhostStates.Up;
+					}
+				}
+			}
+			break;
+		case PinkGhostStates.Right:
+			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					PinkGhostState = PinkGhostStates.Right;
+					break;
+				} 
+			}
+			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+						PinkGhostState = PinkGhostStates.Up;
+					} else {
+						PinkGhostState = PinkGhostStates.Down;
+					}
+				} else {
+					if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+						PinkGhostState = PinkGhostStates.Down;
+					} else {
+						PinkGhostState = PinkGhostStates.Up;
+					}
 
+				}
+			}
+			break;
+		case PinkGhostStates.Up:
+			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					PinkGhostState = PinkGhostStates.Up;
+					break;
+				}
+			}
+			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+						PinkGhostState = PinkGhostStates.Right;
+					} else {
+						PinkGhostState = PinkGhostStates.Left;
+					}
+				} else {
+					if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+						PinkGhostState = PinkGhostStates.Left;
+					} else {
+						PinkGhostState = PinkGhostStates.Right;
+					}
+				}
+			}
+			break;
+		case PinkGhostStates.Down:
+			if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					PinkGhostState = PinkGhostStates.Down;
+					break;
+				}
+			}
+			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+				if (Random.Range (0, 2) == 0) {
+					if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+						PinkGhostState = PinkGhostStates.Right;
+					} else {
+						PinkGhostState = PinkGhostStates.Left;
+					}
+				} else {
+					if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+						PinkGhostState = PinkGhostStates.Left;
+					} else {
+						PinkGhostState = PinkGhostStates.Right;
+					}
+				}
+			}
+			break;
+		}
+
+	}
 
 	IEnumerator MoveRight () {
 		float distanceTraveled = transform.position.x;

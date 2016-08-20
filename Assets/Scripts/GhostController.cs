@@ -6,6 +6,8 @@ public class GhostController : MonoBehaviour {
 	public enum Modes { Scatter, Chase };
 	public Modes Mode;
 
+	public Transform GhostStartLocation;
+
 	public enum Actions
 	{
 		MoveRight,
