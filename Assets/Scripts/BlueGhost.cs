@@ -90,7 +90,7 @@ public class BlueGhost : MonoBehaviour {
 		float distanceTraveled = transform.position.x;
 		float endPosition = transform.position.x + (DistanceToTravel * 2f); 
 
-		float timeMulti = 3f;
+		float timeMulti = 2f;
 
 		animator.enabled = true;
 		animator.Play ("MoveRight");

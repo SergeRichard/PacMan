@@ -81,7 +81,7 @@ public class PinkGhost : MonoBehaviour {
 		float distanceTraveled = transform.position.y;
 		float endPosition = transform.position.y + (DistanceToTravel * 3f);
 
-		float timeMulti = 3f;
+		float timeMulti = 2f;
 
 		animator.enabled = true;
 		animator.Play ("MoveUp");
