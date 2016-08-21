@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject PacManIntro;
 	public MessageController MessageController;
 	public GhostController GhostController;
+	public PacManController PacManController;
 
 	public int Lives;
 
@@ -92,5 +93,14 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+	public void PacManDead() {
+		MusicController.StopAllSounds ();
+		Invoke ("PlayDeathSequence", 1f);
+	}
+	public void PlayDeathSequence() {
+		GhostController.DisableGhostRenderer ();
+		PacManController.PlayDeathSequence ();
+		MusicController.PlayDeathSound ();
 	}
 }

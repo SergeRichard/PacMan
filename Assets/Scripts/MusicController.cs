@@ -5,6 +5,7 @@ public class MusicController : MonoBehaviour {
 
 	public AudioClip IntroMusic;
 	public AudioClip SirenSound;
+	public AudioClip PacManDeathSound;
 	public AudioSource WakaSoundAudioSource;
 
 	protected AudioSource audioSource;
@@ -18,7 +19,11 @@ public class MusicController : MonoBehaviour {
 	void Update () {
 	
 	}
+	public void StopAllSounds() {
+		audioSource.Stop ();
+		WakaSoundAudioSource.Stop ();
 
+	}
 	public void PlayIntro() {
 		audioSource.clip = IntroMusic;
 		audioSource.loop = false;
@@ -40,5 +45,10 @@ public class MusicController : MonoBehaviour {
 	public void StopWakaSound() {
 		if (WakaSoundAudioSource.isPlaying)
 			WakaSoundAudioSource.Stop ();
+	}
+	public void PlayDeathSound() {
+		audioSource.clip = PacManDeathSound;
+		audioSource.loop = false;
+		audioSource.Play ();
 	}
 }

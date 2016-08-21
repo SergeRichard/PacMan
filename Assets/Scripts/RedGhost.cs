@@ -53,6 +53,9 @@ public class RedGhost : MonoBehaviour {
 		//				pacManStates = PacManStates.Left;
 		//			}
 		//		}
+		if (GameManager.state == GameManager.States.PacManDead) {
+			animator.enabled = false;
+		}
 		if (movingDone && GameManager.state == GameManager.States.Play) {
 			ChangeDirection();
 			switch (RedGhostState) {
@@ -81,9 +84,7 @@ public class RedGhost : MonoBehaviour {
 					break;
 				}
 			}
-			if (GameManager.state == GameManager.States.PacManDead) {
-				animator.enabled = false;
-			}
+
 			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
 				if (Random.Range (0, 2) == 0) {
 					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {

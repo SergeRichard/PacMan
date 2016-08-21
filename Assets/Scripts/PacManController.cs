@@ -53,6 +53,7 @@ public class PacManController : MonoBehaviour {
 				pacManStates = PacManStates.Left;
 			}
 		}
+
 		if (movingDone && GameManager.state == GameManager.States.Play) {
 			if ((Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {			
 				SetRight ();
@@ -99,6 +100,13 @@ public class PacManController : MonoBehaviour {
 		} else {
 			GameManager.MusicController.StopWakaSound ();
 		}
+	}
+	public void PlayDeathSequence() {
+		animator.enabled = true;
+		animator.Play ("PacManDeath");
+	}
+	public void OnEndOfDeathSequence () {
+		GetComponent<SpriteRenderer> ().enabled = false;
 	}
 	void SetRight() {
 		animator.enabled = true;
@@ -207,6 +215,8 @@ public class PacManController : MonoBehaviour {
 			other.gameObject.SetActive (false);
 		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead) {
 			GameManager.state = GameManager.States.PacManDead;
+			animator.enabled = false;
+			GameManager.PacManDead ();
 		}
 			
 	}
