@@ -107,6 +107,7 @@ public class PacManController : MonoBehaviour {
 	}
 	public void OnEndOfDeathSequence () {
 		GetComponent<SpriteRenderer> ().enabled = false;
+		GameManager.ResetLevel ();
 	}
 	void SetRight() {
 		animator.enabled = true;

@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour {
 	public MessageController MessageController;
 	public GhostController GhostController;
 	public PacManController PacManController;
+	public Transform RedGhostStart;
+	public Transform BlueGhostStart;
+	public Transform PinkGhostStart;
+	public Transform YellowGhostStart;
 
 	public int Lives;
 
@@ -102,5 +106,26 @@ public class GameManager : MonoBehaviour {
 		GhostController.DisableGhostRenderer ();
 		PacManController.PlayDeathSequence ();
 		MusicController.PlayDeathSound ();
+	}
+	public void ResetLevel() {
+		Invoke ("ResetToStartingPoint", 1f);
+	}
+	public void ResetToStartingPoint() {
+		PacManIntro.GetComponent<SpriteRenderer> ().enabled = true;
+		GhostController.GhostBlue.GetComponent<Transform>().position = GhostController.GhostBlueStart.position;
+		GhostController.GhostRed.GetComponent<Transform>().position = GhostController.GhostRedStart.position;
+		GhostController.GhostYellow.GetComponent<Transform>().position = GhostController.GhostYellowStart.position;
+		GhostController.GhostPink.GetComponent<Transform>().position = GhostController.GhostPinkStart.position;
+
+		GhostController.EnableGhostRenderer ();
+		GhostController.GhostBlue.GetComponent<Animator> ().enabled = true;
+		GhostController.GhostRed.GetComponent<Animator> ().enabled = true;
+		GhostController.GhostYellow.GetComponent<Animator> ().enabled = true;
+		GhostController.GhostPink.GetComponent<Animator> ().enabled = true;
+
+		GhostController.GhostRed.GetComponent<Animator> ().Play ("Idle");
+		GhostController.GhostYellow.GetComponent<Animator> ().Play ("Idle");
+		GhostController.GhostPink.GetComponent<Animator> ().Play ("Idle");
+		GhostController.GhostBlue.GetComponent<Animator> ().Play ("Idle");
 	}
 }

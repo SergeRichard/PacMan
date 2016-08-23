@@ -13,6 +13,11 @@ public class GhostController : MonoBehaviour {
 	public GameObject GhostBlue;
 	public GameObject GhostRed;
 
+	public Transform GhostYellowStart;
+	public Transform GhostPinkStart;
+	public Transform GhostBlueStart;
+	public Transform GhostRedStart;
+
 	public enum Actions
 	{
 		MoveRight,
