@@ -8,16 +8,15 @@ public class GameManager : MonoBehaviour {
 	public enum States {Intro, Play, PacManDead};
 
 	public static States state;
+
 	public MusicController MusicController;
 	public GameObject PacMan;
 	public GameObject PacManIntro;
 	public MessageController MessageController;
 	public GhostController GhostController;
 	public PacManController PacManController;
-	public Transform RedGhostStart;
-	public Transform BlueGhostStart;
-	public Transform PinkGhostStart;
-	public Transform YellowGhostStart;
+
+	public Transform PacManStartLocation;
 
 	public int Lives;
 
@@ -127,5 +126,19 @@ public class GameManager : MonoBehaviour {
 		GhostController.GhostYellow.GetComponent<Animator> ().Play ("Idle");
 		GhostController.GhostPink.GetComponent<Animator> ().Play ("Idle");
 		GhostController.GhostBlue.GetComponent<Animator> ().Play ("Idle");
+
+
+		PacManController.ResetLocation ();
+
+		state = States.Play;
+
+		StartGhostSequence ();
+	}
+	void StartGhostSequence() {
+		GhostController.GhostBlue.GetComponent<BlueGhost> ().StartIdleUpAndDownSequence (16f);
+		GhostController.GhostYellow.GetComponent<BlueGhost> ().StartIdleUpAndDownSequence (22f);
+
+		GhostController.GhostPink.GetComponent<BlueGhost> ().StartIdleUpAndDownSequence (10f);
+
 	}
 }

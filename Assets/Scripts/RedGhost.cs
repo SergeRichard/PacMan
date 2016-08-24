@@ -29,6 +29,9 @@ public class RedGhost : MonoBehaviour {
 	private int rowOnGrid = 11;
 	private int colOnGrid = 14;
 
+	private int rowOnGridStart = 11;
+	private int colOnGridStart = 14;
+
 	private bool movingDone;
 
 	// Use this for initialization
@@ -74,6 +77,12 @@ public class RedGhost : MonoBehaviour {
 
 			}
 		}
+	}
+	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
+		rowOnGrid = rowOnGridStart;
+		colOnGrid = colOnGridStart;
+		RedGhostState = RedGhostStates.Left;
+
 	}
 	void ChangeDirection() {
 		switch (RedGhostState) {

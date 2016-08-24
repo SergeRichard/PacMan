@@ -31,6 +31,9 @@ public class BlueGhost : MonoBehaviour {
 	private int rowOnGrid = 11;
 	private int colOnGrid = 14;
 
+	private int rowOnGridStart = 11;
+	private int colOnGridStart = 14;
+
 	private bool movingDone;
 
 	// Use this for initialization
@@ -85,6 +88,13 @@ public class BlueGhost : MonoBehaviour {
 
 			}
 		}
+	}
+	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
+		rowOnGrid = rowOnGridStart;
+		colOnGrid = colOnGridStart;
+		BlueGhostState = BlueGhostStates.IdleUpAndDown;
+		movingDone = true;
+		Invoke ("StartMovingOutOfBox", timeToStayInBox);
 	}
 	void StartMovingOutOfBox() {
 		BlueGhostState = BlueGhostStates.MoveOutOfBox;

@@ -17,6 +17,7 @@ public class PacManController : MonoBehaviour {
 
 	public Transform LeftBank;
 	public Transform RightBank;
+	public Transform PacManStartLocation;
 
 	public GameManager GameManager;
 	public Sprite RightSprite;
@@ -28,6 +29,9 @@ public class PacManController : MonoBehaviour {
 //	private int colOnGrid = 13;
 	private int rowOnGrid = 23;
 	private int colOnGrid = 14;
+
+	const int rowOnGridStart = 23;
+	const int colOnGridStart = 14;
 
 	private bool movingDone;
 
@@ -78,6 +82,12 @@ public class PacManController : MonoBehaviour {
 		}
 
 
+	}
+	public void ResetLocation() {
+		rowOnGrid = rowOnGridStart;
+		colOnGrid = colOnGridStart;
+		GetComponent<Transform> ().position = PacManStartLocation.position;
+		GetComponent<SpriteRenderer> ().enabled = true;
 	}
 	void PlayWakaIfPelletThere() {
 		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3 || GameManager.GridMap [rowOnGrid, colOnGrid] == 4) {

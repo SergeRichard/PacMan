@@ -31,6 +31,9 @@ public class YellowGhost : MonoBehaviour {
 	private int rowOnGrid = 11;
 	private int colOnGrid = 14;
 
+	private int rowOnGridStart = 11;
+	private int colOnGridStart = 14;
+
 	private bool movingDone;
 
 	// Use this for initialization
@@ -87,6 +90,13 @@ public class YellowGhost : MonoBehaviour {
 		}
 
 
+	}
+	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
+		rowOnGrid = rowOnGridStart;
+		colOnGrid = colOnGridStart;
+		YellowGhostState = YellowGhostStates.IdleUpAndDown;
+		movingDone = true;
+		Invoke ("StartMovingOutOfBox", timeToStayInBox);
 	}
 	void StartMovingOutOfBox() {
 		YellowGhostState = YellowGhostStates.MoveOutOfBox;

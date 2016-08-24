@@ -30,6 +30,9 @@ public class PinkGhost : MonoBehaviour {
 	private int rowOnGrid = 11;
 	private int colOnGrid = 14;
 
+	const int rowOnGridStart = 11;
+	const int colOnGridStart = 14;
+
 	private bool movingDone;
 
 	// Use this for initialization
@@ -54,6 +57,10 @@ public class PinkGhost : MonoBehaviour {
 		//				pacManStates = PacManStates.Left;
 		//			}
 		//		}
+		if (movingDone && GameManager.state == GameManager.States.Play && PinkGhostState == PinkGhostStates.IdleUpAndDown) {
+			movingDone = false;
+			StartCoroutine(MoveUpAndDownInBox ());
+		}
 		if (movingDone && GameManager.state == GameManager.States.Play && PinkGhostState == PinkGhostStates.MoveOutOfBox) {
 			movingDone = false;
 			StartCoroutine (MoveOutOfBox ());
@@ -80,6 +87,16 @@ public class PinkGhost : MonoBehaviour {
 			}
 		}
 	}
+	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
+		rowOnGrid = rowOnGridStart;
+		colOnGrid = colOnGridStart;
+		PinkGhostState = PinkGhostStates.IdleUpAndDown;
+		movingDone = true;
+		Invoke ("StartMovingOutOfBox", timeToStayInBox);
+	}
+	void StartMovingOutOfBox() {
+		PinkGhostState = PinkGhostStates.MoveOutOfBox;
+	}
 	IEnumerator MoveOutOfBox() {
 		float distanceTraveled = transform.position.y;
 		float endPosition = transform.position.y + (DistanceToTravel * 3f);
@@ -98,6 +115,47 @@ public class PinkGhost : MonoBehaviour {
 		PinkGhostState = PinkGhostStates.Left;
 		GetComponent<Transform> ().position = GhostController.GhostStartLocation.position;
 		movingDone = true;
+	}
+	IEnumerator MoveUpAndDownInBox() {
+		float distanceTraveled = transform.position.y;
+		float endPosition = transform.position.y + (DistanceToTravel / 2f);
+
+		float timeMulti = 3f;
+
+		animator.enabled = true;
+		animator.Play ("MoveUp");
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+		endPosition = transform.position.y - DistanceToTravel;
+
+		animator.enabled = true;
+		animator.Play ("MoveDown");
+
+		while (distanceTraveled > endPosition) {
+			distanceTraveled -= .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+		endPosition = transform.position.y + (DistanceToTravel / 2f);
+
+		animator.enabled = true;
+		animator.Play ("MoveUp");
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+
+		movingDone = true;
+
 	}
 	void SetRight() {
 		animator.enabled = true;
