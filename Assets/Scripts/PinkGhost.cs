@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PinkGhost : MonoBehaviour {
+public class PinkGhost : Ghost {
 
 	Animator animator;
 
@@ -88,6 +88,8 @@ public class PinkGhost : MonoBehaviour {
 		}
 	}
 	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
+		CancelInvoke ();
+		StopAllCoroutines ();
 		rowOnGrid = rowOnGridStart;
 		colOnGrid = colOnGridStart;
 		PinkGhostState = PinkGhostStates.IdleUpAndDown;
@@ -118,20 +120,9 @@ public class PinkGhost : MonoBehaviour {
 	}
 	IEnumerator MoveUpAndDownInBox() {
 		float distanceTraveled = transform.position.y;
-		float endPosition = transform.position.y + (DistanceToTravel / 2f);
+		float endPosition = transform.position.y - (DistanceToTravel / 2f);
 
 		float timeMulti = 3f;
-
-		animator.enabled = true;
-		animator.Play ("MoveUp");
-
-		while (distanceTraveled < endPosition) {
-			distanceTraveled += .08f;
-			transform.position = new Vector2(transform.position.x, distanceTraveled);
-
-			yield return new WaitForSeconds (TimeStep * timeMulti);
-		}
-		endPosition = transform.position.y - DistanceToTravel;
 
 		animator.enabled = true;
 		animator.Play ("MoveDown");
@@ -142,13 +133,24 @@ public class PinkGhost : MonoBehaviour {
 
 			yield return new WaitForSeconds (TimeStep * timeMulti);
 		}
-		endPosition = transform.position.y + (DistanceToTravel / 2f);
+		endPosition = transform.position.y + DistanceToTravel;
 
 		animator.enabled = true;
 		animator.Play ("MoveUp");
 
 		while (distanceTraveled < endPosition) {
 			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (TimeStep * timeMulti);
+		}
+		endPosition = transform.position.y - (DistanceToTravel / 2f);
+
+		animator.enabled = true;
+		animator.Play ("MoveDown");
+
+		while (distanceTraveled > endPosition) {
+			distanceTraveled -= .08f;
 			transform.position = new Vector2(transform.position.x, distanceTraveled);
 
 			yield return new WaitForSeconds (TimeStep * timeMulti);

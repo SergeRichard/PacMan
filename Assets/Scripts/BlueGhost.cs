@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BlueGhost : MonoBehaviour {
+public class BlueGhost : Ghost {
 
 	Animator animator;
 
@@ -90,6 +90,8 @@ public class BlueGhost : MonoBehaviour {
 		}
 	}
 	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
+		CancelInvoke ();
+		StopAllCoroutines ();
 		rowOnGrid = rowOnGridStart;
 		colOnGrid = colOnGridStart;
 		BlueGhostState = BlueGhostStates.IdleUpAndDown;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour {
 		MessageController.ScoreValue.text = Score.ToString ();
 		MessageController.LivesController.ShowLives (Lives);
 
-		GhostController.DisableGhostRenderer ();
+		GhostController.DisableGhost ();
 
 		GridMap = new int[,]{
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour {
 		PlayIntroMusic ();
 	}
 	void PlayIntroMusic() {
+		CancelInvoke ();
 		PacManIntro.GetComponent<SpriteRenderer> ().enabled = true;
 		PacMan.GetComponent<SpriteRenderer> ().enabled = false;
 		MusicController.PlayIntro ();
@@ -84,7 +86,7 @@ public class GameManager : MonoBehaviour {
 	}
 	void HidePlayerText() {
 		MessageController.PlayerText.SetActive (false);
-		GhostController.EnableGhostRenderer ();
+		GhostController.EnableGhost ();
 	}
 	void IntroDone() {
 		PacMan.GetComponent<SpriteRenderer> ().enabled = true;
@@ -98,25 +100,31 @@ public class GameManager : MonoBehaviour {
 	
 	}
 	public void PacManDead() {
+		CancelInvoke ();
 		MusicController.StopAllSounds ();
 		Invoke ("PlayDeathSequence", 1f);
 	}
 	public void PlayDeathSequence() {
-		GhostController.DisableGhostRenderer ();
+		GhostController.DisableGhost ();
 		PacManController.PlayDeathSequence ();
 		MusicController.PlayDeathSound ();
 	}
 	public void ResetLevel() {
+		CancelInvoke ();
 		Invoke ("ResetToStartingPoint", 1f);
 	}
 	public void ResetToStartingPoint() {
+		CancelInvoke ();
+		MessageController.GetReadyText.gameObject.SetActive (true);
 		PacManIntro.GetComponent<SpriteRenderer> ().enabled = true;
+		PacMan.GetComponent<SpriteRenderer> ().enabled = false;
+		PacMan.GetComponent<Animator> ().enabled = false;
 		GhostController.GhostBlue.GetComponent<Transform>().position = GhostController.GhostBlueStart.position;
 		GhostController.GhostRed.GetComponent<Transform>().position = GhostController.GhostRedStart.position;
 		GhostController.GhostYellow.GetComponent<Transform>().position = GhostController.GhostYellowStart.position;
 		GhostController.GhostPink.GetComponent<Transform>().position = GhostController.GhostPinkStart.position;
 
-		GhostController.EnableGhostRenderer ();
+		GhostController.EnableGhost ();
 		GhostController.GhostBlue.GetComponent<Animator> ().enabled = true;
 		GhostController.GhostRed.GetComponent<Animator> ().enabled = true;
 		GhostController.GhostYellow.GetComponent<Animator> ().enabled = true;
@@ -130,15 +138,20 @@ public class GameManager : MonoBehaviour {
 
 		PacManController.ResetLocation ();
 
-		state = States.Play;
 
-		StartGhostSequence ();
+		Invoke ("StartGhostSequence", 2f);
 	}
 	void StartGhostSequence() {
-		GhostController.GhostBlue.GetComponent<BlueGhost> ().StartIdleUpAndDownSequence (16f);
-		GhostController.GhostYellow.GetComponent<BlueGhost> ().StartIdleUpAndDownSequence (22f);
+		MessageController.GetReadyText.gameObject.SetActive (false);
+		state = States.Play;
+		PacManIntro.GetComponent<SpriteRenderer> ().enabled = false;
+		PacMan.GetComponent<SpriteRenderer> ().enabled = true;
+		PacMan.GetComponent<Animator> ().enabled = true;
+		GhostController.GhostBlue.GetComponent<BlueGhost> ().StartIdleUpAndDownSequence (10f);
+		GhostController.GhostYellow.GetComponent<YellowGhost> ().StartIdleUpAndDownSequence (15f);
 
-		GhostController.GhostPink.GetComponent<BlueGhost> ().StartIdleUpAndDownSequence (10f);
+		GhostController.GhostPink.GetComponent<PinkGhost> ().StartIdleUpAndDownSequence (5f);
+		GhostController.GhostRed.GetComponent<RedGhost> ().StartMoving ();
 
 	}
 }

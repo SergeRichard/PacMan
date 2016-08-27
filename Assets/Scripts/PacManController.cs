@@ -47,16 +47,20 @@ public class PacManController : MonoBehaviour {
 	void Update () {
 		if (GameManager.state == GameManager.States.Intro) {
 			if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) {
+				
 				transform.position = RightLocation.transform.position;
 				colOnGrid = 15;
 				pacManStates = PacManStates.Right;
 			}
 			if (Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) {
+
 				transform.position = LeftLocation.transform.position;
+
 				colOnGrid = 14;
 				pacManStates = PacManStates.Left;
 			}
 		}
+
 
 		if (movingDone && GameManager.state == GameManager.States.Play) {
 			if ((Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) && GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {			
@@ -84,10 +88,15 @@ public class PacManController : MonoBehaviour {
 
 	}
 	public void ResetLocation() {
+		CancelInvoke ();
+		StopAllCoroutines ();
 		rowOnGrid = rowOnGridStart;
 		colOnGrid = colOnGridStart;
-		GetComponent<Transform> ().position = PacManStartLocation.position;
-		GetComponent<SpriteRenderer> ().enabled = true;
+		pacManStates = PacManStates.Left;
+		colOnGrid = 14;
+		transform.position = LeftLocation.transform.position;
+
+		//GetComponent<Transform> ().position = PacManStartLocation.position;
 	}
 	void PlayWakaIfPelletThere() {
 		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3 || GameManager.GridMap [rowOnGrid, colOnGrid] == 4) {
@@ -112,9 +121,12 @@ public class PacManController : MonoBehaviour {
 		}
 	}
 	public void PlayDeathSequence() {
+		// reset to left for restart of level
+		pacManStates = PacManStates.Left;
 		animator.enabled = true;
 		animator.Play ("PacManDeath");
 	}
+	// event triggered from animator when death animation done
 	public void OnEndOfDeathSequence () {
 		GetComponent<SpriteRenderer> ().enabled = false;
 		GameManager.ResetLevel ();

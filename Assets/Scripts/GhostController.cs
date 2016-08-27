@@ -26,14 +26,28 @@ public class GhostController : MonoBehaviour {
 		MoveUp
 	};
 
-	public void DisableGhostRenderer() {
+	public void DisableGhost() {
+		GhostYellow.GetComponent<YellowGhost> ().CancelInvoke ();
+		GhostYellow.GetComponent<YellowGhost> ().StopAllCoroutines ();
+		GhostPink.GetComponent<PinkGhost> ().CancelInvoke ();
+		GhostPink.GetComponent<PinkGhost> ().StopAllCoroutines ();
+		GhostBlue.GetComponent<BlueGhost> ().CancelInvoke ();
+		GhostBlue.GetComponent<BlueGhost> ().StopAllCoroutines ();
+		GhostRed.GetComponent<RedGhost> ().CancelInvoke ();
+		GhostRed.GetComponent<RedGhost> ().StopAllCoroutines ();
+
+		GhostYellow.GetComponent<Animator> ().enabled = false;
+		GhostPink.GetComponent<Animator> ().enabled = false;
+		GhostBlue.GetComponent<Animator> ().enabled = false;
+		GhostRed.GetComponent<Animator> ().enabled = false;
+
 		GhostYellow.GetComponent<SpriteRenderer> ().enabled = false;
 		GhostPink.GetComponent<SpriteRenderer> ().enabled = false;
 		GhostBlue.GetComponent<SpriteRenderer> ().enabled = false;
 		GhostRed.GetComponent<SpriteRenderer> ().enabled = false;
 
 	}
-	public void EnableGhostRenderer() {
+	public void EnableGhost() {
 		GhostYellow.GetComponent<SpriteRenderer> ().enabled = true;
 		GhostPink.GetComponent<SpriteRenderer> ().enabled = true;
 		GhostBlue.GetComponent<SpriteRenderer> ().enabled = true;

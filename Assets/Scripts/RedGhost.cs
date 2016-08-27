@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RedGhost : MonoBehaviour {
+public class RedGhost : Ghost {
 
 	Animator animator;
 
@@ -78,7 +78,9 @@ public class RedGhost : MonoBehaviour {
 			}
 		}
 	}
-	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
+	public void StartMoving() {
+		CancelInvoke ();
+		StopAllCoroutines ();
 		rowOnGrid = rowOnGridStart;
 		colOnGrid = colOnGridStart;
 		RedGhostState = RedGhostStates.Left;

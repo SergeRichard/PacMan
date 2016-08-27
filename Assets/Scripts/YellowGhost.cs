@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class YellowGhost : MonoBehaviour {
+public class YellowGhost : Ghost {
 
 	Animator animator;
 
@@ -92,6 +92,8 @@ public class YellowGhost : MonoBehaviour {
 
 	}
 	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
+		CancelInvoke ();
+		StopAllCoroutines ();
 		rowOnGrid = rowOnGridStart;
 		colOnGrid = colOnGridStart;
 		YellowGhostState = YellowGhostStates.IdleUpAndDown;
