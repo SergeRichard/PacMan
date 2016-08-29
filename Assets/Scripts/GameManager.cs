@@ -115,6 +115,10 @@ public class GameManager : MonoBehaviour {
 	}
 	public void ResetToStartingPoint() {
 		CancelInvoke ();
+
+		Lives--;
+		MessageController.LivesController.ShowLives (Lives);
+
 		MessageController.GetReadyText.gameObject.SetActive (true);
 		PacManIntro.GetComponent<SpriteRenderer> ().enabled = true;
 		PacMan.GetComponent<SpriteRenderer> ().enabled = false;

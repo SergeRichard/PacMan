@@ -7,9 +7,7 @@ public class LivesController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		foreach (var life in Lives) {
-			life.SetActive (false);
-		}
+		HideAllPacman ();
 	}
 	
 	// Update is called once per frame
@@ -17,8 +15,15 @@ public class LivesController : MonoBehaviour {
 	
 	}
 	public void ShowLives(int numOfLives) {
+		HideAllPacman ();
 		for (int i = 1; i < numOfLives; i++) {
 			Lives [i-1].SetActive (true);
 		}
+	}
+	private void HideAllPacman() {
+		foreach (var life in Lives) {
+			life.SetActive (false);
+		}
+
 	}
 }
