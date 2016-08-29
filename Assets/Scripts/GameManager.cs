@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
 	public MessageController MessageController;
 	public GhostController GhostController;
 	public PacManController PacManController;
+	public LevelManager LevelManager;
 
 	public Transform PacManStartLocation;
 
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour {
 		MessageController.HighScoreValue.text = HighScore.ToString ();
 		MessageController.ScoreValue.text = Score.ToString ();
 		MessageController.LivesController.ShowLives (Lives);
+		MessageController.GameOverText.gameObject.SetActive(false);
 
 		GhostController.DisableGhost ();
 
@@ -113,37 +115,49 @@ public class GameManager : MonoBehaviour {
 		CancelInvoke ();
 		Invoke ("ResetToStartingPoint", 1f);
 	}
+	void PauseBeforeTitleScreen() {
+		MessageController.GameOverText.gameObject.SetActive(true);
+		Invoke ("GoToTitleScreen", 2f);
+	}
+	void GoToTitleScreen() {
+		LevelManager.LoadLevel ("TitleScene");
+
+	}
 	public void ResetToStartingPoint() {
 		CancelInvoke ();
 
 		Lives--;
 		MessageController.LivesController.ShowLives (Lives);
 
-		MessageController.GetReadyText.gameObject.SetActive (true);
-		PacManIntro.GetComponent<SpriteRenderer> ().enabled = true;
-		PacMan.GetComponent<SpriteRenderer> ().enabled = false;
-		PacMan.GetComponent<Animator> ().enabled = false;
-		GhostController.GhostBlue.GetComponent<Transform>().position = GhostController.GhostBlueStart.position;
-		GhostController.GhostRed.GetComponent<Transform>().position = GhostController.GhostRedStart.position;
-		GhostController.GhostYellow.GetComponent<Transform>().position = GhostController.GhostYellowStart.position;
-		GhostController.GhostPink.GetComponent<Transform>().position = GhostController.GhostPinkStart.position;
+		if (Lives == 0) {
+			PauseBeforeTitleScreen ();
+		} else {
+			MessageController.GetReadyText.gameObject.SetActive (true);
+			PacManIntro.GetComponent<SpriteRenderer> ().enabled = true;
+			PacMan.GetComponent<SpriteRenderer> ().enabled = false;
+			PacMan.GetComponent<Animator> ().enabled = false;
+			GhostController.GhostBlue.GetComponent<Transform> ().position = GhostController.GhostBlueStart.position;
+			GhostController.GhostRed.GetComponent<Transform> ().position = GhostController.GhostRedStart.position;
+			GhostController.GhostYellow.GetComponent<Transform> ().position = GhostController.GhostYellowStart.position;
+			GhostController.GhostPink.GetComponent<Transform> ().position = GhostController.GhostPinkStart.position;
 
-		GhostController.EnableGhost ();
-		GhostController.GhostBlue.GetComponent<Animator> ().enabled = true;
-		GhostController.GhostRed.GetComponent<Animator> ().enabled = true;
-		GhostController.GhostYellow.GetComponent<Animator> ().enabled = true;
-		GhostController.GhostPink.GetComponent<Animator> ().enabled = true;
+			GhostController.EnableGhost ();
+			GhostController.GhostBlue.GetComponent<Animator> ().enabled = true;
+			GhostController.GhostRed.GetComponent<Animator> ().enabled = true;
+			GhostController.GhostYellow.GetComponent<Animator> ().enabled = true;
+			GhostController.GhostPink.GetComponent<Animator> ().enabled = true;
 
-		GhostController.GhostRed.GetComponent<Animator> ().Play ("Idle");
-		GhostController.GhostYellow.GetComponent<Animator> ().Play ("Idle");
-		GhostController.GhostPink.GetComponent<Animator> ().Play ("Idle");
-		GhostController.GhostBlue.GetComponent<Animator> ().Play ("Idle");
-
-
-		PacManController.ResetLocation ();
+			GhostController.GhostRed.GetComponent<Animator> ().Play ("Idle");
+			GhostController.GhostYellow.GetComponent<Animator> ().Play ("Idle");
+			GhostController.GhostPink.GetComponent<Animator> ().Play ("Idle");
+			GhostController.GhostBlue.GetComponent<Animator> ().Play ("Idle");
 
 
-		Invoke ("StartGhostSequence", 2f);
+			PacManController.ResetLocation ();
+
+
+			Invoke ("StartGhostSequence", 2f);
+		}
 	}
 	void StartGhostSequence() {
 		MessageController.GetReadyText.gameObject.SetActive (false);

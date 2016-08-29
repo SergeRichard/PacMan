@@ -14,6 +14,7 @@ public class MessageController : MonoBehaviour {
 	public Text ScoreValue;
 
 	public LivesController LivesController;
+	public GameObject GameOverText;
 
 	// Use this for initialization
 	void Start () {
