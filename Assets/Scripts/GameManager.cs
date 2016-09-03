@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour {
 	}
 	public void ResetLevel() {
 		CancelInvoke ();
-		Invoke ("ResetToStartingPoint", 1f);
+		Invoke ("StartingPoint", 1f);
 	}
 	void PauseBeforeTitleScreen() {
 		MessageController.GameOverText.gameObject.SetActive(true);
@@ -174,6 +174,7 @@ public class GameManager : MonoBehaviour {
 		StartCoroutine (StartBlinkingScreen ());
 
 	}
+
 	IEnumerator StartBlinkingScreen() {
 
 		for (int t = 0; t < 4; t++) {
@@ -184,8 +185,7 @@ public class GameManager : MonoBehaviour {
 		}
 		LevelBackgroundWhite.GetComponent<SpriteRenderer> ().enabled = false;
 
-		PelletController.ResetPellet ();
-		ResetPelletsOnGrid ();
+
 		ResetToStartingPoint (true);
 	}
 	private void ResetPelletsOnGrid() {
@@ -196,7 +196,10 @@ public class GameManager : MonoBehaviour {
 		}
 		Pellets = 0;
 	}
-	public void ResetToStartingPoint(bool wonLevel = false) {
+	public void StartingPoint() {
+		ResetToStartingPoint (false);
+	}
+	public void ResetToStartingPoint(bool wonLevel) {
 		CancelInvoke ();
 		if (!wonLevel) {
 			Lives--;
@@ -228,12 +231,17 @@ public class GameManager : MonoBehaviour {
 
 			PacManController.ResetLocation ();
 
+			if (wonLevel) {
+				PelletController.ResetPellet ();
+				ResetPelletsOnGrid ();
+			}
 
 			Invoke ("StartGhostSequence", 2f);
 		}
 	}
 	void StartGhostSequence() {
 		MessageController.GetReadyText.gameObject.SetActive (false);
+		MusicController.PlaySirenSound ();
 		state = States.Play;
 		PacManIntro.GetComponent<SpriteRenderer> ().enabled = false;
 		PacMan.GetComponent<SpriteRenderer> ().enabled = true;

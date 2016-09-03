@@ -95,7 +95,7 @@ public class PacManController : MonoBehaviour {
 		pacManStates = PacManStates.Left;
 		colOnGrid = 14;
 		transform.position = LeftLocation.transform.position;
-
+		movingDone = true;
 		//GetComponent<Transform> ().position = PacManStartLocation.position;
 	}
 	void PlayWakaIfPelletThere() {
@@ -234,16 +234,17 @@ public class PacManController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.tag == "Pellet") {
+		if (other.tag == "Pellet" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
 			other.gameObject.SetActive (false);
 			GameManager.Pellets++;
 			Debug.Log ("Pellets: " + GameManager.Pellets);
-//			if (GameManager.Pellets == 244) {
-//				GameManager.LevelWon ();
-//			}
-			GameManager.LevelWon ();
+			if (GameManager.Pellets == 244) {
+				GameManager.LevelWon ();
+			}
+
+			//GameManager.LevelWon ();
 		}
-		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead) {
+		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
 			GameManager.state = GameManager.States.PacManDead;
 			animator.enabled = false;
 			GameManager.PacManDead ();

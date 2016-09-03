@@ -83,6 +83,7 @@ public class RedGhost : Ghost {
 		StopAllCoroutines ();
 		rowOnGrid = rowOnGridStart;
 		colOnGrid = colOnGridStart;
+		movingDone = true;
 		RedGhostState = RedGhostStates.Left;
 
 	}

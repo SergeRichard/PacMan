@@ -8,12 +8,12 @@ public class PelletController : MonoBehaviour {
 	
 	}
 	
-	public void ResetPellet() {
-		SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer> ();
-		foreach (SpriteRenderer spr in spriteRenderers) {
-			spr.enabled = true;
+	public void ResetPellet() {		
+		gameObject.SetActiveRecursively (true);
+		SpriteRenderer[] srs = GetComponentsInChildren<SpriteRenderer> ();
+		foreach (SpriteRenderer sr in srs) {
+			sr.enabled = true;
 
 		}
-
 	}
 }
