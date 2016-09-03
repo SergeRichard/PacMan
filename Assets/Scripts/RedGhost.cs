@@ -98,16 +98,20 @@ public class RedGhost : Ghost {
 		int ghostY = rowOnGrid;
 
 		// where is pac-man located relative to ghost? To the left or right?
-		if (ghostX - pacManX >= 0)
+		if (ghostX - pacManX > 0)
 			pacHorizontalLocation = "left";
-		else 
+		else if (ghostX - pacManX < 0)
 			pacHorizontalLocation = "right";
+		else
+			pacHorizontalLocation = "";
 
 		// where is pac-man located relative to ghost? To the up(north) or down(south)?
-		if (ghostY - pacManY >= 0) {
+		if (ghostY - pacManY > 0) {
 			pacVerticalLocation = "up";
-		} else {
+		} else if (ghostY - pacManY < 0) {
 			pacVerticalLocation = "down";
+		} else {
+			pacVerticalLocation = "";
 		}
 
 		int xDistance = Mathf.Abs (ghostX - pacManX);
