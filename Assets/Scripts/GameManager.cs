@@ -5,11 +5,13 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
 	public int[,] GridMap;
+	public int[,] GridMapInitial;
 
-	public enum States {Intro, Play, PacManDead};
+	public enum States {Intro, Play, PacManDead, WonLevel};
 
 	public static States state;
 
+	public GameObject LevelBackgroundWhite;
 	public MusicController MusicController;
 	public GameObject PacMan;
 	public GameObject PacManIntro;
@@ -17,6 +19,8 @@ public class GameManager : MonoBehaviour {
 	public GhostController GhostController;
 	public PacManController PacManController;
 	public LevelManager LevelManager;
+	public int Pellets;
+	public PelletController PelletController;
 
 	public Transform PacManStartLocation;
 
@@ -35,6 +39,7 @@ public class GameManager : MonoBehaviour {
 		Score = 0;
 		HighScore = 0;
 		Lives = 5;
+		Pellets = 0;
 
 		MessageController.HighScoreValue.text = HighScore.ToString ();
 		MessageController.ScoreValue.text = Score.ToString ();
@@ -42,6 +47,40 @@ public class GameManager : MonoBehaviour {
 		MessageController.GameOverText.gameObject.SetActive(false);
 
 		GhostController.DisableGhost ();
+
+		GridMapInitial = new int[,]{
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+			{1,1,3,3,3,3,3,3,3,3,3,3,3,3,1,1,3,3,3,3,3,3,3,3,3,3,3,3,1,1},
+			{1,1,3,1,1,1,1,3,1,1,1,1,1,3,1,1,3,1,1,1,1,1,3,1,1,1,1,3,1,1},
+			{1,1,4,1,1,1,1,3,1,1,1,1,1,3,1,1,3,1,1,1,1,1,3,1,1,1,1,4,1,1},
+			{1,1,3,1,1,1,1,3,1,1,1,1,1,3,1,1,3,1,1,1,1,1,3,1,1,1,1,3,1,1},
+			{1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,1},
+			{1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,1},
+			{1,1,3,1,1,1,1,3,1,1,3,1,1,1,1,1,1,1,1,3,1,1,3,1,1,1,1,3,1,1},
+			{1,1,3,3,3,3,3,3,1,1,3,3,3,3,1,1,3,3,3,3,1,1,3,3,3,3,3,3,1,1},
+			{1,1,1,1,1,1,1,3,1,1,1,1,1,0,1,1,0,1,1,1,1,1,3,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,3,1,1,1,1,1,0,1,1,0,1,1,1,1,1,3,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,3,1,1,0,0,0,0,0,0,0,0,0,0,1,1,3,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,3,1,1,0,1,1,1,1,1,1,1,1,0,1,1,3,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,3,1,1,0,1,1,1,1,1,1,1,1,0,1,1,3,1,1,1,1,1,1,1},
+			{2,0,0,0,0,0,0,3,0,0,0,1,1,1,1,1,1,1,1,0,0,0,3,0,0,0,0,0,0,2},
+			{1,1,1,1,1,1,1,3,1,1,0,1,1,1,1,1,1,1,1,0,1,1,3,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,3,1,1,0,1,1,1,1,1,1,1,1,0,1,1,3,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,3,1,1,0,0,0,0,0,0,0,0,0,0,1,1,3,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,3,1,1,0,1,1,1,1,1,1,1,1,0,1,1,3,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,1,3,1,1,0,1,1,1,1,1,1,1,1,0,1,1,3,1,1,1,1,1,1,1},
+			{1,1,3,3,3,3,3,3,3,3,3,3,3,3,1,1,3,3,3,3,3,3,3,3,3,3,3,3,1,1},
+			{1,1,3,1,1,1,1,3,1,1,1,1,1,3,1,1,3,1,1,1,1,1,3,1,1,1,1,3,1,1},
+			{1,1,3,1,1,1,1,3,1,1,1,1,1,3,1,1,3,1,1,1,1,1,3,1,1,1,1,3,1,1},
+			{1,1,4,3,3,1,1,3,3,3,3,3,3,3,0,0,3,3,3,3,3,3,3,1,1,3,3,4,1,1},
+			{1,1,1,1,3,1,1,3,1,1,3,1,1,1,1,1,1,1,1,3,1,1,3,1,1,3,1,1,1,1},
+			{1,1,1,1,3,1,1,3,1,1,3,1,1,1,1,1,1,1,1,3,1,1,3,1,1,3,1,1,1,1},
+			{1,1,3,3,3,3,3,3,1,1,3,3,3,3,1,1,3,3,3,3,1,1,3,3,3,3,3,3,1,1},
+			{1,1,3,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,1,1,1,1,1,1,1,1,1,3,1,1},
+			{1,1,3,1,1,1,1,1,1,1,1,1,1,3,1,1,3,1,1,1,1,1,1,1,1,1,1,3,1,1},
+			{1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,1},
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+		};
 
 		GridMap = new int[,]{
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -123,12 +162,46 @@ public class GameManager : MonoBehaviour {
 		LevelManager.LoadLevel ("TitleScene");
 
 	}
-	public void ResetToStartingPoint() {
+	public void LevelWon() {
+		state = States.WonLevel;
+		GhostController.DisableGhost ();
+		MusicController.StopAllSounds ();
+		PacManController.StopAllCoroutines ();
+		PacManController.GetComponent<Animator> ().enabled = false;
+		Invoke ("BlinkScreen", 2f);
+	}
+	public void BlinkScreen() {
+		StartCoroutine (StartBlinkingScreen ());
+
+	}
+	IEnumerator StartBlinkingScreen() {
+
+		for (int t = 0; t < 4; t++) {
+			LevelBackgroundWhite.GetComponent<SpriteRenderer> ().enabled = false;
+			yield return new WaitForSeconds (.25f);
+			LevelBackgroundWhite.GetComponent<SpriteRenderer> ().enabled = true;
+			yield return new WaitForSeconds (.25f);
+		}
+		LevelBackgroundWhite.GetComponent<SpriteRenderer> ().enabled = false;
+
+		PelletController.ResetPellet ();
+		ResetPelletsOnGrid ();
+		ResetToStartingPoint (true);
+	}
+	private void ResetPelletsOnGrid() {
+		for (int row = 0; row < 31; row++) {
+			for (int col = 0; col < 30; col++) {
+				GridMap [row, col] = GridMapInitial [row, col];
+			}
+		}
+		Pellets = 0;
+	}
+	public void ResetToStartingPoint(bool wonLevel = false) {
 		CancelInvoke ();
-
-		Lives--;
-		MessageController.LivesController.ShowLives (Lives);
-
+		if (!wonLevel) {
+			Lives--;
+			MessageController.LivesController.ShowLives (Lives);
+		}
 		if (Lives == 0) {
 			PauseBeforeTitleScreen ();
 		} else {

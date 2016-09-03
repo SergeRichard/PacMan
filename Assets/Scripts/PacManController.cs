@@ -234,8 +234,15 @@ public class PacManController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.tag == "Pellet") 
+		if (other.tag == "Pellet") {
 			other.gameObject.SetActive (false);
+			GameManager.Pellets++;
+			Debug.Log ("Pellets: " + GameManager.Pellets);
+//			if (GameManager.Pellets == 244) {
+//				GameManager.LevelWon ();
+//			}
+			GameManager.LevelWon ();
+		}
 		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead) {
 			GameManager.state = GameManager.States.PacManDead;
 			animator.enabled = false;
