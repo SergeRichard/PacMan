@@ -35,6 +35,17 @@ public class PacManController : MonoBehaviour {
 
 	private bool movingDone;
 
+	public int RowOnGrid
+	{
+		get { return rowOnGrid; }
+		set { rowOnGrid = value; }
+	}
+	public int ColOnGrid
+	{
+		get { return colOnGrid; }
+		set { colOnGrid = value; }
+	}
+
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
