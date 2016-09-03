@@ -91,6 +91,9 @@ public class YellowGhost : Ghost {
 
 
 	}
+	public void SetOutOfBoxTimer() {
+		Invoke ("StartMovingOutOfBox", 16f);
+	}
 	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
 		CancelInvoke ();
 		StopAllCoroutines ();

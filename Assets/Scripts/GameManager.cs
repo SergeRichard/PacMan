@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour {
 		MessageController.GameOverText.gameObject.SetActive(false);
 
 		GhostController.DisableGhost ();
+		GhostController.GhostYellow.GetComponent<YellowGhost> ().SetOutOfBoxTimer ();
 
 		GridMapInitial = new int[,]{
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
