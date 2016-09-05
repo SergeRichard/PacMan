@@ -38,12 +38,27 @@ public class BlueGhost : Ghost {
 	private bool movingDone;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
+		base.Start ();
 		animator = GetComponent<Animator> ();
 		BlueGhostState = BlueGhostStates.IdleUpAndDown;
 		movingDone = true;
 		Invoke ("StartMovingOutOfBox", 8f);
 		//transform.position = LeftLocation.transform.position;
+		GhostController.GhostStateHasChanged += BlueGhost_GhostStateHasChanged;
+	}
+
+	void BlueGhost_GhostStateHasChanged ()
+	{
+		if (BlueGhostState == BlueGhostStates.Left) {
+			BlueGhostState = BlueGhostStates.Right;
+		} else if (BlueGhostState == BlueGhostStates.Right) {
+			BlueGhostState = BlueGhostStates.Left;
+		} else if (BlueGhostState == BlueGhostStates.Up) {
+			BlueGhostState = BlueGhostStates.Down;
+		} else if (BlueGhostState == BlueGhostStates.Down) {
+			BlueGhostState = BlueGhostStates.Up;
+		}
 	}
 
 	// Update is called once per frame
@@ -173,6 +188,9 @@ public class BlueGhost : Ghost {
 
 	}
 	void ChangeDirection() {
+		int homeX = 27;
+		int homeY = 29;
+
 		string pacVerticalLocation = "same";
 		string pacHorizontalLocation = "same";
 
@@ -202,6 +220,12 @@ public class BlueGhost : Ghost {
 
 		pacManX = pacManX + redGhostX;
 		pacManY = pacManY + redGhostY;
+
+		if (GhostState == GhostStates.Scatter) {
+			pacManX = homeX;
+			pacManY = homeY;
+
+		}
 
 		// where is pac-man located relative to ghost? To the left or right?
 		if (ghostX - pacManX > 0)

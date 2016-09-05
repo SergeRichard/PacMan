@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GhostController : MonoBehaviour {
+public delegate void GhostStateHasChangedEventHandler();
 
-	public enum Modes { Scatter, Chase };
-	public Modes Mode;
+public class GhostController : Ghost {
+
+	public event GhostStateHasChangedEventHandler GhostStateHasChanged;
 
 	public Transform GhostStartLocation;
 
@@ -55,12 +56,49 @@ public class GhostController : MonoBehaviour {
 
 	}
 	// Use this for initialization
-	void Start () {
-		Mode = Modes.Scatter;
+	protected override void Start () {
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+	}
+	public void StartTimer() {
+		StartCoroutine (StartStateTimer ());
+	}
+
+	IEnumerator StartStateTimer() {
+		GhostState = GhostStates.Scatter;
+		yield return new WaitForSeconds (7f);
+
+		GhostState = GhostStates.Chase;
+		GhostStateHasChanged ();
+		yield return new WaitForSeconds (20f);
+
+		GhostState = GhostStates.Scatter;
+		GhostStateHasChanged ();
+		yield return new WaitForSeconds (7f);
+
+		GhostState = GhostStates.Chase;
+		GhostStateHasChanged ();
+		yield return new WaitForSeconds (20f);
+
+		GhostState = GhostStates.Scatter;
+		GhostStateHasChanged ();
+		yield return new WaitForSeconds (5f);
+
+		GhostState = GhostStates.Chase;
+		GhostStateHasChanged ();
+		yield return new WaitForSeconds (20f);
+
+		GhostState = GhostStates.Scatter;
+		GhostStateHasChanged ();
+		yield return new WaitForSeconds (5f);
+
+		// at this point, chase for the rest
+		GhostState = GhostStates.Chase;
+		GhostStateHasChanged ();
+
 	}
 }

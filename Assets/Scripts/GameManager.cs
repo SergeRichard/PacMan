@@ -131,6 +131,8 @@ public class GameManager : MonoBehaviour {
 		GhostController.EnableGhost ();
 	}
 	void IntroDone() {
+		GhostController.StartTimer ();
+
 		PacMan.GetComponent<SpriteRenderer> ().enabled = true;
 		PacManIntro.GetComponent<SpriteRenderer> ().enabled = false;
 		state = States.Play;
@@ -201,6 +203,7 @@ public class GameManager : MonoBehaviour {
 		ResetToStartingPoint (false);
 	}
 	public void ResetToStartingPoint(bool wonLevel) {
+
 		CancelInvoke ();
 		if (!wonLevel) {
 			Lives--;
@@ -241,6 +244,9 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	void StartGhostSequence() {
+		GhostController.StopAllCoroutines ();
+		GhostController.StartTimer ();
+
 		MessageController.GetReadyText.gameObject.SetActive (false);
 		MusicController.PlaySirenSound ();
 		state = States.Play;

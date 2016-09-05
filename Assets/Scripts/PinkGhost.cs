@@ -37,11 +37,26 @@ public class PinkGhost : Ghost {
 	private bool movingDone;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
+		base.Start ();
 		animator = GetComponent<Animator> ();
 		PinkGhostState = PinkGhostStates.MoveOutOfBox;
 		movingDone = true;
 		//transform.position = LeftLocation.transform.position;
+		GhostController.GhostStateHasChanged += PinkGhost_GhostStateHasChanged;
+	}
+
+	void PinkGhost_GhostStateHasChanged ()
+	{
+		if (PinkGhostState == PinkGhostStates.Left) {
+			PinkGhostState = PinkGhostStates.Right;
+		} else if (PinkGhostState == PinkGhostStates.Right) {
+			PinkGhostState = PinkGhostStates.Left;
+		} else if (PinkGhostState == PinkGhostStates.Up) {
+			PinkGhostState = PinkGhostStates.Down;
+		} else if (PinkGhostState == PinkGhostStates.Down) {
+			PinkGhostState = PinkGhostStates.Up;
+		}
 	}
 
 	// Update is called once per frame
@@ -198,6 +213,9 @@ public class PinkGhost : Ghost {
 		GetComponent<SpriteRenderer> ().sprite = DownSprite;
 	}
 	void ChangeDirection() {
+		int homeX = 2;
+		int homeY = 1;
+
 		string pacVerticalLocation = "same";
 		string pacHorizontalLocation = "same";
 
@@ -220,6 +238,12 @@ public class PinkGhost : Ghost {
 		}
 		if (PacManController.pacManStates == PacManController.PacManStates.Up) {
 			pacManY -= 4;
+		}
+
+		if (GhostState == GhostStates.Scatter) {
+			pacManX = homeX;
+			pacManY = homeY;
+
 		}
 
 		// where is pac-man located relative to ghost? To the left or right?

@@ -9,6 +9,7 @@ public class RedGhost : Ghost {
 	public enum RedGhostStates {Idle, Up, Down, Left, Right};
 
 	public static RedGhostStates RedGhostState;
+	public GhostController GhostController;
 
 	//	public Transform LeftLocation;
 	//	public Transform RightLocation;
@@ -47,11 +48,28 @@ public class RedGhost : Ghost {
 	}
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
+		base.Start ();
 		animator = GetComponent<Animator> ();
 		RedGhostState = RedGhostStates.Left;
 		movingDone = true;
+		GhostController.GhostStateHasChanged += RedGhost_GhostStateHasChanged;
+
 		//transform.position = LeftLocation.transform.position;
+	}
+
+	void RedGhost_GhostStateHasChanged ()
+	{
+		if (RedGhostState == RedGhostStates.Left) {
+			RedGhostState = RedGhostStates.Right;
+		} else if (RedGhostState == RedGhostStates.Right) {
+			RedGhostState = RedGhostStates.Left;
+		} else if (RedGhostState == RedGhostStates.Up) {
+			RedGhostState = RedGhostStates.Down;
+		} else if (RedGhostState == RedGhostStates.Down) {
+			RedGhostState = RedGhostStates.Up;
+		}
+
 	}
 
 	// Update is called once per frame
@@ -100,6 +118,9 @@ public class RedGhost : Ghost {
 
 	}
 	void ChangeDirection() {
+		int homeX = 27;
+		int homeY = 1;
+
 		string pacVerticalLocation = "same";
 		string pacHorizontalLocation = "same";
 
@@ -110,6 +131,12 @@ public class RedGhost : Ghost {
 		int ghostY = rowOnGrid;
 
 		List<RedGhostStates> possibleStates = new List<RedGhostStates>();
+
+		if (GhostState == GhostStates.Scatter) {
+			pacManX = homeX;
+			pacManY = homeY;
+
+		}
 
 		// where is pac-man located relative to ghost? To the left or right?
 		if (ghostX - pacManX > 0)

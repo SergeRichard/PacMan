@@ -38,12 +38,27 @@ public class YellowGhost : Ghost {
 	private bool movingDone;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
+		base.Start ();
 		animator = GetComponent<Animator> ();
 		YellowGhostState = YellowGhostStates.IdleUpAndDown;
 		movingDone = true;
 		Invoke ("StartMovingOutOfBox", 16f);
 		//transform.position = LeftLocation.transform.position;
+		GhostController.GhostStateHasChanged += YellowGhost_GhostStateHasChanged;
+	}
+
+	void YellowGhost_GhostStateHasChanged ()
+	{
+		if (YellowGhostState == YellowGhostStates.Left) {
+			YellowGhostState = YellowGhostStates.Right;
+		} else if (YellowGhostState == YellowGhostStates.Right) {
+			YellowGhostState = YellowGhostStates.Left;
+		} else if (YellowGhostState == YellowGhostStates.Up) {
+			YellowGhostState = YellowGhostStates.Down;
+		} else if (YellowGhostState == YellowGhostStates.Down) {
+			YellowGhostState = YellowGhostStates.Up;
+		}
 	}
 
 	// Update is called once per frame
@@ -197,6 +212,12 @@ public class YellowGhost : Ghost {
 
 		// if pac man is closer than 8 squares away to pac-man, go back to safe space (home) until pac-man back to 8 squares away, than chase again
 		if (xDistance <= 8 && yDistance <= 8) {
+			pacManX = homeX;
+			pacManY = homeY;
+
+		}
+
+		if (GhostState == GhostStates.Scatter) {
 			pacManX = homeX;
 			pacManY = homeY;
 
