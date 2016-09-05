@@ -255,11 +255,11 @@ public class PacManController : MonoBehaviour {
 
 			//GameManager.LevelWon ();
 		}
-		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
-			GameManager.state = GameManager.States.PacManDead;
-			animator.enabled = false;
-			GameManager.PacManDead ();
-		}
+//		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
+//			GameManager.state = GameManager.States.PacManDead;
+//			animator.enabled = false;
+//			GameManager.PacManDead ();
+//		}
 			
 	}
 }
