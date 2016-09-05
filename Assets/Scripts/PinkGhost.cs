@@ -163,7 +163,7 @@ public class PinkGhost : Ghost {
 	void SetRight() {
 		animator.enabled = true;
 		PinkGhostState = PinkGhostStates.Right;
-		animator.Play ("MovesRight");
+		animator.Play ("MoveRight");
 		movingDone = false;
 		StartCoroutine (MoveRight ());
 		colOnGrid++;
@@ -172,7 +172,7 @@ public class PinkGhost : Ghost {
 	}
 	void SetLeft() {
 		animator.enabled = true;
-		animator.Play ("MovesLeft");
+		animator.Play ("MoveLeft");
 		PinkGhostState = PinkGhostStates.Left;
 		movingDone = false;
 		StartCoroutine (MoveLeft ());
@@ -181,7 +181,7 @@ public class PinkGhost : Ghost {
 	}
 	void SetUp() {
 		animator.enabled = true;
-		animator.Play ("MovesUp");
+		animator.Play ("MoveUp");
 		PinkGhostState = PinkGhostStates.Up;
 		movingDone = false;
 		StartCoroutine (MoveUp ());
@@ -190,7 +190,7 @@ public class PinkGhost : Ghost {
 	}
 	void SetDown() {
 		animator.enabled = true;
-		animator.Play ("MovesDown");
+		animator.Play ("MoveDown");
 		PinkGhostState = PinkGhostStates.Down;
 		movingDone = false;
 		StartCoroutine (MoveDown ());

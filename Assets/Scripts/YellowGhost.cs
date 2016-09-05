@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class YellowGhost : Ghost {
 
@@ -177,107 +178,501 @@ public class YellowGhost : Ghost {
 
 	}
 	void ChangeDirection() {
+		int homeX = 2;
+		int homeY = 29;
+
+		string pacVerticalLocation = "same";
+		string pacHorizontalLocation = "same";
+
+		int pacManX = GameManager.PacManController.ColOnGrid;
+		int pacManY = GameManager.PacManController.RowOnGrid;
+
+		int ghostX = colOnGrid;
+		int ghostY = rowOnGrid;
+
+		List<YellowGhostStates> possibleStates = new List<YellowGhostStates>();
+
+		int xDistance = Mathf.Abs (ghostX - pacManX);
+		int yDistance = Mathf.Abs (ghostY - pacManY);
+
+		// if pac man is closer than 8 squares away to pac-man, go back to safe space (home) until pac-man back to 8 squares away, than chase again
+		if (xDistance <= 8 && yDistance <= 8) {
+			pacManX = homeX;
+			pacManY = homeY;
+
+		}
+
+		// where is pac-man located relative to ghost? To the left or right?
+		if (ghostX - pacManX > 0)
+			pacHorizontalLocation = "left";
+		else if (ghostX - pacManX < 0)
+			pacHorizontalLocation = "right";		
+
+		// where is pac-man located relative to ghost? To the up(north) or down(south)?
+		if (ghostY - pacManY > 0) {
+			pacVerticalLocation = "up";
+		} else if (ghostY - pacManY < 0) {
+			pacVerticalLocation = "down";
+		} 
+
+
+
 		switch (YellowGhostState) {
 		case YellowGhostStates.Left:
+			// make sure that direction is at the very least set to a possible direction to move
 			if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
-				if (Random.Range (0, 2) == 0) {
+				possibleStates.Add (YellowGhostStates.Left);
+				//RedGhostState = RedGhostStates.Left;
+			}
+			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+				possibleStates.Add (YellowGhostStates.Up);
+				//RedGhostState = RedGhostStates.Up;
+			}
+			if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+				possibleStates.Add (YellowGhostStates.Down);
+				//RedGhostState = RedGhostStates.Down;
+			}
+			YellowGhostState = possibleStates [Random.Range (0, possibleStates.Count)];
+
+			if ((pacHorizontalLocation == "left" || pacHorizontalLocation == "same") && (pacVerticalLocation == "up" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 1) {
 					YellowGhostState = YellowGhostStates.Left;
-					break;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Up;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					if (xDistance > yDistance) {
+						YellowGhostState = YellowGhostStates.Left;
+					}
+					if (xDistance < yDistance) {
+						YellowGhostState = YellowGhostStates.Up;
+					}
+					if (xDistance == yDistance) {
+						if (Random.Range (0, 2) == 0) {
+							YellowGhostState = YellowGhostStates.Up;
+						} else {
+							YellowGhostState = YellowGhostStates.Left;
+						}
+					}
 				}
 			}
-			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
-				if (Random.Range (0, 2) == 0) {
-					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
-						YellowGhostState = YellowGhostStates.Up;
-					} else {
+			if ((pacHorizontalLocation == "left" || pacHorizontalLocation == "same") && (pacVerticalLocation == "down" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Left;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Down;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					if (xDistance > yDistance) {
+						YellowGhostState = YellowGhostStates.Left;
+					}
+					if (xDistance < yDistance) {
 						YellowGhostState = YellowGhostStates.Down;
 					}
-				} else {
-					if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
-						YellowGhostState = YellowGhostStates.Down;
-					} else {
-						YellowGhostState = YellowGhostStates.Up;
+					if (xDistance == yDistance) {
+						if (Random.Range (0, 2) == 0) {
+							YellowGhostState = YellowGhostStates.Down;
+						} else {
+							YellowGhostState = YellowGhostStates.Left;
+						}
 					}
 				}
 			}
-			break;
-		case YellowGhostStates.Right:
-			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
-				if (Random.Range (0, 2) == 0) {
-					YellowGhostState = YellowGhostStates.Right;
-					break;
-				} 
+			// pac-man is in the opposite direction. Ghost has to try to circle back towards pac-man.
+			if ((pacHorizontalLocation == "right" || pacHorizontalLocation == "same") && (pacVerticalLocation == "up" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Left;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Up;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {					
+
+					YellowGhostState = YellowGhostStates.Up;
+
+				}
 			}
-			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
-				if (Random.Range (0, 2) == 0) {
-					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
-						YellowGhostState = YellowGhostStates.Up;
-					} else {
-						YellowGhostState = YellowGhostStates.Down;
-					}
-				} else {
-					if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
-						YellowGhostState = YellowGhostStates.Down;
-					} else {
-						YellowGhostState = YellowGhostStates.Up;
-					}
+			if ((pacHorizontalLocation == "right" || pacHorizontalLocation == "same") && (pacVerticalLocation == "down" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Left;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Down;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+
+					YellowGhostState = YellowGhostStates.Down;
 
 				}
 			}
 			break;
-		case YellowGhostStates.Up:
+		case YellowGhostStates.Right:
+			// make sure that direction is at the very least set to a possible direction to move
+			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+				possibleStates.Add (YellowGhostStates.Right);
+				//RedGhostState = RedGhostStates.Left;
+			}
 			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
-				if (Random.Range (0, 2) == 0) {
+				possibleStates.Add (YellowGhostStates.Up);
+				//RedGhostState = RedGhostStates.Up;
+			}
+			if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+				possibleStates.Add (YellowGhostStates.Down);
+				//RedGhostState = RedGhostStates.Down;
+			}
+			YellowGhostState = possibleStates [Random.Range (0, possibleStates.Count)];
+
+			if ((pacHorizontalLocation == "right" || pacHorizontalLocation == "same") && (pacVerticalLocation == "up" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Right;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
 					YellowGhostState = YellowGhostStates.Up;
-					break;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					if (xDistance > yDistance) {
+						YellowGhostState = YellowGhostStates.Right;
+					}
+					if (xDistance < yDistance) {
+						YellowGhostState = YellowGhostStates.Up;
+					}
+					if (xDistance == yDistance) {
+						if (Random.Range (0, 2) == 0) {
+							YellowGhostState = YellowGhostStates.Up;
+						} else {
+							YellowGhostState = YellowGhostStates.Right;
+						}
+					}
 				}
 			}
-			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
-				if (Random.Range (0, 2) == 0) {
-					if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
-						YellowGhostState = YellowGhostStates.Right;
-					} else {
-						YellowGhostState = YellowGhostStates.Left;
-					}
-				} else {
-					if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
-						YellowGhostState = YellowGhostStates.Left;
-					} else {
+			if ((pacHorizontalLocation == "right" || pacHorizontalLocation == "same") && (pacVerticalLocation == "down" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Right;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Down;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					if (xDistance > yDistance) {
 						YellowGhostState = YellowGhostStates.Right;
 					}
+					if (xDistance < yDistance) {
+						YellowGhostState = YellowGhostStates.Down;
+					}
+					if (xDistance == yDistance) {
+						if (Random.Range (0, 2) == 0) {
+							YellowGhostState = YellowGhostStates.Down;
+						} else {
+							YellowGhostState = YellowGhostStates.Right;
+						}
+					}
+				}
+			}
+			// pac-man is in the opposite direction. Ghost has to try to circle back towards pac-man.
+			if ((pacHorizontalLocation == "left" || pacHorizontalLocation == "same") && (pacVerticalLocation == "up" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Right;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Up;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+
+					YellowGhostState = YellowGhostStates.Up;
+
+				}
+			}
+			if ((pacHorizontalLocation == "left" || pacHorizontalLocation == "same") && (pacVerticalLocation == "down" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Right;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Down;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {	
+					YellowGhostState = YellowGhostStates.Down;					
+				}
+			}
+			break;
+		case YellowGhostStates.Up:
+			// make sure that direction is at the very least set to a possible direction to move
+			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+				possibleStates.Add (YellowGhostStates.Right);
+				//RedGhostState = RedGhostStates.Left;
+			}
+			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+				possibleStates.Add (YellowGhostStates.Up);
+				//RedGhostState = RedGhostStates.Up;
+			}
+			if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+				possibleStates.Add (YellowGhostStates.Left);
+				//RedGhostState = RedGhostStates.Down;
+			}
+			YellowGhostState = possibleStates [Random.Range (0, possibleStates.Count)];
+
+			if ((pacHorizontalLocation == "right" || pacHorizontalLocation == "same") && (pacVerticalLocation == "up" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Right;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Up;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					if (xDistance > yDistance) {
+						YellowGhostState = YellowGhostStates.Right;
+					}
+					if (xDistance < yDistance) {
+						YellowGhostState = YellowGhostStates.Up;
+					}
+					if (xDistance == yDistance) {
+						if (Random.Range (0, 2) == 0) {
+							YellowGhostState = YellowGhostStates.Up;
+						} else {
+							YellowGhostState = YellowGhostStates.Right;
+						}
+					}
+				}
+			}
+			if ((pacHorizontalLocation == "left" || pacHorizontalLocation == "same") && (pacVerticalLocation == "up" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Left;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Up;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					if (xDistance > yDistance) {
+						YellowGhostState = YellowGhostStates.Left;
+					}
+					if (xDistance < yDistance) {
+						YellowGhostState = YellowGhostStates.Up;
+					}
+					if (xDistance == yDistance) {
+						if (Random.Range (0, 2) == 0) {
+							YellowGhostState = YellowGhostStates.Up;
+						} else {
+							YellowGhostState = YellowGhostStates.Left;
+						}
+					}
+				}
+			}
+			// pac-man is in the opposite direction. Ghost has to try to circle back towards pac-man.
+			if ((pacHorizontalLocation == "right" || pacHorizontalLocation == "same") && (pacVerticalLocation == "down" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Right;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Up;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+
+					YellowGhostState = YellowGhostStates.Right;
+				}
+			}
+			if ((pacHorizontalLocation == "left" || pacHorizontalLocation == "same") && (pacVerticalLocation == "down" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Left;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Up;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+
+					YellowGhostState = YellowGhostStates.Left;
+
 				}
 			}
 			break;
 		case YellowGhostStates.Down:
+			// make sure that direction is at the very least set to a possible direction to move
+			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+				possibleStates.Add (YellowGhostStates.Right);
+				//RedGhostState = RedGhostStates.Left;
+			}
 			if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
-				if (Random.Range (0, 2) == 0) {
+				possibleStates.Add (YellowGhostStates.Down);
+				//RedGhostState = RedGhostStates.Up;
+			}
+			if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+				possibleStates.Add (YellowGhostStates.Left);
+				//RedGhostState = RedGhostStates.Down;
+			}
+			YellowGhostState = possibleStates [Random.Range (0, possibleStates.Count)];
+
+			if ((pacHorizontalLocation == "right" || pacHorizontalLocation == "same") && (pacVerticalLocation == "down" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Right;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
 					YellowGhostState = YellowGhostStates.Down;
-					break;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					if (xDistance > yDistance) {
+						YellowGhostState = YellowGhostStates.Right;
+					}
+					if (xDistance < yDistance) {
+						YellowGhostState = YellowGhostStates.Down;
+					}
+					if (xDistance == yDistance) {
+						if (Random.Range (0, 2) == 0) {
+							YellowGhostState = YellowGhostStates.Down;
+						} else {
+							YellowGhostState = YellowGhostStates.Right;
+						}
+					}
 				}
 			}
-			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
-				if (Random.Range (0, 2) == 0) {
-					if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
-						YellowGhostState = YellowGhostStates.Right;
-					} else {
+			if ((pacHorizontalLocation == "left" || pacHorizontalLocation == "same") && (pacVerticalLocation == "down" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Left;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Down;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					if (xDistance > yDistance) {
 						YellowGhostState = YellowGhostStates.Left;
 					}
-				} else {
-					if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
-						YellowGhostState = YellowGhostStates.Left;
-					} else {
-						YellowGhostState = YellowGhostStates.Right;
+					if (xDistance < yDistance) {
+						YellowGhostState = YellowGhostStates.Down;
 					}
+					if (xDistance == yDistance) {
+						if (Random.Range (0, 2) == 0) {
+							YellowGhostState = YellowGhostStates.Down;
+						} else {
+							YellowGhostState = YellowGhostStates.Left;
+						}
+					}
+				}
+			}
+			// pac-man is in the opposite direction. Ghost has to try to circle back towards pac-man.
+			if ((pacHorizontalLocation == "right" || pacHorizontalLocation == "same") && (pacVerticalLocation == "up" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Right;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] == 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Down;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+
+					YellowGhostState = YellowGhostStates.Right;
+				}
+			}
+			if ((pacHorizontalLocation == "left" || pacHorizontalLocation == "same") && (pacVerticalLocation == "up" || pacVerticalLocation == "same")) {
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] == 1) {
+					YellowGhostState = YellowGhostStates.Left;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] == 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+					YellowGhostState = YellowGhostStates.Down;
+				}
+				if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1 && GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+
+					YellowGhostState = YellowGhostStates.Left;
 				}
 			}
 			break;
+//		case YellowGhostStates.Left:
+//			if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+//				if (Random.Range (0, 2) == 0) {
+//					YellowGhostState = YellowGhostStates.Left;
+//					break;
+//				}
+//			}
+//			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+//				if (Random.Range (0, 2) == 0) {
+//					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+//						YellowGhostState = YellowGhostStates.Up;
+//					} else {
+//						YellowGhostState = YellowGhostStates.Down;
+//					}
+//				} else {
+//					if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+//						YellowGhostState = YellowGhostStates.Down;
+//					} else {
+//						YellowGhostState = YellowGhostStates.Up;
+//					}
+//				}
+//			}
+//			break;
+//		case YellowGhostStates.Right:
+//			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+//				if (Random.Range (0, 2) == 0) {
+//					YellowGhostState = YellowGhostStates.Right;
+//					break;
+//				} 
+//			}
+//			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1 || GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+//				if (Random.Range (0, 2) == 0) {
+//					if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+//						YellowGhostState = YellowGhostStates.Up;
+//					} else {
+//						YellowGhostState = YellowGhostStates.Down;
+//					}
+//				} else {
+//					if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+//						YellowGhostState = YellowGhostStates.Down;
+//					} else {
+//						YellowGhostState = YellowGhostStates.Up;
+//					}
+//
+//				}
+//			}
+//			break;
+//		case YellowGhostStates.Up:
+//			if (GameManager.GridMap [rowOnGrid - 1, colOnGrid] != 1) {
+//				if (Random.Range (0, 2) == 0) {
+//					YellowGhostState = YellowGhostStates.Up;
+//					break;
+//				}
+//			}
+//			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+//				if (Random.Range (0, 2) == 0) {
+//					if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+//						YellowGhostState = YellowGhostStates.Right;
+//					} else {
+//						YellowGhostState = YellowGhostStates.Left;
+//					}
+//				} else {
+//					if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+//						YellowGhostState = YellowGhostStates.Left;
+//					} else {
+//						YellowGhostState = YellowGhostStates.Right;
+//					}
+//				}
+//			}
+//			break;
+//		case YellowGhostStates.Down:
+//			if (GameManager.GridMap [rowOnGrid + 1, colOnGrid] != 1) {
+//				if (Random.Range (0, 2) == 0) {
+//					YellowGhostState = YellowGhostStates.Down;
+//					break;
+//				}
+//			}
+//			if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1 || GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+//				if (Random.Range (0, 2) == 0) {
+//					if (GameManager.GridMap [rowOnGrid, colOnGrid + 1] != 1) {
+//						YellowGhostState = YellowGhostStates.Right;
+//					} else {
+//						YellowGhostState = YellowGhostStates.Left;
+//					}
+//				} else {
+//					if (GameManager.GridMap [rowOnGrid, colOnGrid - 1] != 1) {
+//						YellowGhostState = YellowGhostStates.Left;
+//					} else {
+//						YellowGhostState = YellowGhostStates.Right;
+//					}
+//				}
+//			}
+//			break;
 		}
 
 	}
 	void SetRight() {
 		animator.enabled = true;
 		YellowGhostState = YellowGhostStates.Right;
-		animator.Play ("MovesRight");
+		animator.Play ("MoveRight");
 		movingDone = false;
 		StartCoroutine (MoveRight ());
 		colOnGrid++;
@@ -286,7 +681,7 @@ public class YellowGhost : Ghost {
 	}
 	void SetLeft() {
 		animator.enabled = true;
-		animator.Play ("MovesLeft");
+		animator.Play ("MoveLeft");
 		YellowGhostState = YellowGhostStates.Left;
 		movingDone = false;
 		StartCoroutine (MoveLeft ());
@@ -295,7 +690,7 @@ public class YellowGhost : Ghost {
 	}
 	void SetUp() {
 		animator.enabled = true;
-		animator.Play ("MovesUp");
+		animator.Play ("MoveUp");
 		YellowGhostState = YellowGhostStates.Up;
 		movingDone = false;
 		StartCoroutine (MoveUp ());
@@ -304,7 +699,7 @@ public class YellowGhost : Ghost {
 	}
 	void SetDown() {
 		animator.enabled = true;
-		animator.Play ("MovesDown");
+		animator.Play ("MoveDown");
 		YellowGhostState = YellowGhostStates.Down;
 		movingDone = false;
 		StartCoroutine (MoveDown ());

@@ -674,7 +674,7 @@ public class BlueGhost : Ghost {
 	void SetRight() {
 		animator.enabled = true;
 		BlueGhostState = BlueGhostStates.Right;
-		animator.Play ("MovesRight");
+		animator.Play ("MoveRight");
 		movingDone = false;
 		StartCoroutine (MoveRight ());
 		colOnGrid++;
@@ -683,7 +683,7 @@ public class BlueGhost : Ghost {
 	}
 	void SetLeft() {
 		animator.enabled = true;
-		animator.Play ("MovesLeft");
+		animator.Play ("MoveLeft");
 		BlueGhostState = BlueGhostStates.Left;
 		movingDone = false;
 		StartCoroutine (MoveLeft ());
@@ -692,7 +692,7 @@ public class BlueGhost : Ghost {
 	}
 	void SetUp() {
 		animator.enabled = true;
-		animator.Play ("MovesUp");
+		animator.Play ("MoveUp");
 		BlueGhostState = BlueGhostStates.Up;
 		movingDone = false;
 		StartCoroutine (MoveUp ());
@@ -701,7 +701,7 @@ public class BlueGhost : Ghost {
 	}
 	void SetDown() {
 		animator.enabled = true;
-		animator.Play ("MovesDown");
+		animator.Play ("MoveDown");
 		BlueGhostState = BlueGhostStates.Down;
 		movingDone = false;
 		StartCoroutine (MoveDown ());
