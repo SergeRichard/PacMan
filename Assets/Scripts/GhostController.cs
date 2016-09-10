@@ -7,6 +7,8 @@ public class GhostController : Ghost {
 
 	public event GhostStateHasChangedEventHandler GhostStateHasChanged;
 
+	public float GhostFrightenedTimeStep = 0.05f;
+
 	public PacManController PacManController;
 
 	public Transform GhostStartLocation;
