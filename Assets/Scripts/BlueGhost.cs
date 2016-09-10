@@ -46,6 +46,13 @@ public class BlueGhost : Ghost {
 		Invoke ("StartMovingOutOfBox", 8f);
 		//transform.position = LeftLocation.transform.position;
 		GhostController.GhostStateHasChanged += BlueGhost_GhostStateHasChanged;
+		GhostController.PacManController.ChangeGhostToFrightenedState += GhostController_PacManController_ChangeGhostToFrightenedState;
+	}
+
+	void GhostController_PacManController_ChangeGhostToFrightenedState ()
+	{
+		animator.enabled = true;
+		animator.Play ("BlueGhostFrightened");
 	}
 
 	void BlueGhost_GhostStateHasChanged ()
@@ -124,7 +131,12 @@ public class BlueGhost : Ghost {
 		float timeMulti = 2f;
 
 		animator.enabled = true;
-		animator.Play ("MoveRight");
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveRight");
+		}
+
 
 		while (distanceTraveled < endPosition) {
 			distanceTraveled += .08f;
@@ -132,7 +144,13 @@ public class BlueGhost : Ghost {
 
 			yield return new WaitForSeconds (TimeStep * timeMulti);
 		}
-		animator.Play ("MoveUp");
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveUp");
+		}
+
+
 		distanceTraveled = transform.position.y;
 		endPosition = transform.position.y + (DistanceToTravel * 3f); 
 
@@ -153,7 +171,12 @@ public class BlueGhost : Ghost {
 		float timeMulti = 3f;
 
 		animator.enabled = true;
-		animator.Play ("MoveUp");
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveUp");
+		}
+
 
 		while (distanceTraveled < endPosition) {
 			distanceTraveled += .08f;
@@ -164,7 +187,12 @@ public class BlueGhost : Ghost {
 		endPosition = transform.position.y - DistanceToTravel;
 
 		animator.enabled = true;
-		animator.Play ("MoveDown");
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveDown");
+		}
+
 
 		while (distanceTraveled > endPosition) {
 			distanceTraveled -= .08f;
@@ -175,7 +203,12 @@ public class BlueGhost : Ghost {
 		endPosition = transform.position.y + (DistanceToTravel / 2f);
 
 		animator.enabled = true;
-		animator.Play ("MoveUp");
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveUp");
+		}
+
 
 		while (distanceTraveled < endPosition) {
 			distanceTraveled += .08f;
@@ -698,7 +731,12 @@ public class BlueGhost : Ghost {
 	void SetRight() {
 		animator.enabled = true;
 		BlueGhostState = BlueGhostStates.Right;
-		animator.Play ("MoveRight");
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveRight");
+		}
+
 		movingDone = false;
 		StartCoroutine (MoveRight ());
 		colOnGrid++;
@@ -707,8 +745,12 @@ public class BlueGhost : Ghost {
 	}
 	void SetLeft() {
 		animator.enabled = true;
-		animator.Play ("MoveLeft");
 		BlueGhostState = BlueGhostStates.Left;
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveLeft");
+		}
 		movingDone = false;
 		StartCoroutine (MoveLeft ());
 		colOnGrid--;
@@ -716,8 +758,13 @@ public class BlueGhost : Ghost {
 	}
 	void SetUp() {
 		animator.enabled = true;
-		animator.Play ("MoveUp");
+
 		BlueGhostState = BlueGhostStates.Up;
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveUp");
+		}
 		movingDone = false;
 		StartCoroutine (MoveUp ());
 		rowOnGrid--;
@@ -725,8 +772,13 @@ public class BlueGhost : Ghost {
 	}
 	void SetDown() {
 		animator.enabled = true;
-		animator.Play ("MoveDown");
+
 		BlueGhostState = BlueGhostStates.Down;
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("BlueGhostFrightened");
+		} else {
+			animator.Play ("MoveDown");
+		}
 		movingDone = false;
 		StartCoroutine (MoveDown ());
 		rowOnGrid++;

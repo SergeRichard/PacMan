@@ -7,6 +7,8 @@ public class GhostController : Ghost {
 
 	public event GhostStateHasChangedEventHandler GhostStateHasChanged;
 
+	public PacManController PacManController;
+
 	public Transform GhostStartLocation;
 
 	public GameObject GhostYellow;
@@ -57,7 +59,12 @@ public class GhostController : Ghost {
 	}
 	// Use this for initialization
 	protected override void Start () {
+		PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+	}
 
+	void ChangeGhostToFrightenedState ()
+	{
+		StopAllCoroutines ();
 	}
 	
 	// Update is called once per frame

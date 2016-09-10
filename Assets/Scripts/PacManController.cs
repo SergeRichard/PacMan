@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public delegate void ChangeGhostToFrightenedStateEventHandler();
+
 public class PacManController : MonoBehaviour {
+
+	public event ChangeGhostToFrightenedStateEventHandler ChangeGhostToFrightenedState;
 
 	Animator animator;
 
@@ -24,6 +28,7 @@ public class PacManController : MonoBehaviour {
 	public Sprite LeftSprite;
 	public Sprite UpSprite;
 	public Sprite DownSprite;
+	public GhostController GhostController;
 
 //	private int rowOnGrid = 23;
 //	private int colOnGrid = 13;
@@ -246,7 +251,7 @@ public class PacManController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.tag == "Pellet" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
+		if (other.tag == "Pellet" || other.tag == "PowerPellet" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
 			other.gameObject.SetActive (false);
 			GameManager.Pellets++;
 			Debug.Log ("Pellets: " + GameManager.Pellets);
@@ -256,11 +261,15 @@ public class PacManController : MonoBehaviour {
 
 			//GameManager.LevelWon ();
 		}
+		if (other.tag == "PowerPellet" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
+			GhostController.GhostState = GhostController.GhostStates.Freightened;
+			ChangeGhostToFrightenedState ();
+		}
 		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
 			GameManager.state = GameManager.States.PacManDead;
 			animator.enabled = false;
 			GameManager.PacManDead ();
 		}
-			
+
 	}
 }

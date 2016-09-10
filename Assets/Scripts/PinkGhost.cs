@@ -44,6 +44,13 @@ public class PinkGhost : Ghost {
 		movingDone = true;
 		//transform.position = LeftLocation.transform.position;
 		GhostController.GhostStateHasChanged += PinkGhost_GhostStateHasChanged;
+		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+	}
+
+	void ChangeGhostToFrightenedState ()
+	{
+		animator.enabled = true;
+		animator.Play ("YellowGhostFrightened");
 	}
 
 	void PinkGhost_GhostStateHasChanged ()

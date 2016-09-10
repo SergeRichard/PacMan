@@ -46,6 +46,13 @@ public class YellowGhost : Ghost {
 		Invoke ("StartMovingOutOfBox", 16f);
 		//transform.position = LeftLocation.transform.position;
 		GhostController.GhostStateHasChanged += YellowGhost_GhostStateHasChanged;
+		GhostController.PacManController.ChangeGhostToFrightenedState += GhostController_PacManController_ChangeGhostToFrightenedState;
+	}
+
+	void GhostController_PacManController_ChangeGhostToFrightenedState ()
+	{
+		animator.enabled = true;
+		animator.Play ("YellowGhostFrightened");
 	}
 
 	void YellowGhost_GhostStateHasChanged ()
