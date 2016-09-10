@@ -46,10 +46,10 @@ public class BlueGhost : Ghost {
 		Invoke ("StartMovingOutOfBox", 8f);
 		//transform.position = LeftLocation.transform.position;
 		GhostController.GhostStateHasChanged += BlueGhost_GhostStateHasChanged;
-		GhostController.PacManController.ChangeGhostToFrightenedState += GhostController_PacManController_ChangeGhostToFrightenedState;
+		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
 	}
 
-	void GhostController_PacManController_ChangeGhostToFrightenedState ()
+	void ChangeGhostToFrightenedState ()
 	{
 		animator.enabled = true;
 		animator.Play ("BlueGhostFrightened");

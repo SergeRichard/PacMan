@@ -54,15 +54,16 @@ public class RedGhost : Ghost {
 		RedGhostState = RedGhostStates.Left;
 		movingDone = true;
 		GhostController.GhostStateHasChanged += RedGhost_GhostStateHasChanged;
-		GhostController.PacManController.ChangeGhostToFrightenedState += GhostController_PacManController_ChangeGhostToFrightenedState;
+		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
 		//transform.position = LeftLocation.transform.position;
 	}
 
-	void GhostController_PacManController_ChangeGhostToFrightenedState ()
+	void ChangeGhostToFrightenedState ()
 	{
 		animator.enabled = true;
 		animator.Play ("RedGhostFrightened");
 	}
+
 
 	void RedGhost_GhostStateHasChanged ()
 	{
@@ -618,7 +619,12 @@ public class RedGhost : Ghost {
 	void SetRight() {
 		animator.enabled = true;
 		RedGhostState = RedGhostStates.Right;
-		animator.Play ("RedGhostMovesRight");
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("RedGhostFrightened");
+		} else {
+			animator.Play ("RedGhostMovesRight");
+		}
+
 		movingDone = false;
 		StartCoroutine (MoveRight ());
 		colOnGrid++;
@@ -627,7 +633,12 @@ public class RedGhost : Ghost {
 	}
 	void SetLeft() {
 		animator.enabled = true;
-		animator.Play ("RedGhostMovesLeft");
+
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("RedGhostFrightened");
+		} else {
+			animator.Play ("RedGhostMovesLeft");
+		}
 		RedGhostState = RedGhostStates.Left;
 		movingDone = false;
 		StartCoroutine (MoveLeft ());
@@ -636,7 +647,12 @@ public class RedGhost : Ghost {
 	}
 	void SetUp() {
 		animator.enabled = true;
-		animator.Play ("RedGhostMovesUp");
+
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("RedGhostFrightened");
+		} else {
+			animator.Play ("RedGhostMovesUp");
+		}
 		RedGhostState = RedGhostStates.Up;
 		movingDone = false;
 		StartCoroutine (MoveUp ());
@@ -645,7 +661,12 @@ public class RedGhost : Ghost {
 	}
 	void SetDown() {
 		animator.enabled = true;
-		animator.Play ("RedGhostMovesDown");
+
+		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
+			animator.Play ("RedGhostFrightened");
+		} else {
+			animator.Play ("RedGhostMovesDown");
+		}
 		RedGhostState = RedGhostStates.Down;
 		movingDone = false;
 		StartCoroutine (MoveDown ());
