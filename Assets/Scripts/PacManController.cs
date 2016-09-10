@@ -254,7 +254,6 @@ public class PacManController : MonoBehaviour {
 		if (other.tag == "Pellet" || other.tag == "PowerPellet" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
 			other.gameObject.SetActive (false);
 			GameManager.Pellets++;
-			Debug.Log ("Pellets: " + GameManager.Pellets);
 			if (GameManager.Pellets == 244) {
 				GameManager.LevelWon ();
 			}
