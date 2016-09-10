@@ -51,6 +51,13 @@ public class BlueGhost : Ghost {
 		//transform.position = LeftLocation.transform.position;
 		GhostController.GhostStateHasChanged += BlueGhost_GhostStateHasChanged;
 		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+	}
+
+	void GhostLeftFrightenedState ()
+	{
+		timeStep = TimeStep;
+		BlueGhost_GhostStateHasChanged ();
 	}
 
 	void ChangeGhostToFrightenedState ()

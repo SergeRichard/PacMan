@@ -50,6 +50,13 @@ public class YellowGhost : Ghost {
 		//transform.position = LeftLocation.transform.position;
 		GhostController.GhostStateHasChanged += YellowGhost_GhostStateHasChanged;
 		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+	}
+
+	void GhostLeftFrightenedState ()
+	{
+		timeStep = TimeStep;
+		YellowGhost_GhostStateHasChanged ();
 	}
 
 	void ChangeGhostToFrightenedState ()

@@ -48,6 +48,13 @@ public class PinkGhost : Ghost {
 		//transform.position = LeftLocation.transform.position;
 		GhostController.GhostStateHasChanged += PinkGhost_GhostStateHasChanged;
 		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+	}
+
+	void GhostLeftFrightenedState ()
+	{
+		timeStep = TimeStep;
+		PinkGhost_GhostStateHasChanged ();
 	}
 
 	void ChangeGhostToFrightenedState ()

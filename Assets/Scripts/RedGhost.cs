@@ -58,7 +58,14 @@ public class RedGhost : Ghost {
 		movingDone = true;
 		GhostController.GhostStateHasChanged += RedGhost_GhostStateHasChanged;
 		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
 		//transform.position = LeftLocation.transform.position;
+	}
+
+	void GhostLeftFrightenedState ()
+	{
+		timeStep = TimeStep;
+		RedGhost_GhostStateHasChanged ();
 	}
 
 	void ChangeGhostToFrightenedState ()

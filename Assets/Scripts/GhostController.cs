@@ -2,10 +2,12 @@
 using System.Collections;
 
 public delegate void GhostStateHasChangedEventHandler();
+public delegate void GhostLeftFrightenedStateEventHandler();
 
 public class GhostController : Ghost {
 
 	public event GhostStateHasChangedEventHandler GhostStateHasChanged;
+	public event GhostLeftFrightenedStateEventHandler GhostLeftFrightenedState;
 
 	public float GhostFrightenedTimeStep = 0.05f;
 
@@ -66,7 +68,7 @@ public class GhostController : Ghost {
 
 	void ChangeGhostToFrightenedState ()
 	{
-		StopAllCoroutines ();
+		//StopAllCoroutines ();
 	}
 	
 	// Update is called once per frame
@@ -79,35 +81,95 @@ public class GhostController : Ghost {
 
 	IEnumerator StartStateTimer() {
 		GhostState = GhostStates.Scatter;
-		yield return new WaitForSeconds (7f);
+
+		for (int i = 0; i < 7f; i++) {
+			if (GhostState == GhostStates.Freightened) {
+				yield return new WaitForSeconds (10f);
+				GhostLeftFrightenedState ();
+				GhostState = GhostStates.Scatter;
+			}
+			yield return new WaitForSeconds (1f);
+		}
 
 		GhostState = GhostStates.Chase;
 		GhostStateHasChanged ();
-		yield return new WaitForSeconds (20f);
+		for (int i = 0; i < 20f; i++) {
+			if (GhostState == GhostStates.Freightened) {
+				yield return new WaitForSeconds (10f);
+				GhostLeftFrightenedState ();
+				GhostState = GhostStates.Chase;
+			}
+			yield return new WaitForSeconds (1f);
+		}
 
 		GhostState = GhostStates.Scatter;
 		GhostStateHasChanged ();
-		yield return new WaitForSeconds (7f);
+		for (int i = 0; i < 7f; i++) {
+			if (GhostState == GhostStates.Freightened) {
+				yield return new WaitForSeconds (10f);
+				GhostLeftFrightenedState ();
+				GhostState = GhostStates.Scatter;
+			}
+			yield return new WaitForSeconds (1f);
+		}
 
 		GhostState = GhostStates.Chase;
 		GhostStateHasChanged ();
-		yield return new WaitForSeconds (20f);
+		for (int i = 0; i < 20f; i++) {
+			if (GhostState == GhostStates.Freightened) {
+				yield return new WaitForSeconds (10f);
+				GhostLeftFrightenedState ();
+				GhostState = GhostStates.Chase;
+			}
+			yield return new WaitForSeconds (1f);
+		}
 
 		GhostState = GhostStates.Scatter;
 		GhostStateHasChanged ();
-		yield return new WaitForSeconds (5f);
+		for (int i = 0; i < 5f; i++) {
+			if (GhostState == GhostStates.Freightened) {
+				yield return new WaitForSeconds (10f);
+				GhostLeftFrightenedState ();
+				GhostState = GhostStates.Scatter;
+			}
+			yield return new WaitForSeconds (1f);
+		}
 
 		GhostState = GhostStates.Chase;
 		GhostStateHasChanged ();
-		yield return new WaitForSeconds (20f);
+		for (int i = 0; i < 7f; i++) {
+			if (GhostState == GhostStates.Freightened) {
+				yield return new WaitForSeconds (10f);
+				GhostLeftFrightenedState ();
+				GhostState = GhostStates.Chase;
+			}
+			yield return new WaitForSeconds (1f);
+		}
 
 		GhostState = GhostStates.Scatter;
 		GhostStateHasChanged ();
-		yield return new WaitForSeconds (5f);
+		for (int i = 0; i < 7f; i++) {
+			if (GhostState == GhostStates.Freightened) {
+				yield return new WaitForSeconds (10f);
+				GhostLeftFrightenedState ();
+				GhostState = GhostStates.Scatter;
+			}
+			yield return new WaitForSeconds (1f);
+		}
 
 		// at this point, chase for the rest
 		GhostState = GhostStates.Chase;
 		GhostStateHasChanged ();
-
+		while (true) {
+			for (int i = 0; i < 7f; i++) {
+				if (GhostState == GhostStates.Freightened) {
+					yield return new WaitForSeconds (10f);
+					GhostLeftFrightenedState ();
+					GhostState = GhostStates.Chase;
+				}
+				yield return new WaitForSeconds (1f);
+			}
+			yield return new WaitForSeconds (1f);
+		}
 	}
 }
