@@ -52,8 +52,12 @@ public class BlueGhost : Ghost {
 		GhostController.GhostStateHasChanged += BlueGhost_GhostStateHasChanged;
 		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
 		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+		GhostController.FrightenedBlinking += FrightenedBlinking;
 	}
-
+	void FrightenedBlinking ()
+	{
+		animator.Play ("FrightenedBlinking");
+	}
 	void GhostLeftFrightenedState ()
 	{
 		timeStep = TimeStep;
@@ -146,6 +150,8 @@ public class BlueGhost : Ghost {
 		animator.enabled = true;
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveRight");
 		}
@@ -159,6 +165,8 @@ public class BlueGhost : Ghost {
 		}
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -186,6 +194,8 @@ public class BlueGhost : Ghost {
 		animator.enabled = true;
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -202,6 +212,8 @@ public class BlueGhost : Ghost {
 		animator.enabled = true;
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveDown");
 		}
@@ -218,6 +230,8 @@ public class BlueGhost : Ghost {
 		animator.enabled = true;
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -289,7 +303,7 @@ public class BlueGhost : Ghost {
 		int xDistance = Mathf.Abs (ghostX - pacManX);
 		int yDistance = Mathf.Abs (ghostY - pacManY);
 
-		if (GhostController.GhostState != GhostController.GhostStates.Freightened) {
+		if (GhostController.GhostState != GhostController.GhostStates.Freightened || GhostController.GhostState != GhostController.GhostStates.FrightenedBlinking) {
 			switch (BlueGhostState) {
 			case BlueGhostStates.Left:
 			// make sure that direction is at the very least set to a possible direction to move
@@ -752,6 +766,8 @@ public class BlueGhost : Ghost {
 		BlueGhostState = BlueGhostStates.Right;
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveRight");
 		}
@@ -767,6 +783,8 @@ public class BlueGhost : Ghost {
 		BlueGhostState = BlueGhostStates.Left;
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveLeft");
 		}
@@ -781,6 +799,8 @@ public class BlueGhost : Ghost {
 		BlueGhostState = BlueGhostStates.Up;
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -795,6 +815,8 @@ public class BlueGhost : Ghost {
 		BlueGhostState = BlueGhostStates.Down;
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("BlueGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveDown");
 		}

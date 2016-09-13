@@ -95,8 +95,21 @@ public class GhostController : Ghost {
 				}
 			}
 		}
-		if (GhostState != GhostStates.Freightened) {
+		if (GhostState == GhostStates.Freightened) {
 			frightenedTimer += Time.deltaTime;
+			if (frightenedTimer >= 6) {
+				frightenedTimer = 0;
+				GhostState = GhostStates.FrightenedBlinking;
+				FrightenedBlinking ();
+			}
+		}
+		if (GhostState == GhostStates.FrightenedBlinking) {
+			frightenedTimer += Time.deltaTime;
+			if (frightenedTimer >= 4) {
+				frightenedTimer = 0;
+				GhostLeftFrightenedState ();
+				GhostState = GhostStates.Scatter;
+			}
 
 		}
 	}
@@ -132,7 +145,8 @@ public class GhostController : Ghost {
 
 	void ChangeGhostToFrightenedState ()
 	{
-		//StopAllCoroutines ();
+		// reset the frightened timer
+		frightenedTimer = 0;
 	}
 	
 

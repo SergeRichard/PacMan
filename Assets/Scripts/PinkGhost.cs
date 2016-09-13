@@ -49,8 +49,12 @@ public class PinkGhost : Ghost {
 		GhostController.GhostStateHasChanged += PinkGhost_GhostStateHasChanged;
 		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
 		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+		GhostController.FrightenedBlinking += FrightenedBlinking;
 	}
-
+	void FrightenedBlinking ()
+	{
+		animator.Play ("FrightenedBlinking");
+	}
 	void GhostLeftFrightenedState ()
 	{
 		timeStep = TimeStep;
@@ -144,7 +148,9 @@ public class PinkGhost : Ghost {
 
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("PinkGhostFrightened");
-		} else {
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
+	    } else {
 			animator.Play ("MoveUp");
 		}
 
@@ -168,6 +174,8 @@ public class PinkGhost : Ghost {
 
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("PinkGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveDown");
 		}
@@ -184,6 +192,8 @@ public class PinkGhost : Ghost {
 
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("PinkGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -200,6 +210,8 @@ public class PinkGhost : Ghost {
 
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("PinkGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveDown");
 		}
@@ -220,6 +232,8 @@ public class PinkGhost : Ghost {
 
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("PinkGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveRight");
 		}
@@ -234,6 +248,8 @@ public class PinkGhost : Ghost {
 
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("PinkGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveLeft");
 		}
@@ -248,6 +264,8 @@ public class PinkGhost : Ghost {
 
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("PinkGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -262,6 +280,8 @@ public class PinkGhost : Ghost {
 
 		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
 			animator.Play ("PinkGhostFrightened");
+		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
 		} else {
 			animator.Play ("MoveDown");
 		}
@@ -321,7 +341,7 @@ public class PinkGhost : Ghost {
 		int xDistance = Mathf.Abs (ghostX - pacManX);
 		int yDistance = Mathf.Abs (ghostY - pacManY);
 
-		if (GhostController.GhostState != GhostController.GhostStates.Freightened) {
+		if (GhostController.GhostState != GhostController.GhostStates.Freightened || GhostController.GhostState != GhostController.GhostStates.FrightenedBlinking) {
 			switch (PinkGhostState) {
 			case PinkGhostStates.Left:
 			// make sure that direction is at the very least set to a possible direction to move
