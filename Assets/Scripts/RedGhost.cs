@@ -3,42 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class RedGhost : Ghost {
-
-//	Animator animator;
-//
-//	public enum RedGhostStates {Idle, Up, Down, Left, Right};
-//
-//	public static RedGhostStates RedGhostState;
-//
-//
-//	public GhostController GhostController;
-
-	//	public Transform LeftLocation;
-	//	public Transform RightLocation;
-
-//	public float DistanceToTravel = .32f;
-//	public float TimeStep = .025f;
-//
-//	public Transform LeftBank;
-//	public Transform RightBank;
-//
-//	public GameManager GameManager;
-//	public Sprite RightSprite;
-//	public Sprite LeftSprite;
-//	public Sprite UpSprite;
-//	public Sprite DownSprite;
-
-	//	private int rowOnGrid = 23;
-	//	private int colOnGrid = 13;
-//	private int rowOnGrid = 11;
-//	private int colOnGrid = 14;
-//
-//	private int rowOnGridStart = 11;
-//	private int colOnGridStart = 14;
-//
-//	private bool movingDone;
-//	private float timeStep;
-
+	
 	public int RowOnGrid 
 	{
 		get { return rowOnGrid; }
@@ -75,7 +40,7 @@ public class RedGhost : Ghost {
 	void ChangeGhostToFrightenedState ()
 	{
 		animator.enabled = true;
-		animator.Play ("RedGhostFrightened");
+		animator.Play ("GhostFrightened");
 		timeStep = GhostController.GhostFrightenedTimeStep;
 		// change direction
 		RedGhost_GhostStateHasChanged ();
@@ -98,18 +63,7 @@ public class RedGhost : Ghost {
 
 	// Update is called once per frame
 	void Update () {
-		//		if (GameManager.state == GameManager.States.Intro) {
-		//			if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) {
-		//				transform.position = RightLocation.transform.position;
-		//				colOnGrid = 15;
-		//				pacManStates = PacManStates.Right;
-		//			}
-		//			if (Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) {
-		//				transform.position = LeftLocation.transform.position;
-		//				colOnGrid = 14;
-		//				pacManStates = PacManStates.Left;
-		//			}
-		//		}
+		
 		if (GameManager.state == GameManager.States.PacManDead) {
 			animator.enabled = false;
 		}
@@ -638,129 +592,5 @@ public class RedGhost : Ghost {
 
 		}
 	}
-//	void SetRight() {
-//		animator.enabled = true;
-//		IndGhostState = RedGhostStates.Right;
-//		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
-//			animator.Play ("RedGhostFrightened");
-//		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) {
-//			animator.Play ("FrightenedBlinking");
-//		} else {
-//			animator.Play ("RedGhostMovesRight");
-//		}
-//
-//		movingDone = false;
-//		StartCoroutine (MoveRight ());
-//		colOnGrid++;
-//
-//		GetComponent<SpriteRenderer> ().sprite = RightSprite;
-//	}
-//	void SetLeft() {
-//		animator.enabled = true;
-//
-//		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
-//			animator.Play ("RedGhostFrightened");
-//		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) {
-//			animator.Play ("FrightenedBlinking");
-//		} else {
-//			animator.Play ("RedGhostMovesLeft");
-//		}
-//		RedGhostState = RedGhostStates.Left;
-//		movingDone = false;
-//		StartCoroutine (MoveLeft ());
-//		colOnGrid--;
-//		GetComponent<SpriteRenderer> ().sprite = LeftSprite;
-//	}
-//	void SetUp() {
-//		animator.enabled = true;
-//
-//		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
-//			animator.Play ("RedGhostFrightened");
-//		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) {
-//			animator.Play ("FrightenedBlinking");
-//		} else {
-//			animator.Play ("RedGhostMovesUp");
-//		}
-//		RedGhostState = RedGhostStates.Up;
-//		movingDone = false;
-//		StartCoroutine (MoveUp ());
-//		rowOnGrid--;
-//		GetComponent<SpriteRenderer> ().sprite = UpSprite;
-//	}
-//	void SetDown() {
-//		animator.enabled = true;
-//
-//		if (GhostController.GhostState == GhostController.GhostStates.Freightened) {
-//			animator.Play ("RedGhostFrightened");
-//		} else if (GhostController.GhostState == GhostController.GhostStates.FrightenedBlinking) {
-//			animator.Play ("FrightenedBlinking");
-//		} else {
-//			animator.Play ("RedGhostMovesDown");
-//		}
-//		RedGhostState = RedGhostStates.Down;
-//		movingDone = false;
-//		StartCoroutine (MoveDown ());
-//		rowOnGrid++;
-//		GetComponent<SpriteRenderer> ().sprite = DownSprite;
-//	}
-//
-//
-//	IEnumerator MoveRight () {
-//		float distanceTraveled = transform.position.x;
-//		float endPosition = transform.position.x + DistanceToTravel; 
-//		while (distanceTraveled < endPosition) {
-//			distanceTraveled += .08f;
-//			transform.position = new Vector2(distanceTraveled,transform.position.y);
-//
-//			yield return new WaitForSeconds (timeStep);
-//		}
-//		movingDone = true;
-//		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 2) {
-//			transform.position = LeftBank.position;
-//			rowOnGrid = 14;
-//			colOnGrid = 1;
-//		}
-//
-//	}
-//	IEnumerator MoveLeft () {
-//		float distanceTraveled = transform.position.x;
-//		float endPosition = transform.position.x - DistanceToTravel; 
-//
-//		while (distanceTraveled > endPosition) {
-//			distanceTraveled -= .08f;
-//			transform.position = new Vector2(distanceTraveled,transform.position.y);
-//
-//			yield return new WaitForSeconds (timeStep);
-//		}
-//		movingDone = true;
-//		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 2) {
-//			transform.position = RightBank.position;
-//			rowOnGrid = 14;
-//			colOnGrid = 28;
-//		}
-//	}
-//	IEnumerator MoveUp () {
-//		float distanceTraveled = transform.position.y;
-//		float endPosition = transform.position.y + DistanceToTravel; 
-//
-//		while (distanceTraveled < endPosition) {
-//			distanceTraveled += .08f;
-//			transform.position = new Vector2(transform.position.x, distanceTraveled);
-//
-//			yield return new WaitForSeconds (timeStep);
-//		}
-//		movingDone = true;
-//	}
-//	IEnumerator MoveDown () {
-//		float distanceTraveled = transform.position.y;
-//		float endPosition = transform.position.y - DistanceToTravel; 
-//
-//		while (distanceTraveled > endPosition) {
-//			distanceTraveled -= .08f;
-//			transform.position = new Vector2(transform.position.x, distanceTraveled);
-//
-//			yield return new WaitForSeconds (timeStep);
-//		}
-//		movingDone = true;
-//	}
+
 }

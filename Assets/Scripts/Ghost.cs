@@ -5,8 +5,6 @@ using System.Collections;
 
 public class Ghost : MonoBehaviour {
 
-
-
 	public enum GhostStates
 	{
 		Scatter, Chase
