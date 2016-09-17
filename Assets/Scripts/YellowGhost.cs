@@ -296,7 +296,7 @@ public class YellowGhost : Ghost {
 		} 
 
 
-		if (GhostController.GhostState != GhostController.GhostStates.Freightened || GhostController.GhostState != GhostController.GhostStates.FrightenedBlinking) {
+		if (GhostController.GhostState != GhostController.GhostStates.Freightened && GhostController.GhostState != GhostController.GhostStates.FrightenedBlinking) {
 			switch (YellowGhostState) {
 			case YellowGhostStates.Left:
 			// make sure that direction is at the very least set to a possible direction to move
