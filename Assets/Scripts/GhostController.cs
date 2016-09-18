@@ -6,11 +6,11 @@ public delegate void GhostStateHasChangedEventHandler();
 public delegate void GhostLeftFrightenedStateEventHandler();
 public delegate void FrightenedBlinkingEventHandler();
 
-public class GhostController : Ghost {
+public class GhostController : MonoBehaviour {
 
 	class GhostMode
 	{
-		public GhostStates state;
+		public Ghost.GhostStates state;
 		public float time;
 	}
 
@@ -40,14 +40,13 @@ public class GhostController : Ghost {
 	private float frightenedTimer;
 
 	// Use this for initialization
-	protected override void Start () {
-		PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+	void Start () {
 		ghostModes = new Queue<GhostMode> ();
 		SetUpInitial ();
 
 	}
 	public void SetUpInitial(bool newLevel = true) {
-		GhostState = GhostStates.Scatter;
+		Ghost.GhostState = Ghost.GhostStates.Scatter;
 		frightenedTimer = 0;
 
 		if (newLevel == true) {
@@ -57,27 +56,27 @@ public class GhostController : Ghost {
 			ghostModes.Clear ();
 
 			GhostMode mode = new GhostMode ();
-			mode.state = GhostStates.Scatter;
+			mode.state = Ghost.GhostStates.Scatter;
 			mode.time = 7f; // start right away
 			ghostModes.Enqueue (mode);
 
 			GhostMode mode2 = new GhostMode ();
-			mode2.state = GhostStates.Chase;
+			mode2.state = Ghost.GhostStates.Chase;
 			mode2.time = 20f;
 			ghostModes.Enqueue (mode2);
 
 			GhostMode mode3 = new GhostMode ();
-			mode3.state = GhostStates.Scatter;
+			mode3.state = Ghost.GhostStates.Scatter;
 			mode3.time = 7f;
 			ghostModes.Enqueue (mode3);
 
 			GhostMode mode4 = new GhostMode ();
-			mode4.state = GhostStates.Chase;
+			mode4.state = Ghost.GhostStates.Chase;
 			mode4.time = 20f;
 			ghostModes.Enqueue (mode4);
 
 			GhostMode mode5 = new GhostMode ();
-			mode5.state = GhostStates.Scatter;
+			mode5.state = Ghost.GhostStates.Scatter;
 			mode5.time = 5f;
 			ghostModes.Enqueue (mode5);
 		}
@@ -87,42 +86,42 @@ public class GhostController : Ghost {
 	void Update () {
 		// TODO clear and re-add ghost modes. 
 
-		if (GameManager.state == GameManager.States.Play && FrightenedState != FrightenedStates.Frightened && FrightenedState != FrightenedStates.FrightenedBlinking) {
-			modeTimer += Time.deltaTime;
-			if (ghostModes.Count > 0) {
-				if (modeTimer >= ghostModes.Peek ().time) {					
-					ghostModes.Dequeue ();
-					GhostStateHasChanged ();
-
-					GhostState = ghostModes.Peek ().state;
-
-				}
-			} else {
-				GhostState = GhostStates.Chase;
-				modeTimer = 0;
-			}
-		}
-		if (FrightenedState == FrightenedStates.Frightened) {
-			frightenedTimer += Time.deltaTime;
-			if (frightenedTimer >= 6) {
-				frightenedTimer = 0;
-				FrightenedState = FrightenedStates.FrightenedBlinking;
-				FrightenedBlinking ();
-			}
-		}
-		if (FrightenedState == FrightenedStates.FrightenedBlinking) {
-			frightenedTimer += Time.deltaTime;
-			if (frightenedTimer >= 4) {
-				frightenedTimer = 0;
-				if (ghostModes.Count > 0) {
-					GhostState = ghostModes.Peek ().state;
-				} else {
-					GhostState = GhostStates.Chase;
-				}
-				GhostLeftFrightenedState ();
-			}
-
-		}
+//		if (GameManager.state == GameManager.States.Play && FrightenedState != FrightenedStates.Frightened && FrightenedState != FrightenedStates.FrightenedBlinking) {
+//			modeTimer += Time.deltaTime;
+//			if (ghostModes.Count > 0) {
+//				if (modeTimer >= ghostModes.Peek ().time) {					
+//					ghostModes.Dequeue ();
+//					GhostStateHasChanged ();
+//
+//					GhostState = ghostModes.Peek ().state;
+//
+//				}
+//			} else {
+//				GhostState = GhostStates.Chase;
+//				modeTimer = 0;
+//			}
+//		}
+//		if (FrightenedState == FrightenedStates.Frightened) {
+//			frightenedTimer += Time.deltaTime;
+//			if (frightenedTimer >= 6) {
+//				frightenedTimer = 0;
+//				FrightenedState = FrightenedStates.FrightenedBlinking;
+//				FrightenedBlinking ();
+//			}
+//		}
+//		if (FrightenedState == FrightenedStates.FrightenedBlinking) {
+//			frightenedTimer += Time.deltaTime;
+//			if (frightenedTimer >= 4) {
+//				frightenedTimer = 0;
+//				if (ghostModes.Count > 0) {
+//					GhostState = ghostModes.Peek ().state;
+//				} else {
+//					GhostState = GhostStates.Chase;
+//				}
+//				GhostLeftFrightenedState ();
+//			}
+//
+//		}
 	}
 	public void DisableGhost() {
 		GhostYellow.GetComponent<YellowGhost> ().CancelInvoke ();
@@ -151,135 +150,5 @@ public class GhostController : Ghost {
 		GhostBlue.GetComponent<SpriteRenderer> ().enabled = true;
 		GhostRed.GetComponent<SpriteRenderer> ().enabled = true;
 
-	}
-
-
-	void ChangeGhostToFrightenedState ()
-	{
-		// reset the frightened timer
-		frightenedTimer = 0;
-	}
-	
-
-	public void StartTimer() {
-		//StartCoroutine (StartStateTimer ());
-	}
-
-	IEnumerator StartStateTimer() {
-		GhostState = GhostStates.Scatter;
-
-		for (int i = 0; i < 7f; i++) {
-			if (FrightenedState == FrightenedStates.Frightened) {
-				yield return new WaitForSeconds (6f);
-				FrightenedState = FrightenedStates.FrightenedBlinking;
-				FrightenedBlinking ();
-				yield return new WaitForSeconds (4f);
-				GhostLeftFrightenedState ();
-				GhostState = GhostStates.Scatter;
-			}
-			yield return new WaitForSeconds (1f);
-		}
-
-		GhostState = GhostStates.Chase;
-		GhostStateHasChanged ();
-		for (int i = 0; i < 20f; i++) {
-			if (FrightenedState == FrightenedStates.Frightened) {
-				yield return new WaitForSeconds (6f);
-				FrightenedState = FrightenedStates.FrightenedBlinking;
-				FrightenedBlinking ();
-				yield return new WaitForSeconds (4f);
-				GhostLeftFrightenedState ();
-				GhostState = GhostStates.Chase;
-			}
-			yield return new WaitForSeconds (1f);
-		}
-
-		GhostState = GhostStates.Scatter;
-		GhostStateHasChanged ();
-		for (int i = 0; i < 7f; i++) {
-			if (FrightenedState == FrightenedStates.Frightened) {
-				yield return new WaitForSeconds (6f);
-				FrightenedState = FrightenedStates.FrightenedBlinking;
-				FrightenedBlinking ();
-				yield return new WaitForSeconds (4f);
-				GhostLeftFrightenedState ();
-				GhostState = GhostStates.Scatter;
-			}
-			yield return new WaitForSeconds (1f);
-		}
-
-		GhostState = GhostStates.Chase;
-		GhostStateHasChanged ();
-		for (int i = 0; i < 20f; i++) {
-			if (FrightenedState == FrightenedStates.Frightened) {
-				yield return new WaitForSeconds (6f);
-				FrightenedState = FrightenedStates.FrightenedBlinking;
-				FrightenedBlinking ();
-				yield return new WaitForSeconds (4f);
-				GhostLeftFrightenedState ();
-				GhostState = GhostStates.Chase;
-			}
-			yield return new WaitForSeconds (1f);
-		}
-
-		GhostState = GhostStates.Scatter;
-		GhostStateHasChanged ();
-		for (int i = 0; i < 5f; i++) {
-			if (FrightenedState == FrightenedStates.Frightened) {
-				yield return new WaitForSeconds (6f);
-				FrightenedState = FrightenedStates.FrightenedBlinking;
-				FrightenedBlinking ();
-				yield return new WaitForSeconds (4f);
-				GhostLeftFrightenedState ();
-				GhostState = GhostStates.Scatter;
-			}
-			yield return new WaitForSeconds (1f);
-		}
-
-		GhostState = GhostStates.Chase;
-		GhostStateHasChanged ();
-		for (int i = 0; i < 7f; i++) {
-			if (FrightenedState == FrightenedStates.Frightened) {
-				yield return new WaitForSeconds (6f);
-				FrightenedState = FrightenedStates.FrightenedBlinking;
-				FrightenedBlinking ();
-				yield return new WaitForSeconds (4f);
-				GhostLeftFrightenedState ();
-				GhostState = GhostStates.Chase;
-			}
-			yield return new WaitForSeconds (1f);
-		}
-
-		GhostState = GhostStates.Scatter;
-		GhostStateHasChanged ();
-		for (int i = 0; i < 7f; i++) {
-			if (FrightenedState == FrightenedStates.Frightened) {
-				yield return new WaitForSeconds (6f);
-				FrightenedState = FrightenedStates.FrightenedBlinking;
-				FrightenedBlinking ();
-				yield return new WaitForSeconds (4f);
-				GhostLeftFrightenedState ();
-				GhostState = GhostStates.Scatter;
-			}
-			yield return new WaitForSeconds (1f);
-		}
-
-		// at this point, chase for the rest
-		GhostState = GhostStates.Chase;
-		GhostStateHasChanged ();
-		while (true) {
-			for (int i = 0; i < 7f; i++) {
-				if (FrightenedState == FrightenedStates.Frightened) {
-					yield return new WaitForSeconds (6f);
-					FrightenedState = FrightenedStates.FrightenedBlinking;
-					FrightenedBlinking ();
-					yield return new WaitForSeconds (4f);
-					GhostLeftFrightenedState ();
-					GhostState = GhostStates.Chase;
-				}
-				yield return new WaitForSeconds (1f);
-			}
-			yield return new WaitForSeconds (1f);
-		}
 	}
 }

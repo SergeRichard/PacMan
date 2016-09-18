@@ -30,7 +30,7 @@ public class Ghost : MonoBehaviour {
 
 	public GameManager GameManager;
 
-	public GhostStates GhostState;
+	public static GhostStates GhostState;
 	public FrightenedStates FrightenedState;
 	public IndGhostStates IndGhostState;
 

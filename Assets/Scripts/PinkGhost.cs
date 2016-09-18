@@ -85,15 +85,7 @@ public class PinkGhost : Ghost {
 			}
 		}
 	}
-	public void StartIdleUpAndDownSequence(float timeToStayInBox) {
-		CancelInvoke ();
-		StopAllCoroutines ();
-		rowOnGrid = rowOnGridStart;
-		colOnGrid = colOnGridStart;
-		IndGhostState = IndGhostStates.IdleUpAndDown;
-		movingDone = true;
-		Invoke ("StartMovingOutOfBox", timeToStayInBox);
-	}
+
 	void StartMovingOutOfBox() {
 		IndGhostState = IndGhostStates.MoveOutOfBox;
 	}

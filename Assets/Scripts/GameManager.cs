@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour {
 		GhostController.EnableGhost ();
 	}
 	void IntroDone() {
-		GhostController.StartTimer ();
+		//GhostController.StartTimer ();
 
 		PacMan.GetComponent<SpriteRenderer> ().enabled = true;
 		PacManIntro.GetComponent<SpriteRenderer> ().enabled = false;
@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour {
 	}
 	void StartGhostSequence() {
 		GhostController.StopAllCoroutines ();
-		GhostController.StartTimer ();
+		//GhostController.StartTimer ();
 
 		MessageController.GetReadyText.gameObject.SetActive (false);
 		MusicController.PlaySirenSound ();
