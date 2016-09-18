@@ -34,12 +34,12 @@ public class Ghost : MonoBehaviour {
 	public FrightenedStates FrightenedState;
 	public IndGhostStates IndGhostState;
 
-	public bool movingDone;
-	public int rowOnGrid;
-	public int colOnGrid;
+	protected bool movingDone;
+	protected int rowOnGrid;
+	protected int colOnGrid;
 
-	public int rowOnGridStart;
-	public int colOnGridStart;
+	protected int rowOnGridStart;
+	protected int colOnGridStart;
 
 	public Sprite RightSprite;
 	public Sprite LeftSprite;
@@ -48,7 +48,7 @@ public class Ghost : MonoBehaviour {
 
 	public float DistanceToTravel = .32f;
 	public float TimeStep = .01f;
-	public float timeStep;
+	protected float timeStep;
 
 	protected Animator animator;
 
@@ -58,6 +58,7 @@ public class Ghost : MonoBehaviour {
 		GhostState = GhostStates.Scatter;
 		animator = GetComponent<Animator> ();
 		movingDone = true;
+		FrightenedState = FrightenedStates.NotFrightened;
 	}
 	
 	// Update is called once per frame

@@ -8,6 +8,12 @@ public class YellowGhost : Ghost {
 	protected override void Start () {
 		base.Start ();
 
+		rowOnGrid = 11;
+		colOnGrid = 14;
+
+		rowOnGridStart = 11;
+		colOnGridStart = 14;
+
 		IndGhostState = IndGhostStates.IdleUpAndDown;
 
 		Invoke ("StartMovingOutOfBox", 16f);
