@@ -262,7 +262,7 @@ public class PacManController : MonoBehaviour {
 		}
 		if (other.tag == "PowerPellet" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
 			//Ghost.FrightenedState = Ghost.FrightenedStates.Frightened;
-			//ChangeGhostToFrightenedState ();
+			ChangeGhostToFrightenedState ();
 		}
 		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
 			GameManager.state = GameManager.States.PacManDead;

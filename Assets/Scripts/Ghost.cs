@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-
+using System.Collections.Generic;
 
 public class Ghost : MonoBehaviour {
 
@@ -52,6 +51,17 @@ public class Ghost : MonoBehaviour {
 
 	protected Animator animator;
 
+	private float modeTimer;
+	private float frightenedTimer;
+
+	class GhostMode
+	{
+		public GhostStates state;
+		public float time;
+	}
+
+	Queue<GhostMode> ghostModes;
+
 	// Use this for initialization
 	protected virtual void Start () {
 		timeStep = TimeStep;
@@ -59,11 +69,119 @@ public class Ghost : MonoBehaviour {
 		animator = GetComponent<Animator> ();
 		movingDone = true;
 		FrightenedState = FrightenedStates.NotFrightened;
+
+		ghostModes = new Queue<GhostMode> ();
+
+		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+
+		SetUpInitial ();
+
 	}
-	
+	public void SetUpInitial(bool newLevel = true) {
+		Ghost.GhostState = Ghost.GhostStates.Scatter;
+		frightenedTimer = 0;
+
+		if (newLevel == true) {
+			modeTimer = 0;
+
+
+			ghostModes.Clear ();
+
+			GhostMode mode = new GhostMode ();
+			mode.state = Ghost.GhostStates.Scatter;
+			mode.time = 7f; // start right away
+			ghostModes.Enqueue (mode);
+
+			GhostMode mode2 = new GhostMode ();
+			mode2.state = Ghost.GhostStates.Chase;
+			mode2.time = 20f;
+			ghostModes.Enqueue (mode2);
+
+			GhostMode mode3 = new GhostMode ();
+			mode3.state = Ghost.GhostStates.Scatter;
+			mode3.time = 7f;
+			ghostModes.Enqueue (mode3);
+
+			GhostMode mode4 = new GhostMode ();
+			mode4.state = Ghost.GhostStates.Chase;
+			mode4.time = 20f;
+			ghostModes.Enqueue (mode4);
+
+			GhostMode mode5 = new GhostMode ();
+			mode5.state = Ghost.GhostStates.Scatter;
+			mode5.time = 5f;
+			ghostModes.Enqueue (mode5);
+		}
+
+	}
+	void ChangeGhostToFrightenedState ()
+	{
+		animator.enabled = true;
+		animator.Play ("GhostFrightened");
+		timeStep = GhostController.GhostFrightenedTimeStep;
+		// change direction
+		GhostStateHasChanged ();
+	}
+	void GhostStateHasChanged ()
+	{
+		if (IndGhostState == IndGhostStates.Left) {
+			IndGhostState = IndGhostStates.Right;
+		} else if (IndGhostState == IndGhostStates.Right) {
+			IndGhostState = IndGhostStates.Left;
+		} else if (IndGhostState == IndGhostStates.Up) {
+			IndGhostState = IndGhostStates.Down;
+		} else if (IndGhostState == IndGhostStates.Down) {
+			IndGhostState = IndGhostStates.Up;
+		}
+
+	}
 	// Update is called once per frame
-	void Update () {
-	
+	public virtual void Update () {
+		// TODO clear and re-add ghost modes. 
+
+		if (GameManager.state == GameManager.States.Play && FrightenedState != FrightenedStates.Frightened && FrightenedState != FrightenedStates.FrightenedBlinking) {
+			modeTimer += Time.deltaTime;
+			if (ghostModes.Count > 0) {
+				if (modeTimer >= ghostModes.Peek ().time) {
+					ghostModes.Dequeue ();
+					GhostStateHasChanged ();
+					if (ghostModes.Count > 0) {
+						GhostState = ghostModes.Peek ().state;
+					} else {
+						GhostState = GhostStates.Chase;
+					}
+
+					modeTimer = 0;
+				}
+			} else {
+				GhostState = GhostStates.Chase;
+				modeTimer = 0;
+			}
+		}
+		if (FrightenedState == FrightenedStates.Frightened) {
+			frightenedTimer += Time.deltaTime;
+			if (frightenedTimer >= 6) {
+				frightenedTimer = 0;
+				FrightenedState = FrightenedStates.FrightenedBlinking;
+				//FrightenedBlinking ();
+				animator.Play ("FrightenedBlinking");
+			}
+		}
+		if (FrightenedState == FrightenedStates.FrightenedBlinking) {
+			frightenedTimer += Time.deltaTime;
+			if (frightenedTimer >= 4) {
+				frightenedTimer = 0;
+				if (ghostModes.Count > 0) {
+					GhostState = ghostModes.Peek ().state;
+				} else {
+					GhostState = GhostStates.Chase;
+				}
+				//GhostLeftFrightenedState ();
+				timeStep = TimeStep;
+				FrightenedState = FrightenedStates.NotFrightened;
+			}
+
+		}	
 	}
 	public void SetRight() {
 		animator.enabled = true;

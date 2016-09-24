@@ -27,10 +27,10 @@ public class RedGhost : Ghost {
 
 		IndGhostState = IndGhostStates.Left;
 
-		GhostController.GhostStateHasChanged += RedGhost_GhostStateHasChanged;
-		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
-		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
-		GhostController.FrightenedBlinking += FrightenedBlinking;
+//		GhostController.GhostStateHasChanged += RedGhost_GhostStateHasChanged;
+//		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+//		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+//		GhostController.FrightenedBlinking += FrightenedBlinking;
 		//transform.position = LeftLocation.transform.position;
 	}
 
@@ -70,8 +70,9 @@ public class RedGhost : Ghost {
 	}
 
 	// Update is called once per frame
-	void Update () {
-		
+	public override void Update () {
+		base.Update ();
+
 		if (GameManager.state == GameManager.States.PacManDead) {
 			animator.enabled = false;
 		}
