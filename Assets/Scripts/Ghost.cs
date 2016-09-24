@@ -33,6 +33,7 @@ public class Ghost : MonoBehaviour {
 	public static GhostStates GhostState;
 	public FrightenedStates FrightenedState;
 	public IndGhostStates IndGhostState;
+	public GameObject ScoreText;
 
 	protected bool movingDone;
 	protected int rowOnGrid;

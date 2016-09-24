@@ -269,12 +269,18 @@ public class PacManController : MonoBehaviour {
 			//Ghost.FrightenedState = Ghost.FrightenedStates.Frightened;
 			ChangeGhostToFrightenedState ();
 		}
-		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
+		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel && other.gameObject.GetComponent<Ghost>().FrightenedState == Ghost.FrightenedStates.NotFrightened) {
 			GameManager.state = GameManager.States.PacManDead;
 			animator.enabled = false;
 			GameManager.PacManDead ();
 			PacManDead ();
 		}
-
+		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel && other.gameObject.GetComponent<Ghost>().FrightenedState != Ghost.FrightenedStates.NotFrightened) {
+			GameManager.state = GameManager.States.GhostEaten;
+			animator.enabled = false;
+			other.gameObject.GetComponent<SpriteRenderer> ().enabled = false;
+			other.gameObject.GetComponent<Ghost> ().ScoreText.SetActive (true);
+			gameObject.GetComponent<SpriteRenderer> ().enabled = false;
+		}
 	}
 }

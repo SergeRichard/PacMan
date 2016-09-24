@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
 	public int[,] GridMap;
 	public int[,] GridMapInitial;
 
-	public enum States {Intro, Play, PacManDead, WonLevel};
+	public enum States {Intro, Play, PacManDead, WonLevel, GhostEaten};
 
 	public static States state;
 
