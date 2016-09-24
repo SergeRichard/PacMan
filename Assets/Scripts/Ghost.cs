@@ -178,7 +178,7 @@ public class Ghost : MonoBehaviour {
 				modeTimer = 0;
 			}
 		}
-		if (FrightenedState == FrightenedStates.Frightened) {
+		if (FrightenedState == FrightenedStates.Frightened && GameManager.state == GameManager.States.Play) {
 			frightenedTimer += Time.deltaTime;
 			if (frightenedTimer >= 6) {
 				frightenedTimer = 0;
@@ -187,7 +187,7 @@ public class Ghost : MonoBehaviour {
 				animator.Play ("FrightenedBlinking");
 			}
 		}
-		if (FrightenedState == FrightenedStates.FrightenedBlinking) {
+		if (FrightenedState == FrightenedStates.FrightenedBlinking && GameManager.state == GameManager.States.Play) {
 			frightenedTimer += Time.deltaTime;
 			if (frightenedTimer >= 4) {
 				frightenedTimer = 0;

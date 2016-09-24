@@ -43,6 +43,7 @@ public class PacManController : MonoBehaviour {
 	const int colOnGridStart = 14;
 
 	private bool movingDone;
+	private GameObject ghostEaten;
 
 	public int RowOnGrid
 	{
@@ -281,6 +282,17 @@ public class PacManController : MonoBehaviour {
 			other.gameObject.GetComponent<SpriteRenderer> ().enabled = false;
 			other.gameObject.GetComponent<Ghost> ().ScoreText.SetActive (true);
 			gameObject.GetComponent<SpriteRenderer> ().enabled = false;
+			ghostEaten = other.gameObject;
+			ghostEaten.GetComponent<BoxCollider2D> ().enabled = false;
+			Invoke ("ResumeAfterEaten", 2f);
 		}
+	}
+	void ResumeAfterEaten() {
+		
+		animator.enabled = true;
+
+		ghostEaten.GetComponent<Ghost> ().ScoreText.SetActive (false);
+		gameObject.GetComponent<SpriteRenderer> ().enabled = true;
+		GameManager.state = GameManager.States.Play;
 	}
 }
