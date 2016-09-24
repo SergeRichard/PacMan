@@ -34,40 +34,40 @@ public class RedGhost : Ghost {
 		//transform.position = LeftLocation.transform.position;
 	}
 
-	void FrightenedBlinking ()
-	{
-		animator.Play ("FrightenedBlinking");
-	}
-
-	void GhostLeftFrightenedState ()
-	{
-		timeStep = TimeStep;
-		RedGhost_GhostStateHasChanged ();
-	}
-
-	void ChangeGhostToFrightenedState ()
-	{
-		animator.enabled = true;
-		animator.Play ("GhostFrightened");
-		timeStep = GhostController.GhostFrightenedTimeStep;
-		// change direction
-		RedGhost_GhostStateHasChanged ();
-	}
-
-
-	void RedGhost_GhostStateHasChanged ()
-	{
-		if (IndGhostState == IndGhostStates.Left) {
-			IndGhostState = IndGhostStates.Right;
-		} else if (IndGhostState == IndGhostStates.Right) {
-			IndGhostState = IndGhostStates.Left;
-		} else if (IndGhostState == IndGhostStates.Up) {
-			IndGhostState = IndGhostStates.Down;
-		} else if (IndGhostState == IndGhostStates.Down) {
-			IndGhostState = IndGhostStates.Up;
-		}
-
-	}
+//	void FrightenedBlinking ()
+//	{
+//		animator.Play ("FrightenedBlinking");
+//	}
+//
+//	void GhostLeftFrightenedState ()
+//	{
+//		timeStep = TimeStep;
+//		RedGhost_GhostStateHasChanged ();
+//	}
+//
+//	void ChangeGhostToFrightenedState ()
+//	{
+//		animator.enabled = true;
+//		animator.Play ("GhostFrightened");
+//		timeStep = GhostController.GhostFrightenedTimeStep;
+//		// change direction
+//		RedGhost_GhostStateHasChanged ();
+//	}
+//
+//
+//	void RedGhost_GhostStateHasChanged ()
+//	{
+//		if (IndGhostState == IndGhostStates.Left) {
+//			IndGhostState = IndGhostStates.Right;
+//		} else if (IndGhostState == IndGhostStates.Right) {
+//			IndGhostState = IndGhostStates.Left;
+//		} else if (IndGhostState == IndGhostStates.Up) {
+//			IndGhostState = IndGhostStates.Down;
+//		} else if (IndGhostState == IndGhostStates.Down) {
+//			IndGhostState = IndGhostStates.Up;
+//		}
+//
+//	}
 
 	// Update is called once per frame
 	public override void Update () {

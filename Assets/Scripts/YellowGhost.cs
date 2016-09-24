@@ -18,44 +18,45 @@ public class YellowGhost : Ghost {
 
 		Invoke ("StartMovingOutOfBox", 16f);
 		//transform.position = LeftLocation.transform.position;
-		GhostController.GhostStateHasChanged += YellowGhost_GhostStateHasChanged;
-		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
-		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
-		GhostController.FrightenedBlinking += FrightenedBlinking;
+//		GhostController.GhostStateHasChanged += YellowGhost_GhostStateHasChanged;
+//		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+//		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+//		GhostController.FrightenedBlinking += FrightenedBlinking;
 	}
-	void FrightenedBlinking ()
-	{
-		animator.Play ("FrightenedBlinking");
-	}
-	void GhostLeftFrightenedState ()
-	{
-		timeStep = TimeStep;
-		YellowGhost_GhostStateHasChanged ();
-	}
-
-	void ChangeGhostToFrightenedState ()
-	{
-		animator.enabled = true;
-		animator.Play ("YellowGhostFrightened");
-		timeStep = GhostController.GhostFrightenedTimeStep;
-		YellowGhost_GhostStateHasChanged ();
-	}
-
-	void YellowGhost_GhostStateHasChanged ()
-	{
-		if (IndGhostState == IndGhostStates.Left) {
-			IndGhostState = IndGhostStates.Right;
-		} else if (IndGhostState == IndGhostStates.Right) {
-			IndGhostState = IndGhostStates.Left;
-		} else if (IndGhostState == IndGhostStates.Up) {
-			IndGhostState = IndGhostStates.Down;
-		} else if (IndGhostState == IndGhostStates.Down) {
-			IndGhostState = IndGhostStates.Up;
-		}
-	}
+//	void FrightenedBlinking ()
+//	{
+//		animator.Play ("FrightenedBlinking");
+//	}
+//	void GhostLeftFrightenedState ()
+//	{
+//		timeStep = TimeStep;
+//		YellowGhost_GhostStateHasChanged ();
+//	}
+//
+//	void ChangeGhostToFrightenedState ()
+//	{
+//		animator.enabled = true;
+//		animator.Play ("YellowGhostFrightened");
+//		timeStep = GhostController.GhostFrightenedTimeStep;
+//		YellowGhost_GhostStateHasChanged ();
+//	}
+//
+//	void YellowGhost_GhostStateHasChanged ()
+//	{
+//		if (IndGhostState == IndGhostStates.Left) {
+//			IndGhostState = IndGhostStates.Right;
+//		} else if (IndGhostState == IndGhostStates.Right) {
+//			IndGhostState = IndGhostStates.Left;
+//		} else if (IndGhostState == IndGhostStates.Up) {
+//			IndGhostState = IndGhostStates.Down;
+//		} else if (IndGhostState == IndGhostStates.Down) {
+//			IndGhostState = IndGhostStates.Up;
+//		}
+//	}
 
 	// Update is called once per frame
-	void Update () {
+	public override void Update () {
+		base.Update ();
 
 		if (movingDone && GameManager.state == GameManager.States.Play && IndGhostState == IndGhostStates.IdleUpAndDown) {
 			movingDone = false;
@@ -63,7 +64,7 @@ public class YellowGhost : Ghost {
 		}
 		if (movingDone && GameManager.state == GameManager.States.Play && IndGhostState == IndGhostStates.MoveOutOfBox) {
 			movingDone = false;
-			StartCoroutine(MoveOutOfBox ());
+			StartCoroutine(MoveOutOfBox (false));
 		}
 		if (GameManager.state == GameManager.States.PacManDead) {
 			animator.enabled = false;

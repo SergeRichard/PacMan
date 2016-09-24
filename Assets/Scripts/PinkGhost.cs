@@ -16,52 +16,53 @@ public class PinkGhost : Ghost {
 
 		IndGhostState = IndGhostStates.MoveOutOfBox;
 
-		GhostController.GhostStateHasChanged += PinkGhost_GhostStateHasChanged;
-		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
-		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
-		GhostController.FrightenedBlinking += FrightenedBlinking;
+//		GhostController.GhostStateHasChanged += PinkGhost_GhostStateHasChanged;
+//		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+//		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+//		GhostController.FrightenedBlinking += FrightenedBlinking;
 	}
-	void FrightenedBlinking ()
-	{
-		animator.Play ("FrightenedBlinking");
-	}
-	void GhostLeftFrightenedState ()
-	{
-		timeStep = TimeStep;
-		PinkGhost_GhostStateHasChanged ();
-	}
-
-	void ChangeGhostToFrightenedState ()
-	{
-		animator.enabled = true;
-		animator.Play ("PinkGhostFrightened");
-		timeStep = GhostController.GhostFrightenedTimeStep;
-		PinkGhost_GhostStateHasChanged ();
-	}
-
-	void PinkGhost_GhostStateHasChanged ()
-	{
-		if (IndGhostState == IndGhostStates.Left) {
-			IndGhostState = IndGhostStates.Right;
-		} else if (IndGhostState == IndGhostStates.Right) {
-			IndGhostState = IndGhostStates.Left;
-		} else if (IndGhostState == IndGhostStates.Up) {
-			IndGhostState = IndGhostStates.Down;
-		} else if (IndGhostState == IndGhostStates.Down) {
-			IndGhostState = IndGhostStates.Up;
-		}
-	}
+//	void FrightenedBlinking ()
+//	{
+//		animator.Play ("FrightenedBlinking");
+//	}
+//	void GhostLeftFrightenedState ()
+//	{
+//		timeStep = TimeStep;
+//		PinkGhost_GhostStateHasChanged ();
+//	}
+//
+//	void ChangeGhostToFrightenedState ()
+//	{
+//		animator.enabled = true;
+//		animator.Play ("PinkGhostFrightened");
+//		timeStep = GhostController.GhostFrightenedTimeStep;
+//		PinkGhost_GhostStateHasChanged ();
+//	}
+//
+//	void PinkGhost_GhostStateHasChanged ()
+//	{
+//		if (IndGhostState == IndGhostStates.Left) {
+//			IndGhostState = IndGhostStates.Right;
+//		} else if (IndGhostState == IndGhostStates.Right) {
+//			IndGhostState = IndGhostStates.Left;
+//		} else if (IndGhostState == IndGhostStates.Up) {
+//			IndGhostState = IndGhostStates.Down;
+//		} else if (IndGhostState == IndGhostStates.Down) {
+//			IndGhostState = IndGhostStates.Up;
+//		}
+//	}
 
 	// Update is called once per frame
-	void Update () {
-		
+	public override void Update () {
+		base.Update ();
+
 		if (movingDone && GameManager.state == GameManager.States.Play && IndGhostState == IndGhostStates.IdleUpAndDown) {
 			movingDone = false;
 			StartCoroutine(MoveUpAndDownInBox ());
 		}
 		if (movingDone && GameManager.state == GameManager.States.Play && IndGhostState == IndGhostStates.MoveOutOfBox) {
 			movingDone = false;
-			StartCoroutine (MoveOutOfBox ());
+			StartCoroutine (MoveUpAndOutOfBox ());
 		}
 		if (GameManager.state == GameManager.States.PacManDead) {
 			animator.enabled = false;

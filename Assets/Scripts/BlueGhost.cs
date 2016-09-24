@@ -18,44 +18,45 @@ public class BlueGhost : Ghost {
 
 		Invoke ("StartMovingOutOfBox", 8f);
 		//transform.position = LeftLocation.transform.position;
-		GhostController.GhostStateHasChanged += BlueGhost_GhostStateHasChanged;
-		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
-		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
-		GhostController.FrightenedBlinking += FrightenedBlinking;
+//		GhostController.GhostStateHasChanged += BlueGhost_GhostStateHasChanged;
+//		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+//		GhostController.GhostLeftFrightenedState += GhostLeftFrightenedState;
+//		GhostController.FrightenedBlinking += FrightenedBlinking;
 	}
-	void FrightenedBlinking ()
-	{
-		animator.Play ("FrightenedBlinking");
-	}
-	void GhostLeftFrightenedState ()
-	{
-		timeStep = TimeStep;
-		BlueGhost_GhostStateHasChanged ();
-	}
-
-	void ChangeGhostToFrightenedState ()
-	{
-		animator.enabled = true;
-		animator.Play ("GhostFrightened");
-		timeStep = GhostController.GhostFrightenedTimeStep;
-		BlueGhost_GhostStateHasChanged ();
-	}
-
-	void BlueGhost_GhostStateHasChanged ()
-	{
-		if (IndGhostState == IndGhostStates.Left) {
-			IndGhostState = IndGhostStates.Right;
-		} else if (IndGhostState == IndGhostStates.Right) {
-			IndGhostState = IndGhostStates.Left;
-		} else if (IndGhostState == IndGhostStates.Up) {
-			IndGhostState = IndGhostStates.Down;
-		} else if (IndGhostState == IndGhostStates.Down) {
-			IndGhostState = IndGhostStates.Up;
-		}
-	}
+//	void FrightenedBlinking ()
+//	{
+//		animator.Play ("FrightenedBlinking");
+//	}
+//	void GhostLeftFrightenedState ()
+//	{
+//		timeStep = TimeStep;
+//		BlueGhost_GhostStateHasChanged ();
+//	}
+//
+//	void ChangeGhostToFrightenedState ()
+//	{
+//		animator.enabled = true;
+//		animator.Play ("GhostFrightened");
+//		timeStep = GhostController.GhostFrightenedTimeStep;
+//		BlueGhost_GhostStateHasChanged ();
+//	}
+//
+//	void BlueGhost_GhostStateHasChanged ()
+//	{
+//		if (IndGhostState == IndGhostStates.Left) {
+//			IndGhostState = IndGhostStates.Right;
+//		} else if (IndGhostState == IndGhostStates.Right) {
+//			IndGhostState = IndGhostStates.Left;
+//		} else if (IndGhostState == IndGhostStates.Up) {
+//			IndGhostState = IndGhostStates.Down;
+//		} else if (IndGhostState == IndGhostStates.Down) {
+//			IndGhostState = IndGhostStates.Up;
+//		}
+//	}
 
 	// Update is called once per frame
-	void Update () {
+	public override void Update () {
+		base.Update ();
 		
 		if (movingDone && GameManager.state == GameManager.States.Play && IndGhostState == IndGhostStates.IdleUpAndDown) {
 			movingDone = false;

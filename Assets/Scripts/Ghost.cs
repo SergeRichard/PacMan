@@ -119,6 +119,8 @@ public class Ghost : MonoBehaviour {
 		animator.enabled = true;
 		animator.Play ("GhostFrightened");
 		timeStep = GhostController.GhostFrightenedTimeStep;
+		FrightenedState = FrightenedStates.Frightened;
+
 		// change direction
 		GhostStateHasChanged ();
 	}
@@ -259,7 +261,36 @@ public class Ghost : MonoBehaviour {
 	void StartMovingOutOfBox() {
 		IndGhostState = IndGhostStates.MoveOutOfBox;
 	}
-	public IEnumerator MoveOutOfBox() {
+	public IEnumerator MoveUpAndOutOfBox() {	
+
+		float timeMulti = 2f;
+
+		animator.enabled = true;
+
+		if (FrightenedState == Ghost.FrightenedStates.Frightened) {
+			animator.Play ("GhostFrightened");
+		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
+			animator.Play ("FrightenedBlinking");
+		} else {
+			animator.Play ("MoveUp");
+		}
+
+
+		float distanceTraveled = transform.position.y;
+		float endPosition = transform.position.y + (DistanceToTravel * 3f); 
+
+		while (distanceTraveled < endPosition) {
+			distanceTraveled += .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (timeStep * timeMulti);
+		}
+		IndGhostState = IndGhostStates.Left;
+		GetComponent<Transform> ().position = GhostController.GhostStartLocation.position;
+		movingDone = true;
+
+	}
+	public IEnumerator MoveOutOfBox(bool rightAndUp = true) {
 		float distanceTraveled = transform.position.x;
 		float endPosition = transform.position.x + (DistanceToTravel * 2f); 
 
@@ -276,7 +307,7 @@ public class Ghost : MonoBehaviour {
 
 
 		while (distanceTraveled < endPosition) {
-			distanceTraveled += .08f;
+			distanceTraveled += (rightAndUp == true ? .08f : -.08f);
 			transform.position = new Vector2(distanceTraveled,transform.position.y);
 
 			yield return new WaitForSeconds (timeStep * timeMulti);
