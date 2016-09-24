@@ -146,7 +146,6 @@ public class GameManager : MonoBehaviour {
 	public void PacManDead() {
 		CancelInvoke ();
 		MusicController.StopAllSounds ();
-		GhostController.SetUpInitial (false);
 		Invoke ("PlayDeathSequence", 1f);
 	}
 	public void PlayDeathSequence() {
@@ -172,7 +171,6 @@ public class GameManager : MonoBehaviour {
 		MusicController.StopAllSounds ();
 		PacManController.StopAllCoroutines ();
 		PacManController.GetComponent<Animator> ().enabled = false;
-		GhostController.SetUpInitial ();
 		Invoke ("BlinkScreen", 2f);
 	}
 	public void BlinkScreen() {

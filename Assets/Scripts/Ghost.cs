@@ -24,6 +24,7 @@ public class Ghost : MonoBehaviour {
 	}
 
 	public GhostController GhostController;
+	public PacManController PacManController;
 	public Transform LeftBank;
 	public Transform RightBank;
 
@@ -73,13 +74,28 @@ public class Ghost : MonoBehaviour {
 		ghostModes = new Queue<GhostMode> ();
 
 		GhostController.PacManController.ChangeGhostToFrightenedState += ChangeGhostToFrightenedState;
+		PacManController.LevelWon += LevelWon;
+		PacManController.PacManDead += PacManDead;
 
 		SetUpInitial ();
 
 	}
+
+	void PacManDead ()
+	{
+		frightenedTimer = 0;
+		timeStep = TimeStep;
+		FrightenedState = FrightenedStates.NotFrightened;
+	}
+
+	void LevelWon ()
+	{
+		SetUpInitial ();
+	}
 	public void SetUpInitial(bool newLevel = true) {
 		Ghost.GhostState = Ghost.GhostStates.Scatter;
 		frightenedTimer = 0;
+		timeStep = TimeStep;
 
 		if (newLevel == true) {
 			modeTimer = 0;
@@ -116,6 +132,7 @@ public class Ghost : MonoBehaviour {
 	}
 	void ChangeGhostToFrightenedState ()
 	{
+		frightenedTimer = 0;
 		animator.enabled = true;
 		animator.Play ("GhostFrightened");
 		timeStep = GhostController.GhostFrightenedTimeStep;
@@ -291,26 +308,54 @@ public class Ghost : MonoBehaviour {
 
 	}
 	public IEnumerator MoveOutOfBox(bool rightAndUp = true) {
+		
 		float distanceTraveled = transform.position.x;
-		float endPosition = transform.position.x + (DistanceToTravel * 2f); 
-
+		float endPosition;
 		float timeMulti = 2f;
 
-		animator.enabled = true;
-		if (FrightenedState == Ghost.FrightenedStates.Frightened) {
-			animator.Play ("GhostFrightened");
-		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
-			animator.Play ("FrightenedBlinking");
+		if (rightAndUp) {
+			endPosition = transform.position.x + (DistanceToTravel * 2f); 
+
+
+
+
+			animator.enabled = true;
+			if (FrightenedState == Ghost.FrightenedStates.Frightened) {
+				animator.Play ("GhostFrightened");
+			} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
+				animator.Play ("FrightenedBlinking");
+			} else {
+				animator.Play ("MoveRight");
+			}
+
+
+			while (distanceTraveled < endPosition) {
+				distanceTraveled += .08f;
+				transform.position = new Vector2 (distanceTraveled, transform.position.y);
+
+				yield return new WaitForSeconds (timeStep * timeMulti);
+			}
+		
 		} else {
-			animator.Play ("MoveRight");
-		}
+			endPosition = transform.position.x + (DistanceToTravel * -2f); 
+
+			animator.enabled = true;
+			if (FrightenedState == Ghost.FrightenedStates.Frightened) {
+				animator.Play ("GhostFrightened");
+			} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
+				animator.Play ("FrightenedBlinking");
+			} else {
+				animator.Play ("MoveLeft");
+			}
 
 
-		while (distanceTraveled < endPosition) {
-			distanceTraveled += (rightAndUp == true ? .08f : -.08f);
-			transform.position = new Vector2(distanceTraveled,transform.position.y);
+			while (distanceTraveled > endPosition) {
+				distanceTraveled -= .08f;
+				transform.position = new Vector2 (distanceTraveled, transform.position.y);
 
-			yield return new WaitForSeconds (timeStep * timeMulti);
+				yield return new WaitForSeconds (timeStep * timeMulti);
+			}
+
 		}
 		if (FrightenedState == Ghost.FrightenedStates.Frightened) {
 			animator.Play ("GhostFrightened");
@@ -319,7 +364,6 @@ public class Ghost : MonoBehaviour {
 		} else {
 			animator.Play ("MoveUp");
 		}
-
 
 		distanceTraveled = transform.position.y;
 		endPosition = transform.position.y + (DistanceToTravel * 3f); 

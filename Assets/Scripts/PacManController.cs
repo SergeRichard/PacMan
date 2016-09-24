@@ -2,10 +2,14 @@
 using System.Collections;
 
 public delegate void ChangeGhostToFrightenedStateEventHandler();
+public delegate void PacManDeadEventHandler();
+public delegate void LevelWonEventHandler();
 
 public class PacManController : MonoBehaviour {
 
 	public event ChangeGhostToFrightenedStateEventHandler ChangeGhostToFrightenedState;
+	public event PacManDeadEventHandler PacManDead;
+	public event LevelWonEventHandler LevelWon;
 
 	Animator animator;
 
@@ -256,6 +260,7 @@ public class PacManController : MonoBehaviour {
 			GameManager.Pellets++;
 			if (GameManager.Pellets == 244) {
 				GameManager.LevelWon ();
+				LevelWon ();
 			}
 
 			//GameManager.LevelWon ();
@@ -268,6 +273,7 @@ public class PacManController : MonoBehaviour {
 			GameManager.state = GameManager.States.PacManDead;
 			animator.enabled = false;
 			GameManager.PacManDead ();
+			PacManDead ();
 		}
 
 	}
