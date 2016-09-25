@@ -284,6 +284,7 @@ public class PacManController : MonoBehaviour {
 			gameObject.GetComponent<SpriteRenderer> ().enabled = false;
 			ghostEaten = other.gameObject;
 			ghostEaten.GetComponent<BoxCollider2D> ().enabled = false;
+
 			Invoke ("ResumeAfterEaten", 2f);
 		}
 	}
@@ -294,5 +295,12 @@ public class PacManController : MonoBehaviour {
 		ghostEaten.GetComponent<Ghost> ().ScoreText.SetActive (false);
 		gameObject.GetComponent<SpriteRenderer> ().enabled = true;
 		GameManager.state = GameManager.States.Play;
+		ghostEaten.GetComponent<Ghost> ().FrightenedState = Ghost.FrightenedStates.Eaten;
+		ghostEaten.GetComponent<Animator> ().enabled = true;
+		ghostEaten.GetComponent<Animator> ().Play ("EyesMovesLeft");
+		ghostEaten.GetComponent<SpriteRenderer> ().enabled = true;
+		ghostEaten.GetComponent<Ghost> ().SetTimeStep (.01f);
+
+
 	}
 }

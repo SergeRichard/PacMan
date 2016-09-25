@@ -124,6 +124,11 @@ public class YellowGhost : Ghost {
 			pacManY = homeY;
 
 		}
+		if (FrightenedState == FrightenedStates.Eaten) {
+			pacManX = colOnGridStart;
+			pacManY = rowOnGridStart;
+		}
+
 
 		// where is pac-man located relative to ghost? To the left or right?
 		if (ghostX - pacManX > 0)

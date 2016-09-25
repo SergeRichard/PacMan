@@ -10,7 +10,7 @@ public class Ghost : MonoBehaviour {
 	}
 	public enum FrightenedStates
 	{
-		Frightened, FrightenedBlinking, NotFrightened
+		Frightened, FrightenedBlinking, NotFrightened, Eaten
 	}
 	public enum IndGhostStates {
 		Idle, 
@@ -81,7 +81,9 @@ public class Ghost : MonoBehaviour {
 		SetUpInitial ();
 
 	}
-
+	public void SetTimeStep(float newTime) {
+		timeStep = newTime;
+	}
 	void PacManDead ()
 	{
 		frightenedTimer = 0;
@@ -210,6 +212,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesRight");
 		} else {
 			animator.Play ("MoveRight");
 		}
@@ -227,6 +231,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesLeft");
 		} else {
 			animator.Play ("MoveLeft");
 		}
@@ -243,6 +249,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesUp");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -259,6 +267,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesDown");
 		} else {
 			animator.Play ("MoveDown");
 		}
@@ -289,6 +299,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesUp");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -325,6 +337,8 @@ public class Ghost : MonoBehaviour {
 				animator.Play ("GhostFrightened");
 			} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 				animator.Play ("FrightenedBlinking");
+			} else if (FrightenedState == FrightenedStates.Eaten) {
+				animator.Play ("EyesMovesRight");
 			} else {
 				animator.Play ("MoveRight");
 			}
@@ -345,6 +359,8 @@ public class Ghost : MonoBehaviour {
 				animator.Play ("GhostFrightened");
 			} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 				animator.Play ("FrightenedBlinking");
+			} else if (FrightenedState == FrightenedStates.Eaten) {
+				animator.Play ("EyesMovesLeft");
 			} else {
 				animator.Play ("MoveLeft");
 			}
@@ -362,6 +378,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesUp");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -390,6 +408,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesUp");
 		} else {
 			animator.Play ("MoveUp");
 		}
@@ -408,6 +428,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesDown");
 		} else {
 			animator.Play ("MoveDown");
 		}
@@ -426,6 +448,8 @@ public class Ghost : MonoBehaviour {
 			animator.Play ("GhostFrightened");
 		} else if (FrightenedState == Ghost.FrightenedStates.FrightenedBlinking) { 
 			animator.Play ("FrightenedBlinking");
+		} else if (FrightenedState == FrightenedStates.Eaten) {
+			animator.Play ("EyesMovesUp");
 		} else {
 			animator.Play ("MoveUp");
 		}

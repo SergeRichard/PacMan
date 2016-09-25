@@ -129,6 +129,11 @@ public class BlueGhost : Ghost {
 
 		}
 
+		if (FrightenedState == FrightenedStates.Eaten) {
+			pacManX = colOnGridStart;
+			pacManY = rowOnGridStart;
+		}
+
 		// where is pac-man located relative to ghost? To the left or right?
 		if (ghostX - pacManX > 0)
 			pacHorizontalLocation = "left";
@@ -600,7 +605,7 @@ public class BlueGhost : Ghost {
 				}
 				break;
 			}
-		}
+		} 
 
 	}
 
