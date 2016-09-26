@@ -16,6 +16,7 @@ public class Ghost : MonoBehaviour {
 		Idle, 
 		IdleUpAndDown, 
 		MoveOutOfBox, 
+		MoveIntoBox,
 		IdleDown, 
 		Up, 
 		Down, 
@@ -288,6 +289,33 @@ public class Ghost : MonoBehaviour {
 	}
 	void StartMovingOutOfBox() {
 		IndGhostState = IndGhostStates.MoveOutOfBox;
+	}
+	public IEnumerator MoveIntoBox() {	
+
+		float timeMulti = 2f;
+
+		animator.enabled = true;
+
+		animator.Play ("EyesMovesDown");
+
+		float distanceTraveled = transform.position.y;
+		float endPosition = transform.position.y + (DistanceToTravel * -3f); 
+
+		transform.position = new Vector2 (transform.position.x + .15f, transform.position.y);
+
+		while (distanceTraveled > endPosition) {
+			distanceTraveled -= .08f;
+			transform.position = new Vector2(transform.position.x, distanceTraveled);
+
+			yield return new WaitForSeconds (timeStep * timeMulti);
+		}
+		GetComponent<SpriteRenderer> ().enabled = true;
+		GetComponent<BoxCollider2D> ().enabled = true;
+
+		FrightenedState = FrightenedStates.NotFrightened;
+
+		StartCoroutine (MoveUpAndOutOfBox ());
+
 	}
 	public IEnumerator MoveUpAndOutOfBox() {	
 

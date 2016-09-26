@@ -299,7 +299,7 @@ public class PacManController : MonoBehaviour {
 		ghostEaten.GetComponent<Animator> ().enabled = true;
 		ghostEaten.GetComponent<Animator> ().Play ("EyesMovesLeft");
 		ghostEaten.GetComponent<SpriteRenderer> ().enabled = true;
-		ghostEaten.GetComponent<Ghost> ().SetTimeStep (.01f);
+		ghostEaten.GetComponent<Ghost> ().SetTimeStep (.025f);
 
 
 	}
