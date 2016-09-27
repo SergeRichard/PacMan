@@ -6,7 +6,9 @@ public class MusicController : MonoBehaviour {
 	public AudioClip IntroMusic;
 	public AudioClip SirenSound;
 	public AudioClip PacManDeathSound;
+	public AudioClip EatGhostSound;
 	public AudioSource WakaSoundAudioSource;
+	public AudioSource GhostEatenAudioSource;
 
 	protected AudioSource audioSource;
 
@@ -50,5 +52,10 @@ public class MusicController : MonoBehaviour {
 		audioSource.clip = PacManDeathSound;
 		audioSource.loop = false;
 		audioSource.Play ();
+	}
+	public void PlayGhostEatenSound() {
+		GhostEatenAudioSource.loop = false;
+		GhostEatenAudioSource.Play ();
+
 	}
 }

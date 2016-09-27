@@ -127,18 +127,20 @@ public class PacManController : MonoBehaviour {
 		//GetComponent<Transform> ().position = PacManStartLocation.position;
 	}
 	void PlayWakaIfPelletThere() {
-		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3 || GameManager.GridMap [rowOnGrid, colOnGrid] == 4) {
-			GameManager.MusicController.PlayWakaSound ();
+		if (GameManager.state != GameManager.States.GhostEaten) {
+			if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3 || GameManager.GridMap [rowOnGrid, colOnGrid] == 4) {
+				GameManager.MusicController.PlayWakaSound ();
 
-			if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3)
-				AddToAndUpdateScore(10);
+				if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3)
+					AddToAndUpdateScore (10);
 			
-			if (GameManager.GridMap [rowOnGrid, colOnGrid] == 4)
-				AddToAndUpdateScore(50);
+				if (GameManager.GridMap [rowOnGrid, colOnGrid] == 4)
+					AddToAndUpdateScore (50);
 
-			GameManager.GridMap [rowOnGrid, colOnGrid] = 0;
-		} else {
-			GameManager.MusicController.StopWakaSound ();
+				GameManager.GridMap [rowOnGrid, colOnGrid] = 0;
+			} else {
+				GameManager.MusicController.StopWakaSound ();
+			}
 		}
 	}
 	private void AddToAndUpdateScore(int scoreToAdd) {
@@ -296,6 +298,8 @@ public class PacManController : MonoBehaviour {
 			gameObject.GetComponent<SpriteRenderer> ().enabled = false;
 			ghostEaten = other.gameObject;
 			ghostEaten.GetComponent<BoxCollider2D> ().enabled = false;
+			GameManager.MusicController.StopWakaSound ();
+			GameManager.MusicController.PlayGhostEatenSound ();
 
 			Invoke ("ResumeAfterEaten", 1f);
 		}
