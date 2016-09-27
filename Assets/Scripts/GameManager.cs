@@ -145,8 +145,24 @@ public class GameManager : MonoBehaviour {
 	}
 	public void PacManDead() {
 		CancelInvoke ();
+		ResetGhosts ();
 		MusicController.StopAllSounds ();
 		Invoke ("PlayDeathSequence", 1f);
+	}
+	private void ResetGhosts() {
+		GhostController.GhostBlue.GetComponent<BoxCollider2D> ().enabled = true;
+		GhostController.GhostBlue.GetComponent<BlueGhost> ().FrightenedState = Ghost.FrightenedStates.NotFrightened;
+
+		GhostController.GhostRed.GetComponent<BoxCollider2D> ().enabled = true;
+		GhostController.GhostRed.GetComponent<RedGhost> ().FrightenedState = Ghost.FrightenedStates.NotFrightened;
+
+		GhostController.GhostPink.GetComponent<BoxCollider2D> ().enabled = true;
+		GhostController.GhostPink.GetComponent<PinkGhost> ().FrightenedState = Ghost.FrightenedStates.NotFrightened;
+
+		GhostController.GhostYellow.GetComponent<BoxCollider2D> ().enabled = true;
+		GhostController.GhostYellow.GetComponent<YellowGhost> ().FrightenedState = Ghost.FrightenedStates.NotFrightened;
+
+
 	}
 	public void PlayDeathSequence() {
 		GhostController.DisableGhost ();
@@ -166,6 +182,7 @@ public class GameManager : MonoBehaviour {
 
 	}
 	public void LevelWon() {
+		ResetGhosts ();
 		state = States.WonLevel;
 		GhostController.DisableGhost ();
 		MusicController.StopAllSounds ();
