@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public delegate void ChangeGhostToFrightenedStateEventHandler();
 public delegate void PacManDeadEventHandler();
@@ -16,6 +18,10 @@ public class PacManController : MonoBehaviour {
 	public enum PacManStates {Idle, Up, Down, Left, Right};
 
 	public static PacManStates pacManStates;
+
+	private List<int> numOfGhostEatenScore = new List<int>() {200, 400, 800, 1600};
+
+	private int ghostScoreIndex = 0;
 
 	public Transform LeftLocation;
 	public Transform RightLocation;
@@ -124,23 +130,25 @@ public class PacManController : MonoBehaviour {
 		if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3 || GameManager.GridMap [rowOnGrid, colOnGrid] == 4) {
 			GameManager.MusicController.PlayWakaSound ();
 
-
 			if (GameManager.GridMap [rowOnGrid, colOnGrid] == 3)
-				GameManager.Score += 10;
+				AddToAndUpdateScore(10);
 			
 			if (GameManager.GridMap [rowOnGrid, colOnGrid] == 4)
-				GameManager.Score += 50;
-
-			if (GameManager.HighScore < GameManager.Score) {
-				GameManager.HighScore = GameManager.Score;
-				GameManager.MessageController.HighScoreValue.text = GameManager.HighScore.ToString ();
-			}
-			GameManager.MessageController.ScoreValue.text = GameManager.Score.ToString ();
+				AddToAndUpdateScore(50);
 
 			GameManager.GridMap [rowOnGrid, colOnGrid] = 0;
 		} else {
 			GameManager.MusicController.StopWakaSound ();
 		}
+	}
+	private void AddToAndUpdateScore(int scoreToAdd) {
+		GameManager.Score += scoreToAdd;
+
+		if (GameManager.HighScore < GameManager.Score) {
+			GameManager.HighScore = GameManager.Score;
+			GameManager.MessageController.HighScoreValue.text = GameManager.HighScore.ToString ();
+		}
+		GameManager.MessageController.ScoreValue.text = GameManager.Score.ToString ();
 	}
 	public void PlayDeathSequence() {
 		// reset to left for restart of level
@@ -268,6 +276,7 @@ public class PacManController : MonoBehaviour {
 		}
 		if (other.tag == "PowerPellet" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {
 			//Ghost.FrightenedState = Ghost.FrightenedStates.Frightened;
+			ghostScoreIndex = 0;
 			ChangeGhostToFrightenedState ();
 		}
 		if (other.tag == "Ghost" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel && other.gameObject.GetComponent<Ghost>().FrightenedState == Ghost.FrightenedStates.NotFrightened) {
@@ -280,7 +289,10 @@ public class PacManController : MonoBehaviour {
 			GameManager.state = GameManager.States.GhostEaten;
 			animator.enabled = false;
 			other.gameObject.GetComponent<SpriteRenderer> ().enabled = false;
+			AddToAndUpdateScore (numOfGhostEatenScore [ghostScoreIndex]);
 			other.gameObject.GetComponent<Ghost> ().ScoreText.SetActive (true);
+			other.GetComponent<Ghost> ().ScoreText.GetComponent<Text>().text = numOfGhostEatenScore [ghostScoreIndex++].ToString ();
+
 			gameObject.GetComponent<SpriteRenderer> ().enabled = false;
 			ghostEaten = other.gameObject;
 			ghostEaten.GetComponent<BoxCollider2D> ().enabled = false;

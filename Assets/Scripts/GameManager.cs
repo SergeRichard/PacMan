@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour {
 
 		Score = 0;
 		HighScore = 0;
-		Lives = 5;
+		Lives = 3;
 		Pellets = 0;
 
 		MessageController.HighScoreValue.text = HighScore.ToString ();
