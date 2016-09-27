@@ -152,15 +152,19 @@ public class GameManager : MonoBehaviour {
 	private void ResetGhosts() {
 		GhostController.GhostBlue.GetComponent<BoxCollider2D> ().enabled = true;
 		GhostController.GhostBlue.GetComponent<BlueGhost> ().FrightenedState = Ghost.FrightenedStates.NotFrightened;
+		//GhostController.GhostBlue.GetComponent<BlueGhost>().SetTimeStep (.025f);
 
 		GhostController.GhostRed.GetComponent<BoxCollider2D> ().enabled = true;
 		GhostController.GhostRed.GetComponent<RedGhost> ().FrightenedState = Ghost.FrightenedStates.NotFrightened;
+		//GhostController.GhostBlue.GetComponent<RedGhost>().SetTimeStep (.025f);
 
 		GhostController.GhostPink.GetComponent<BoxCollider2D> ().enabled = true;
 		GhostController.GhostPink.GetComponent<PinkGhost> ().FrightenedState = Ghost.FrightenedStates.NotFrightened;
+		//GhostController.GhostBlue.GetComponent<PinkGhost>().SetTimeStep (.025f);
 
 		GhostController.GhostYellow.GetComponent<BoxCollider2D> ().enabled = true;
 		GhostController.GhostYellow.GetComponent<YellowGhost> ().FrightenedState = Ghost.FrightenedStates.NotFrightened;
+		//GhostController.GhostBlue.GetComponent<YellowGhost>().SetTimeStep (.025f);
 
 
 	}

@@ -291,6 +291,7 @@ public class Ghost : MonoBehaviour {
 		IndGhostState = IndGhostStates.MoveOutOfBox;
 	}
 	public IEnumerator MoveIntoBox() {	
+		SetTimeStep (.025f);
 
 		float timeMulti = 2f;
 

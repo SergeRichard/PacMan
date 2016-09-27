@@ -297,7 +297,7 @@ public class PacManController : MonoBehaviour {
 			ghostEaten = other.gameObject;
 			ghostEaten.GetComponent<BoxCollider2D> ().enabled = false;
 
-			Invoke ("ResumeAfterEaten", 2f);
+			Invoke ("ResumeAfterEaten", 1f);
 		}
 	}
 	void ResumeAfterEaten() {
@@ -311,7 +311,7 @@ public class PacManController : MonoBehaviour {
 		ghostEaten.GetComponent<Animator> ().enabled = true;
 		ghostEaten.GetComponent<Animator> ().Play ("EyesMovesLeft");
 		ghostEaten.GetComponent<SpriteRenderer> ().enabled = true;
-		ghostEaten.GetComponent<Ghost> ().SetTimeStep (.025f);
+		ghostEaten.GetComponent<Ghost> ().SetTimeStep (.01f);
 
 
 	}
