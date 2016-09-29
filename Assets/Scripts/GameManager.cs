@@ -21,10 +21,13 @@ public class GameManager : MonoBehaviour {
 	public LevelManager LevelManager;
 	public int Pellets;
 	public PelletController PelletController;
+	public FruitController FruitController;
 
 	public Transform PacManStartLocation;
 
 	public int Lives;
+
+	public int Level = 1;
 
 	[HideInInspector]
 	public int Score;
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour {
 		HighScore = 0;
 		Lives = 3;
 		Pellets = 0;
+		Level = 1;
 
 		MessageController.HighScoreValue.text = HighScore.ToString ();
 		MessageController.ScoreValue.text = Score.ToString ();
@@ -143,7 +147,7 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 	
 	}
-	public void PacManDead() {
+	public void PacManDead() {		
 		CancelInvoke ();
 		ResetGhosts ();
 		MusicController.StopAllSounds ();
@@ -186,6 +190,7 @@ public class GameManager : MonoBehaviour {
 
 	}
 	public void LevelWon() {
+		Level++;
 		ResetGhosts ();
 		state = States.WonLevel;
 		GhostController.DisableGhost ();
@@ -224,7 +229,7 @@ public class GameManager : MonoBehaviour {
 		ResetToStartingPoint (false);
 	}
 	public void ResetToStartingPoint(bool wonLevel) {
-
+		FruitController.DisplayFruitsOnCounter ();
 		CancelInvoke ();
 		if (!wonLevel) {
 			Lives--;
