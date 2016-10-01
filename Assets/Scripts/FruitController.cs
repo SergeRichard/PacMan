@@ -5,6 +5,18 @@ using System.Collections.Generic;
 public class FruitController : MonoBehaviour {
 
 	public GameManager GameManager;
+	public Transform FruitSpawner;
+
+	[System.Serializable]
+	public class Fruit 
+	{
+		
+		public GameObject FruitPrefab;
+		public FruitTypes FruitType;
+
+
+	}
+	public Fruit[] fruit;
 
 	public enum FruitTypes
 	{
@@ -17,6 +29,7 @@ public class FruitController : MonoBehaviour {
 		Bell,
 		Key
 	}
+
 
 	public List<SpriteRenderer> FruitPositions;
 	public List<Sprite> Sprites;
@@ -54,13 +67,35 @@ public class FruitController : MonoBehaviour {
 			FruitTypes.Key,
 		};
 
+
+
+
 		DisplayFruitsOnCounter ();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	
 	}
+	public void InstantiateFruit() {
+		int fruitIndexByLevel = GameManager.Level - 1;
+
+		if (fruitIndexByLevel > FruitsByLevel.Count - 1)
+			fruitIndexByLevel = FruitsByLevel.Count - 1;
+
+		foreach (var f in fruit) {
+			if (f.FruitType == FruitsByLevel [fruitIndexByLevel]) {
+				GameObject fruitInstance = (GameObject)Instantiate (f.FruitPrefab);
+
+				fruitInstance.transform.parent = FruitSpawner.transform;
+				fruitInstance.transform.localPosition = new Vector3 (0, 0, 0);
+			}
+		}
+
+
+
+	}
+
 	public void DisplayFruitsOnCounter() {
 		DisablePositions ();
 

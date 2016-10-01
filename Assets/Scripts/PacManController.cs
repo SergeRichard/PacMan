@@ -273,7 +273,13 @@ public class PacManController : MonoBehaviour {
 				GameManager.LevelWon ();
 				LevelWon ();
 			}
+			if (GameManager.Pellets == 70) {
+				GameManager.FruitController.InstantiateFruit ();
+			}
+			if (GameManager.Pellets == 170) {
+				GameManager.FruitController.InstantiateFruit ();
 
+			}
 			//GameManager.LevelWon ();
 		}
 		if (other.tag == "PowerPellet" && GameManager.state != GameManager.States.PacManDead && GameManager.state != GameManager.States.WonLevel) {

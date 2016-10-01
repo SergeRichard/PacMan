@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour {
 
 	public int Lives;
 
-	public int Level = 1;
+	public int Level = 2;
 
 	[HideInInspector]
 	public int Score;
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 		HighScore = 0;
 		Lives = 3;
 		Pellets = 0;
-		Level = 1;
+		Level = 2;
 
 		MessageController.HighScoreValue.text = HighScore.ToString ();
 		MessageController.ScoreValue.text = Score.ToString ();
