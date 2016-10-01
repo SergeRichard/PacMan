@@ -137,13 +137,15 @@ public class Ghost : MonoBehaviour {
 	void ChangeGhostToFrightenedState ()
 	{
 		frightenedTimer = 0;
-		animator.enabled = true;
-		animator.Play ("GhostFrightened");
-		timeStep = GhostController.GhostFrightenedTimeStep;
-		FrightenedState = FrightenedStates.Frightened;
+		if (FrightenedState != FrightenedStates.Eaten) {
+			animator.enabled = true;
+			animator.Play ("GhostFrightened");
+			timeStep = GhostController.GhostFrightenedTimeStep;
+			FrightenedState = FrightenedStates.Frightened;
 
-		// change direction
-		GhostStateHasChanged ();
+			// change direction
+			GhostStateHasChanged ();
+		}
 	}
 	void GhostStateHasChanged ()
 	{
