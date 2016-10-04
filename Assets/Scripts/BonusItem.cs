@@ -7,10 +7,12 @@ public class BonusItem : MonoBehaviour {
 	float time = 0f;
 	public AudioClip audioClip;
 	public Text ScoreText;
+	private GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
 		time = 0f;
+		gameManager = (GameManager)FindObjectOfType (typeof(GameManager));
 
 	}
 	
@@ -32,6 +34,8 @@ public class BonusItem : MonoBehaviour {
 			ScoreText.enabled = true;
 			GetComponent<SpriteRenderer> ().enabled = false;
 			GetComponent<BoxCollider2D> ().enabled = false;
+
+			gameManager.AddToAndUpdateScore (int.Parse(ScoreText.text));
 
 			Invoke ("DestroyMyself", 2f);
 

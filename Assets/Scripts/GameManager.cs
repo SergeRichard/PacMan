@@ -122,6 +122,15 @@ public class GameManager : MonoBehaviour {
 		};
 		PlayIntroMusic ();
 	}
+	public void AddToAndUpdateScore(int scoreToAdd) {
+		Score += scoreToAdd;
+
+		if (HighScore < Score) {
+			HighScore = Score;
+			MessageController.HighScoreValue.text = HighScore.ToString ();
+		}
+		MessageController.ScoreValue.text = Score.ToString ();
+	}
 	void PlayIntroMusic() {
 		CancelInvoke ();
 		PacManIntro.GetComponent<SpriteRenderer> ().enabled = true;
