@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class BonusItem : MonoBehaviour {
 
 	float time = 0f;
 	public AudioClip audioClip;
+	public Text ScoreText;
 
 	// Use this for initialization
 	void Start () {
@@ -27,7 +29,16 @@ public class BonusItem : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Player") {
 			AudioSource.PlayClipAtPoint (audioClip, Vector3.zero,1f);
-			Destroy (gameObject);
+			ScoreText.enabled = true;
+			GetComponent<SpriteRenderer> ().enabled = false;
+			GetComponent<BoxCollider2D> ().enabled = false;
+
+			Invoke ("DestroyMyself", 2f);
+
 		}
+	}
+	void DestroyMyself() {
+
+		Destroy (gameObject);
 	}
 }

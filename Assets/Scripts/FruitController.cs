@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,6 +7,7 @@ public class FruitController : MonoBehaviour {
 
 	public GameManager GameManager;
 	public Transform FruitSpawner;
+	public Text ScoreText;
 
 	[System.Serializable]
 	public class Fruit 
@@ -13,7 +15,7 @@ public class FruitController : MonoBehaviour {
 		
 		public GameObject FruitPrefab;
 		public FruitTypes FruitType;
-
+		public int score;
 
 	}
 	public Fruit[] fruit;
@@ -86,9 +88,11 @@ public class FruitController : MonoBehaviour {
 		foreach (var f in fruit) {
 			if (f.FruitType == FruitsByLevel [fruitIndexByLevel]) {
 				GameObject fruitInstance = (GameObject)Instantiate (f.FruitPrefab);
+				fruitInstance.GetComponent<BonusItem>().ScoreText.text = f.score.ToString ();
 
 				fruitInstance.transform.parent = FruitSpawner.transform;
 				fruitInstance.transform.localPosition = new Vector3 (0, 0, 0);
+				
 			}
 		}
 
