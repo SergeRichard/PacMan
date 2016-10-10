@@ -20,6 +20,37 @@ public class TitleMessageController : MonoBehaviour {
 	public GameObject FirstPowerPellet;
 	public GameObject TenPtsText;
 	public GameObject FiftyPtsText;
+	public GameObject MovePacMan;
+	public GameObject MoveRedGhost;
+	public GameObject MovePinkGhost;
+	public GameObject MoveBlueGhost;
+	public GameObject MoveYellowGhost;
+
+	public Sprite PacManSpriteClosedLeft;
+	public Sprite PacManSpriteOpenedLeft;
+	public Sprite PacManSpriteOpenedWideLeft;
+
+	public Sprite RedGhostSpriteLeft1;
+	public Sprite RedGhostSpriteLeft2;
+	public Sprite RedGhostSpriteRight1;
+	public Sprite RedGhostSpriteRight2;
+
+	public Sprite PinkGhostSpriteLeft1;
+	public Sprite PinkGhostSpriteLeft2;
+	public Sprite PinkGhostSpriteRight1;
+	public Sprite PinkGhostSpriteRight2;
+
+	public Sprite BlueGhostSpriteLeft1;
+	public Sprite BlueGhostSpriteLeft2;
+	public Sprite BlueGhostSpriteRight1;
+	public Sprite BlueGhostSpriteRight2;
+
+	public Sprite YellowGhostSpriteLeft1;
+	public Sprite YellowGhostSpriteLeft2;
+	public Sprite YellowGhostSpriteRight1;
+	public Sprite YellowGhostSpriteRight2;
+
+	public Animator Animator;
 
 	// Use this for initialization
 	void Start () {
@@ -90,8 +121,76 @@ public class TitleMessageController : MonoBehaviour {
 		yield return new WaitForSeconds (.5f);
 		ClydeText.SetActive (true);
 
+		// show bottom
+		yield return new WaitForSeconds (1f);
+		TenPtsText.SetActive(true);
+		FiftyPtsText.SetActive(true);
+		PowerPellet.SetActive(true);
+		SmallPellet.SetActive(true);
 
+		// show first power pellet
+		FirstPowerPellet.SetActive(true);
+
+		// start first power pellet blinking and start ghost and pac-man animation
+		yield return new WaitForSeconds (1f);
+
+		StartCoroutine (StartPelletBlinking ());
+		StartCoroutine (PacManAnimWhileMovingLeft ());
+		StartCoroutine (GhostsAnimWhileMovingLeft ());
+		Animator.Play ("GhostChasingPacMan");
+	}
+	IEnumerator StartPelletBlinking() {
+
+		while (true) {
+			FirstPowerPellet.SetActive(false);
+
+			yield return new WaitForSeconds (.2f);
+
+			FirstPowerPellet.SetActive (true);
+
+			yield return new WaitForSeconds (.2f);
+
+		}
 
 	}
+	IEnumerator PacManAnimWhileMovingLeft() {
 
+		SpriteRenderer sRenderer = MovePacMan.GetComponent<SpriteRenderer> ();
+
+		while (true) {
+			sRenderer.sprite = PacManSpriteClosedLeft;
+			yield return new WaitForSeconds (.04f);
+
+			sRenderer.sprite = PacManSpriteOpenedLeft;
+			yield return new WaitForSeconds (.04f);
+
+			sRenderer.sprite = PacManSpriteOpenedWideLeft;
+			yield return new WaitForSeconds (.04f);
+
+			sRenderer.sprite = PacManSpriteOpenedLeft;
+			yield return new WaitForSeconds (.04f);
+		}
+	}
+	IEnumerator GhostsAnimWhileMovingLeft() {
+		SpriteRenderer redGhost = MoveRedGhost.GetComponent<SpriteRenderer> ();
+		SpriteRenderer pinkGhost = MovePinkGhost.GetComponent<SpriteRenderer> ();
+		SpriteRenderer blueGhost = MoveBlueGhost.GetComponent<SpriteRenderer> ();
+		SpriteRenderer yellowGhost = MoveYellowGhost.GetComponent<SpriteRenderer> ();
+
+		while (true) {
+			redGhost.sprite = RedGhostSpriteLeft1;
+			pinkGhost.sprite = PinkGhostSpriteLeft1;
+			blueGhost.sprite = BlueGhostSpriteLeft1;
+			yellowGhost.sprite = YellowGhostSpriteLeft1;
+
+			yield return new WaitForSeconds (.1f);
+			redGhost.sprite = RedGhostSpriteLeft2;
+			pinkGhost.sprite = PinkGhostSpriteLeft2;
+			blueGhost.sprite = BlueGhostSpriteLeft2;
+			yellowGhost.sprite = YellowGhostSpriteLeft2;
+
+			yield return new WaitForSeconds (.1f);
+		}
+
+	}
 }
