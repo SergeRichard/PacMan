@@ -30,6 +30,10 @@ public class TitleMessageController : MonoBehaviour {
 	public Sprite PacManSpriteOpenedLeft;
 	public Sprite PacManSpriteOpenedWideLeft;
 
+	public Sprite PacManSpriteClosedRight;
+	public Sprite PacManSpriteOpenedRight;
+	public Sprite PacManSpriteOpenedWideRight;
+
 	public Sprite RedGhostSpriteLeft1;
 	public Sprite RedGhostSpriteLeft2;
 	public Sprite RedGhostSpriteRight1;
@@ -135,9 +139,14 @@ public class TitleMessageController : MonoBehaviour {
 		yield return new WaitForSeconds (1f);
 
 		StartCoroutine (StartPelletBlinking ());
-		StartCoroutine (PacManAnimWhileMovingLeft ());
-		StartCoroutine (GhostsAnimWhileMovingLeft ());
+		//StartCoroutine (PacManAnimWhileMovingLeft ());
+		//StartCoroutine (GhostsAnimWhileMovingLeft ());
 		Animator.Play ("GhostChasingPacMan");
+		Animator.Play ("PacManWalkingLeft", 1);
+		Animator.Play ("RedGhostWalkingLeft", 2);
+		Animator.Play ("PinkGhostWalkingLeft", 3);
+		Animator.Play ("BlueGhostWalkingLeft", 4);
+		Animator.Play ("YellowGhostWalkingLeft", 5);
 	}
 	IEnumerator StartPelletBlinking() {
 
@@ -153,44 +162,11 @@ public class TitleMessageController : MonoBehaviour {
 		}
 
 	}
-	IEnumerator PacManAnimWhileMovingLeft() {
 
-		SpriteRenderer sRenderer = MovePacMan.GetComponent<SpriteRenderer> ();
 
-		while (true) {
-			sRenderer.sprite = PacManSpriteClosedLeft;
-			yield return new WaitForSeconds (.04f);
-
-			sRenderer.sprite = PacManSpriteOpenedLeft;
-			yield return new WaitForSeconds (.04f);
-
-			sRenderer.sprite = PacManSpriteOpenedWideLeft;
-			yield return new WaitForSeconds (.04f);
-
-			sRenderer.sprite = PacManSpriteOpenedLeft;
-			yield return new WaitForSeconds (.04f);
-		}
-	}
-	IEnumerator GhostsAnimWhileMovingLeft() {
-		SpriteRenderer redGhost = MoveRedGhost.GetComponent<SpriteRenderer> ();
-		SpriteRenderer pinkGhost = MovePinkGhost.GetComponent<SpriteRenderer> ();
-		SpriteRenderer blueGhost = MoveBlueGhost.GetComponent<SpriteRenderer> ();
-		SpriteRenderer yellowGhost = MoveYellowGhost.GetComponent<SpriteRenderer> ();
-
-		while (true) {
-			redGhost.sprite = RedGhostSpriteLeft1;
-			pinkGhost.sprite = PinkGhostSpriteLeft1;
-			blueGhost.sprite = BlueGhostSpriteLeft1;
-			yellowGhost.sprite = YellowGhostSpriteLeft1;
-
-			yield return new WaitForSeconds (.1f);
-			redGhost.sprite = RedGhostSpriteLeft2;
-			pinkGhost.sprite = PinkGhostSpriteLeft2;
-			blueGhost.sprite = BlueGhostSpriteLeft2;
-			yellowGhost.sprite = YellowGhostSpriteLeft2;
-
-			yield return new WaitForSeconds (.1f);
-		}
+	public void OnGhostChasingPacManDone() {
+		StopAllCoroutines ();
+		PowerPellet.GetComponent<SpriteRenderer> ().enabled = false;
 
 	}
 }
