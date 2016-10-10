@@ -167,6 +167,11 @@ public class TitleMessageController : MonoBehaviour {
 	public void OnGhostChasingPacManDone() {
 		StopAllCoroutines ();
 		PowerPellet.GetComponent<SpriteRenderer> ().enabled = false;
-
+		Animator.Play ("ChasingFourGhosts");
+		Animator.Play ("PacManWalkingRight", 1);
+		Animator.Play ("RedGhostWalkingRight", 2);
+		Animator.Play ("PinkGhostWalkingRight", 3);
+		Animator.Play ("BlueGhostWalkingRight", 4);
+		Animator.Play ("YellowGhostWalkingRight", 5);
 	}
 }
