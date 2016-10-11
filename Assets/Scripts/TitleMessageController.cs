@@ -58,23 +58,7 @@ public class TitleMessageController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		RedGhost.SetActive(false);
-		ShadowText.SetActive(false);
-		BlinkyText.SetActive(false);
-		PinkGhost.SetActive(false);
-		SpeedyText.SetActive(false);
-		PinkyText.SetActive(false);
-		BlueGhost.SetActive(false);
-		BashfulText.SetActive(false);
-		InkyText.SetActive(false);
-		YellowGhost.SetActive(false);
-		PokeyText.SetActive(false);
-		ClydeText.SetActive(false);
-		SmallPellet.SetActive(false);
-		FirstPowerPellet.SetActive (false);
-		PowerPellet.SetActive(false);
-		TenPtsText.SetActive(false);
-		FiftyPtsText.SetActive(false);
+		ResetScreen ();
 
 		StartCoroutine (StartAnimation ());
 	}
@@ -166,12 +150,88 @@ public class TitleMessageController : MonoBehaviour {
 
 	public void OnGhostChasingPacManDone() {
 		StopAllCoroutines ();
-		PowerPellet.GetComponent<SpriteRenderer> ().enabled = false;
+		FirstPowerPellet.GetComponent<SpriteRenderer> ().enabled = false;
 		Animator.Play ("ChasingFourGhosts");
 		Animator.Play ("PacManWalkingRight", 1);
 		Animator.Play ("RedGhostWalkingRight", 2);
 		Animator.Play ("PinkGhostWalkingRight", 3);
 		Animator.Play ("BlueGhostWalkingRight", 4);
 		Animator.Play ("YellowGhostWalkingRight", 5);
+	}
+	public void OnChasingFourGhostsDone() {
+		Animator.Play ("PacManClosedMouth", 1);
+		Animator.Play ("RedGhostDead");
+		Invoke ("PauseToShowFirstScore", 1f);
+	}
+	private void PauseToShowFirstScore() {
+		Animator.Play ("ChasingThreeGhost");
+		Animator.Play ("PacManWalkingRight", 1);
+		Animator.Play ("PinkGhostWalkingRight", 3);
+		Animator.Play ("BlueGhostWalkingRight", 4);
+		Animator.Play ("YellowGhostWalkingRight", 5);
+	}
+	public void OnChasingThreeGhostDone() {
+		Animator.Play ("PacManClosedMouth", 1);
+		Animator.Play ("PinkGhostDead");
+		Invoke ("PauseToShowSecondScore", 1f);
+	}
+	private void PauseToShowSecondScore() {
+		Animator.Play ("ChasingTwoGhost");
+		Animator.Play ("PacManWalkingRight", 1);
+		Animator.Play ("BlueGhostWalkingRight", 4);
+		Animator.Play ("YellowGhostWalkingRight", 5);
+
+	}
+	public void OnChasingTwoGhostDone() {
+		Animator.Play ("PacManClosedMouth", 1);
+		Animator.Play ("BlueGhostDead");
+		Invoke ("PauseToShowThirdScore", 1f);
+
+	}
+	private void PauseToShowThirdScore() {
+		Animator.Play ("ChasingOneGhost");
+		Animator.Play ("PacManWalkingRight", 1);
+		Animator.Play ("BlueGhostWalkingRight", 4);
+		Animator.Play ("YellowGhostWalkingRight", 5);
+
+	}
+	public void OnChasingOneGhostDone() {
+		Animator.Play ("PacManClosedMouth", 1);
+		Animator.Play ("YellowGhostDead");
+		Invoke ("PauseToShowLastScore", 1f);
+
+	}
+	private void PauseToShowLastScore() {
+		// for now, just reset everything and restart title screen.
+		ResetScreen();
+
+		StartCoroutine (StartAnimation ());
+
+	}
+	private void ResetScreen() {
+		Animator.Play("Idle", 0);
+		Animator.Play ("Idle", 1);
+		Animator.Play ("Idle", 2);
+		Animator.Play ("Idle", 3);
+		Animator.Play ("Idle", 4);
+		Animator.Play ("Idle", 5);
+
+		RedGhost.SetActive(false);
+		ShadowText.SetActive(false);
+		BlinkyText.SetActive(false);
+		PinkGhost.SetActive(false);
+		SpeedyText.SetActive(false);
+		PinkyText.SetActive(false);
+		BlueGhost.SetActive(false);
+		BashfulText.SetActive(false);
+		InkyText.SetActive(false);
+		YellowGhost.SetActive(false);
+		PokeyText.SetActive(false);
+		ClydeText.SetActive(false);
+		SmallPellet.SetActive(false);
+		FirstPowerPellet.SetActive (false);
+		PowerPellet.SetActive(false);
+		TenPtsText.SetActive(false);
+		FiftyPtsText.SetActive(false);
 	}
 }

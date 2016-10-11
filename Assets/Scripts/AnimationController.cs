@@ -21,4 +21,19 @@ public class AnimationController : MonoBehaviour {
 
 
 	}
+	public void OnChasingFourGhostsDone() {
+		TitleMessageController.OnChasingFourGhostsDone ();
+	}
+	public void OnChasingThreeGhostDone() {
+		TitleMessageController.OnChasingThreeGhostDone ();
+
+	}
+	public void OnChasingTwoGhostDone() {
+		TitleMessageController.OnChasingTwoGhostDone ();
+
+	}
+	public void OnChasingOneGhostDone() {
+		TitleMessageController.OnChasingOneGhostDone ();
+
+	}
 }
