@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class TitleMessageController : MonoBehaviour {
+
+	public Text HighScoreText;
 
 	public GameObject RedGhost;
 	public GameObject ShadowText;
@@ -58,6 +61,8 @@ public class TitleMessageController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		HighScoreText.text = PlayerPrefs.GetInt ("High Score").ToString();
+
 		ResetScreen ();
 
 		StartCoroutine (StartAnimation ());

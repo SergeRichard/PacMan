@@ -37,13 +37,18 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		state = States.Intro;
-
 		Score = 0;
 		HighScore = 0;
 		Lives = 3;
 		Pellets = 0;
 		Level = 1;
+
+		//PlayerPrefs.DeleteKey ("High Score");
+		HighScore = PlayerPrefs.GetInt ("High Score");
+
+		state = States.Intro;
+
+
 
 		MessageController.HighScoreValue.text = HighScore.ToString ();
 		MessageController.ScoreValue.text = Score.ToString ();
@@ -157,6 +162,13 @@ public class GameManager : MonoBehaviour {
 	
 	}
 	public void PacManDead() {		
+
+		int prevHighScore = PlayerPrefs.GetInt ("High Score");
+		if (prevHighScore < Score) {
+			PlayerPrefs.SetInt ("High Score", Score);
+			PlayerPrefs.Save ();
+		}
+
 		CancelInvoke ();
 		ResetGhosts ();
 		MusicController.StopAllSounds ();
@@ -199,6 +211,12 @@ public class GameManager : MonoBehaviour {
 
 	}
 	public void LevelWon() {
+		int prevHighScore = PlayerPrefs.GetInt ("High Score");
+		if (prevHighScore < Score) {
+			PlayerPrefs.SetInt ("High Score", Score);
+			PlayerPrefs.Save ();
+		}
+
 		Level++;
 		ResetGhosts ();
 		state = States.WonLevel;

@@ -10,7 +10,7 @@ public class Ghost : MonoBehaviour {
 	}
 	public enum FrightenedStates
 	{
-		Frightened, FrightenedBlinking, NotFrightened, Eaten
+		Frightened, FrightenedBlinking, NotFrightened, Eaten, EatenScoreDisplayed
 	}
 	public enum IndGhostStates {
 		Idle, 
@@ -137,7 +137,7 @@ public class Ghost : MonoBehaviour {
 	void ChangeGhostToFrightenedState ()
 	{
 		frightenedTimer = 0;
-		if (FrightenedState != FrightenedStates.Eaten) {
+		if (FrightenedState != FrightenedStates.Eaten && FrightenedState != FrightenedStates.EatenScoreDisplayed) {
 			animator.enabled = true;
 			animator.Play ("GhostFrightened");
 			timeStep = GhostController.GhostFrightenedTimeStep;

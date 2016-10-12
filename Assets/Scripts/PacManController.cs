@@ -303,6 +303,7 @@ public class PacManController : MonoBehaviour {
 
 			gameObject.GetComponent<SpriteRenderer> ().enabled = false;
 			ghostEaten = other.gameObject;
+			ghostEaten.GetComponent<Ghost> ().FrightenedState = Ghost.FrightenedStates.EatenScoreDisplayed;
 			ghostEaten.GetComponent<BoxCollider2D> ().enabled = false;
 			GameManager.MusicController.StopWakaSound ();
 			GameManager.MusicController.PlayGhostEatenSound ();
