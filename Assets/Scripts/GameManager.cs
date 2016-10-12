@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour {
 
 	public int Level = 2;
 
+	public int NextScoreForExtraLife;
+
 	[HideInInspector]
 	public int Score;
 
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviour {
 		Lives = 3;
 		Pellets = 0;
 		Level = 1;
+		NextScoreForExtraLife = 10000;
 
 		//PlayerPrefs.DeleteKey ("High Score");
 		HighScore = PlayerPrefs.GetInt ("High Score");

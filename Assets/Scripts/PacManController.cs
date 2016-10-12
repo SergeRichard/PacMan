@@ -12,6 +12,7 @@ public class PacManController : MonoBehaviour {
 	public event ChangeGhostToFrightenedStateEventHandler ChangeGhostToFrightenedState;
 	public event PacManDeadEventHandler PacManDead;
 	public event LevelWonEventHandler LevelWon;
+	public AudioClip ExtraLifeSound;
 
 	Animator animator;
 
@@ -145,6 +146,12 @@ public class PacManController : MonoBehaviour {
 	}
 	private void AddToAndUpdateScore(int scoreToAdd) {
 		GameManager.Score += scoreToAdd;
+		if (GameManager.Score >= GameManager.NextScoreForExtraLife) {
+			GameManager.Lives++;
+			GameManager.MessageController.LivesController.ShowLives (GameManager.Lives);
+			GameManager.NextScoreForExtraLife += 10000;
+			AudioSource.PlayClipAtPoint (ExtraLifeSound, Vector3.zero);
+		}
 
 		if (GameManager.HighScore < GameManager.Score) {
 			GameManager.HighScore = GameManager.Score;
