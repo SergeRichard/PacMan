@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
@@ -27,7 +28,7 @@ public class GameManager : MonoBehaviour {
 
 	public int Lives;
 
-	public int Level = 2;
+	public static int Level = 1;
 
 	public int NextScoreForExtraLife;
 
@@ -130,6 +131,7 @@ public class GameManager : MonoBehaviour {
 		};
 		PlayIntroMusic ();
 	}
+
 	public void AddToAndUpdateScore(int scoreToAdd) {
 		Score += scoreToAdd;
 

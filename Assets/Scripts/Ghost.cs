@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Ghost : MonoBehaviour {
-
+	
 	public enum GhostStates
 	{
 		Scatter, Chase
@@ -23,6 +23,23 @@ public class Ghost : MonoBehaviour {
 		Left, 
 		Right
 	}
+
+	class VariablesByLevel {
+
+		public float ScatterTime { get; set; }
+		public float FrightenedTime { get; set; }
+		public float BlinkingTime { get; set; }
+
+		public VariablesByLevel(float scatterTime, float frightenedTime, float blinkingTime) {
+			ScatterTime = scatterTime;
+			FrightenedTime = frightenedTime;
+			BlinkingTime = blinkingTime;
+		}
+
+
+	}
+
+	private List<VariablesByLevel> VariablesByLevels;
 
 	public GhostController GhostController;
 	public PacManController PacManController;
@@ -79,6 +96,19 @@ public class Ghost : MonoBehaviour {
 		PacManController.LevelWon += LevelWon;
 		PacManController.PacManDead += PacManDead;
 
+		VariablesByLevels = new List<VariablesByLevel> () { 
+			new VariablesByLevel(7f, 6f, 4f), 
+			new VariablesByLevel(6f, 5f, 3f), 
+			new VariablesByLevel(5f, 5f, 3f), 
+			new VariablesByLevel(4f, 5f, 3f), 
+			new VariablesByLevel(3f, 4f, 2f),
+			new VariablesByLevel(2f, 4f, 2f), 
+			new VariablesByLevel(1f, 4f, 2f),
+			new VariablesByLevel(1f, 3f, 1f),
+			new VariablesByLevel(1f, 2f, 1f),
+			new VariablesByLevel(1f, 1f, 1f)
+		};
+
 		SetUpInitial ();
 
 	}
@@ -101,15 +131,21 @@ public class Ghost : MonoBehaviour {
 		frightenedTimer = 0;
 		timeStep = TimeStep;
 
+
+
 		if (newLevel == true) {
 			modeTimer = 0;
+			float scatterTime = 1f;
 
+			if (GameManager.Level <= VariablesByLevels.Count - 1) {
+				scatterTime = VariablesByLevels [GameManager.Level - 1].ScatterTime;
+			}
 
 			ghostModes.Clear ();
 
 			GhostMode mode = new GhostMode ();
 			mode.state = Ghost.GhostStates.Scatter;
-			mode.time = 7f; // start right away
+			mode.time = scatterTime; // start right away
 			ghostModes.Enqueue (mode);
 
 			GhostMode mode2 = new GhostMode ();
@@ -119,7 +155,7 @@ public class Ghost : MonoBehaviour {
 
 			GhostMode mode3 = new GhostMode ();
 			mode3.state = Ghost.GhostStates.Scatter;
-			mode3.time = 7f;
+			mode3.time = scatterTime;
 			ghostModes.Enqueue (mode3);
 
 			GhostMode mode4 = new GhostMode ();
@@ -129,7 +165,7 @@ public class Ghost : MonoBehaviour {
 
 			GhostMode mode5 = new GhostMode ();
 			mode5.state = Ghost.GhostStates.Scatter;
-			mode5.time = 5f;
+			mode5.time = (scatterTime - 2f > 0f ? scatterTime - 2f : 1f);
 			ghostModes.Enqueue (mode5);
 		}
 
@@ -185,7 +221,14 @@ public class Ghost : MonoBehaviour {
 		}
 		if (FrightenedState == FrightenedStates.Frightened && GameManager.state == GameManager.States.Play) {
 			frightenedTimer += Time.deltaTime;
-			if (frightenedTimer >= 6) {
+
+			float frightenedTime;
+			if (GameManager.Level <= VariablesByLevels.Count - 1)
+				frightenedTime = VariablesByLevels [GameManager.Level-1].FrightenedTime;
+			else
+				frightenedTime = VariablesByLevels [VariablesByLevels.Count - 1].FrightenedTime;
+			
+			if (frightenedTimer >= frightenedTime) {
 				frightenedTimer = 0;
 				FrightenedState = FrightenedStates.FrightenedBlinking;
 				//FrightenedBlinking ();
@@ -194,7 +237,14 @@ public class Ghost : MonoBehaviour {
 		}
 		if (FrightenedState == FrightenedStates.FrightenedBlinking && GameManager.state == GameManager.States.Play) {
 			frightenedTimer += Time.deltaTime;
-			if (frightenedTimer >= 4) {
+
+			float blinkingTime;
+			if (GameManager.Level <= VariablesByLevels.Count - 1)
+				blinkingTime = VariablesByLevels [GameManager.Level-1].BlinkingTime;
+			else
+				blinkingTime = VariablesByLevels [VariablesByLevels.Count - 1].BlinkingTime;
+			
+			if (frightenedTimer >= blinkingTime) {
 				frightenedTimer = 0;
 				if (ghostModes.Count > 0) {
 					GhostState = ghostModes.Peek ().state;
