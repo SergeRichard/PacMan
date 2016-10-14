@@ -41,6 +41,7 @@ public class Ghost : MonoBehaviour {
 
 	private List<VariablesByLevel> VariablesByLevels;
 
+	protected float GhostSpeed;
 	public GhostController GhostController;
 	public PacManController PacManController;
 	public Transform LeftBank;

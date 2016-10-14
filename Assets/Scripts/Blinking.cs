@@ -15,7 +15,15 @@ public class Blinking : MonoBehaviour {
 		}
 
 	}
+	void OnEnable() {
+		if (GetComponent<SpriteRenderer> () != null) {
+			StartCoroutine (BlinkSprite());
+		}
+		if (GetComponent<Text> () != null) {
+			StartCoroutine (BlinkText ());
+		}
 
+	}
 	IEnumerator BlinkSprite() {
 		while (true) {
 			GetComponent<SpriteRenderer> ().enabled = false;
